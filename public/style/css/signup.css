@@ -1,0 +1,115 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  user-select: none;
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  margin: 0;
+  padding: 0;
+}
+body .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+body .container .div1 {
+  width: 30%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+body .container .div1 img {
+  margin: 5% 0 0 0;
+  border-radius: 10px;
+}
+body .container .div1 h1,
+body .container .div1 h4 {
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  margin: 4px;
+}
+body .container .div1::-webkit-scrollbar {
+  display: none;
+}
+body .container .div1 form {
+  padding-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+body .container .div1 form a {
+  text-decoration: none;
+  color: #000;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+body .container .div1 form a:hover {
+  text-decoration: underline;
+}
+body .container .div1 form span {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  width: 350px;
+  margin: 10px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  gap: 10px;
+}
+body .container .div1 form span sup {
+  color: red;
+}
+body .container .div1 form span input,
+body .container .div1 form span select {
+  padding: 15px;
+  background: rgb(255, 255, 255);
+  box-shadow: 2px 2px 4px rgba(128, 128, 128, 0.377);
+  border: 0.5px solid rgba(131, 131, 131, 0.384);
+  outline: none;
+  border-radius: 5px;
+  width: 100%;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+body .container .div1 form button {
+  border: none;
+  background: #000;
+  color: white;
+  width: 350px;
+  padding: 20px 40px;
+  border-radius: 5px;
+}
+body .container .div2 {
+  width: 70%;
+  height: 100vh;
+  position: relative;
+}
+body .container .div2 .credit {
+  position: absolute;
+  bottom: 2%;
+  right: 10px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  filter: invert(10%) grayscale(10%) hue-rotate(40deg);
+}
+body .container .div2 .credit a {
+  text-decoration: none;
+  color: black;
+}
+body .container .div2 img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/*# sourceMappingURL=signup.css.map */

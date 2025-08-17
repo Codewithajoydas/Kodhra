@@ -1,0 +1,135 @@
+.container {
+  main {
+    display: flex;
+    justify-content: center;
+    .div1,
+    .div2 {
+      width: 50%;
+      height: 90vh;
+      margin-inline: 10px;
+    }
+    .div1 {
+      .title,
+      .des,
+      .lan,
+      .tags {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .title {
+        background: transparent;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(83, 83, 83, 0.493);
+        padding: 10px;
+        border-radius: 10px;
+        input {
+          margin: 10px 0px;
+          padding: 10px 0;
+          background: none;
+          border: none;
+          outline: none;
+          border-bottom: 1px solid rgba(83, 83, 83, 0.493);
+        }
+      }
+      .des {
+        background: transparent;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        padding: 10px;
+        border-radius: 10px;
+        textarea {
+          margin: 10px 0px;
+          padding: 10px 0;
+          background: none;
+          border: none;
+          padding: 10px;
+          outline: none;
+          border: 1px solid rgba(0, 0, 0, 0.4);
+          resize: vertical;
+          border-radius: 10px;
+        }
+      }
+      .lan {
+        background: transparent;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        padding: 10px;
+        border-radius: 10px;
+        select {
+          margin: 10px 0px;
+          border-radius: 10px;
+          padding: 10px 0;
+          background: none;
+          border: none;
+          accent-color: rgba(0, 0, 0, 0.4);
+          outline: none;
+          border: 1px solid rgba(0, 0, 0, 0.4);
+        }
+      }
+    }
+    .div2 {
+      .code,
+      .tags {
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        padding: 10px;
+        border-radius: 10px;
+        textarea,
+        input {
+          margin: 10px 0px;
+          margin-top: 10px;
+          padding: 10px 0;
+          border-radius: 10px;
+          background: none;
+          padding: 10px;
+          border: none;
+          outline: none;
+          border: 1px solid rgba(0, 0, 0, 0.4);
+          resize: vertical;
+        }
+      }
+      button {
+        padding: 20px 50px;
+        margin: 10px;
+        background: #000;
+        color: white;
+        cursor: pointer;
+        border: none;
+        border-radius: 10px;
+      }
+    }
+    .loading {
+      position: fixed;
+      bottom: 2%;
+      right: 2%;
+      background: rgba(0, 128, 0, 0.411);
+      padding: 20px 40px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      svg{
+        stroke: yellow;
+        animation: loader .7s infinite linear;
+      }
+      @keyframes loader {
+        0%{
+          transform: rotate(0deg);
+        }
+        100%{
+          transform: rotate(360deg);
+        }
+      }
+      span{
+        font-weight: bolder;
+        color: white;
+      }
+    }
+  }
+}

@@ -1,0 +1,307 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  input::placeholder,
+  input {
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  }
+  label{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bolder;
+  }
+  ::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 500px;
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(177, 175, 175);
+    border-radius: 500px;
+  }
+
+  body {
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    user-select: none;
+    overflow-y: hidden;
+    button {
+      cursor: pointer;
+    }
+    header {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding-inline: 10px;
+      padding-block: 10px;
+      .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        img {
+          width: 50px;
+          border-radius: 50%;
+        }
+      }
+      nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        .notification,
+        .help,
+        .profile {
+          width: 50px;
+          cursor: pointer;
+          height: 50px;
+          transition: all 0.5s ease;
+          border-radius: 50%;
+          display: flex;
+          &:hover {
+            background: rgba(211, 211, 211, 0.377);
+          }
+          justify-content: center;
+          align-items: center;
+          svg {
+            width: 23px;
+            height: 23px;
+          }
+        }
+        .profile {
+          padding: 10px;
+          img {
+            width: 45px;
+            height: 45px;
+            border: 0.5px solid gary;
+            border-radius: 50px;
+            object-fit: cover;
+          }
+        }
+        .search {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          border: 1px solid gray;
+          padding: 10px 20px;
+          border-radius: 50px;
+          cursor: pointer;
+          &:hover span {
+            text-decoration: underline;
+          }
+          svg {
+            width: 23px !important;
+            height: 23px !important;
+          }
+        }
+      }
+    }
+    .container {
+      overflow-y: hidden;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 72px;
+      aside {
+        height: 90vh;
+        overflow-y: scroll;
+        width: 20%;
+        &::-webkit-scrollbar {
+          width: 0;
+          height: 0;
+        }
+        &:hover::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        ul {
+          list-style: none;
+          span {
+            margin: 10px 20px;
+            font-size: smaller;
+            color: gray;
+          }
+          li {
+            margin: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 0 10px 10px 0;
+            border-left: 4px solid transparent;
+            &.active {
+              background: #e6e6e6;
+              border-radius: 0 10px 10px 0;
+              border-left: 4px solid black;
+            }
+            a {
+              margin: 10px;
+              text-decoration: none;
+              color: black;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              svg {
+                width: 20px;
+                height: 20px;
+              }
+            }
+          }
+        }
+      }
+      main {
+        width: 80%;
+        height: 90vh;
+        overflow: scroll;
+        border-radius: 30px 0 0 0;
+        padding: 10px;
+        background: url("https://files.passeidireto.com/483b9c33-a9c4-480a-ac3c-2192719ab56a/bg1.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+        .quiteoftheday {
+          padding: 10px;
+          border-left: 10px solid rgba(28, 243, 0, 0.384);
+          background: rgba(142, 235, 55, 0.247);
+          font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
+          border-radius: 10px 0 0 10px;
+          .author {
+            text-align: right;
+          }
+        }
+        .recentSnippets {
+          margin-block: 10px;
+          & > span {
+            font-weight: bolder;
+            color: gray;
+          }
+        }
+        #cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+          width: 100%;
+          .card {
+            width: 500px;
+            margin: 10px;
+            break-inside: avoid;
+            border: 1px solid white;
+            position: relative;
+            border-radius: 10px;
+            background: transparent;
+            backdrop-filter: blur(10px);
+            border: 1px solid lightgray;
+            .header-info {
+              padding: 5px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding-inline: 10px;
+              .menu_top {
+                svg {
+                  width: 20px;
+                }
+                cursor: pointer;
+              }
+              .title {
+                h3 {
+                  font-size: 25px;
+                }
+                div .author,
+                .lan,
+                .time {
+                  font-size: smaller;
+                }
+              }
+            }
+            .code {
+              background: #00000063;
+              margin: 10px;
+              padding: 10px;
+              border-radius: 10px;
+            }
+            .tags {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 10px;
+              span {
+                padding: 5px 20px;
+                border-radius: 50px;
+                background: rgba(128, 128, 128, 0.103);
+                border: 0.5px solid gray;
+                font-size: small;
+                cursor: pointer;
+              }
+              padding: 10px;
+              margin: 10px;
+            }
+            .options {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin: 10px;
+              .sub_menu {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                svg {
+                  width: 20px;
+                  cursor: pointer;
+                }
+              }
+              .open {
+                background: rgb(36, 36, 36);
+                padding: 10px 30px;
+                border-radius: 10px;
+                a {
+                  text-decoration: none;
+                  color: rgb(255, 255, 255);
+                }
+              }
+            }
+            .menu {
+              display: flex;
+              position: absolute;
+              top: 50px;
+              right: 10px;
+              flex-direction: column;
+              break-inside: avoid;
+              gap: 10px;
+              background: rgba(255, 255, 255, 0.521);
+              border: 1px solid gray;
+              width: 200px;
+              backdrop-filter: blur(100px) !important;
+              padding: 10px;
+              border-radius: 10px;
+              transition: all 0.5s;
+              opacity: 1;
+              &.active {
+                display: none;
+                opacity: 0;
+              }
+              li {
+                text-decoration: none;
+                list-style: none;
+                border: 1px solid rgb(255, 255, 255);
+                color: black;
+                padding: 10px 20px;
+                transition: all 0.5s;
+                border-radius: 10px;
+                &:hover {
+                  background: #00000038;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
