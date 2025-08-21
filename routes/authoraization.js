@@ -1,7 +1,7 @@
 const express = require("express");
 const signup = express.Router();
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const cloudinary = require("../config/cloudinary.config");
 

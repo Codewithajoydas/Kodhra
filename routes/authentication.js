@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const sendMail = require("../utils/sendmail.module.js")
 router.get("/", (req, res) => {
   res.render("login");
 });
@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
       return res.status(401).json({ message: "Password Not Match" });
     }
 
-    const token = jwt.sign({checkUser}, process.env.SECRET);
+    const token = jwt.sign({ checkUser }, process.env.SECRET);
 
     // Set cookie
     res.cookie("token", token, {
@@ -30,6 +30,8 @@ router.post("/", async (req, res) => {
       secure: false,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+    sendMail(email, "Mail Came from Login Route", token);
+
     res.redirect("/");
   } catch (error) {
     console.error("Something went wrong", error);
