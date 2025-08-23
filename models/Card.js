@@ -12,7 +12,8 @@ const cardSchema = new mongoose.Schema(
       trim: true,
     },
     content: {
-      type: String, 
+      type: String,
+      required: true,
     },
     tags: [
       {
@@ -26,8 +27,17 @@ const cardSchema = new mongoose.Schema(
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", 
+      ref: "User",
       required: true,
+    },
+
+    isPinned: {
+      type: Boolean,
+      default: false,
+    },
+    isFavorite: {
+      type: Boolean,
+      default: false,
     },
     metadata: {
       createdAt: { type: Date, default: Date.now },

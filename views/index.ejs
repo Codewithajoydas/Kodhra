@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Home | Code Snippet Manager</title>
     <link rel="stylesheet" href="/style/css/index.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/assets/logo.png" type="image/png">
@@ -15,17 +15,27 @@
         <header>
             <span class="logo">
                 <img src="/assets/logo.png" alt="code snippet manager">
-                Code Snippet Manager
+                <span>Code Snippet Manager <sub style="font-family: 'Segoe UI', Tahoma,  sans-serif; font-size: 10px;">V.1.0.1</sub></span>
             </span>
             <nav>
-                <div class="search">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-search-icon lucide-search">
-                        <path d="m21 21-4.34-4.34" />
-                        <circle cx="11" cy="11" r="8" />
-                    </svg>
-                    <span>Search</span>
+                <div class="searchResult">
+                    <label class="search" for="search" style="cursor: text;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-search-icon lucide-search">
+                            <path d="m21 21-4.34-4.34" />
+                            <circle cx="11" cy="11" r="8" />
+                        </svg>
+
+                        <input type="search" placeholder="Search Snippets..." id="search" autocomplete="off">
+                        <kbd
+                            style="background: rgba(128, 128, 128, 0.21); color: rgb(122, 122, 122); padding: 5px;border-radius: 5px;box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);">ctrl+k</kbd>
+
+                    </label>
+                    <div class="results" id="results">
+                        <ul id="results-list">
+                        </ul>
+                    </div>
                 </div>
                 <div class="notification">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -49,15 +59,24 @@
                     <img src="<%= image %>" alt="">
                 </div>
             </nav>
+            <div class="openList" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-list-filter-icon lucide-list-filter">
+                    <path d="M3 6h18" />
+                    <path d="M7 12h10" />
+                    <path d="M10 18h4" />
+                </svg>
+            </div>
         </header>
         <div class="container">
             <aside>
                 <ul>
                     <!-- Main Pages -->
                     <span>Main Pages</span>
-                    <li class="active"><a href="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round"
+                    <li class="active"><a href="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
                                 class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard">
                                 <rect width="7" height="9" x="3" y="3" rx="1" />
                                 <rect width="7" height="5" x="14" y="3" rx="1" />
@@ -108,7 +127,7 @@
 
                     <!-- Creation Shortcuts -->
                     <span>Creation Shortcuts</span>
-                    <li ><a href="/card/create"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    <li><a href="/card/create"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
                                 class="lucide lucide-square-dashed-bottom-code-icon lucide-square-dashed-bottom-code">
@@ -217,95 +236,375 @@
 
             </aside>
             <main>
-                <!-- <div class="quiteoftheday">
-                    <h2></h2>
-                    <div class="author"><i>-Ajoy Das</i></div>
-                </div> -->
-                <div class="recentSnippets">
-                    <span>Recent Snippets</span>
-                    <div id="cards">
-                        <div class="card">
-                            <div class="header-info">
-                                <div class="title">
-                                    <h3>Header Code for React</h3>
-                                    <div>
-                                        <span class="author"><strong>Codewithajoydas</strong></span>,
-                                        <span class="lan">Javascript</span>,
-                                        <span class="time">23-08-2025</span>
-                                    </div>
-                                </div>
-                                <div class="menu_top" onclick="openmenu()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
-                                        <circle cx="12" cy="12" r="1" />
-                                        <circle cx="12" cy="5" r="1" />
-                                        <circle cx="12" cy="19" r="1" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="code">
-                                <code>
-                                    .loading {
-                                    font-size: 0.8rem;
-                                    color: #888;
-                                    display: none;
-                                    margin-left: 0.5rem;
-                                    }
-                                    </code>
-                            </div>
-                            <div class="tags">
-                                <span>Js</span>
-                                <span>Javascript</span>
-                                <span>Header UI</span>
-                                <span>HTML</span>
-                            </div>
-                            <div class="options">
-                                <div class="open">
-                                    <a href="/card">
-                                        Open in new New Page
-                                    </a>
-                                </div>
-                                <div class="sub_menu">
-                                    <div class="pin">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-pin-icon lucide-pin">
-                                            <path d="M12 17v5" />
-                                            <path
-                                                d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
-                                        </svg>
-                                    </div>
-                                    <div class="fav">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-star-icon lucide-star">
-                                            <path
-                                                d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="menu active" id="mune">
-                                <a href="/edit">Edit</a>
-                                <a href="/dlt">Delete</a>
-                                <a href="/fav">Favorite</a>
-                                <a href="/pin">Pin</a>
-                                <a href="/move">Move</a>
-                            </div>
-                        </div>
-                 
-                    </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <h1 id="greeting"
+                        style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: 5px;color: rgb(54, 54, 54);">
+                    </h1><br>
+                    <span id="wifi-speed" title="Wifi Speed"
+                        style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 500;">Checking
+                        speed...</span>
+
                 </div>
+                <% if (cards.length !==0) { %>
+                    <div class="title1">Recent Folders</div>
+                    <% } %>
+                        <div class="folders">
+                            <% cards.forEach((e)=>{%>
+                                <div class="folder" draggable="true">
+                                    <div style="display: flex; justify-content: center;align-items: center;gap: 10px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="lucide lucide-folder-icon lucide-folder">
+                                            <path
+                                                d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                                        </svg>
+                                        <span class="name" style="line-height: 14px;">
+                                            <div
+                                                style="display: flex;justify-content: center; align-items: center;gap: 10px;">
+                                                <%= e.folder %>
+                                            </div>
+                                            <span datetime="<%= e.metadata.updatedAt%>" style="font-size: 10px;">
+                                                <%= new Date(e.metadata.updatedAt).toLocaleString() %>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="menu" onclick="sharebtn('<%=userId %>', '<%=e._id%>')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="lucide lucide-share2-icon lucide-share-2">
+                                            <circle cx="18" cy="5" r="3" />
+                                            <circle cx="6" cy="12" r="3" />
+                                            <circle cx="18" cy="19" r="3" />
+                                            <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
+                                            <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <%})%>
+                        </div>
+                        <div class="recentSnippets">
+                            <% if (cards.length !==0) { %>
+                                <div class="title1">Recent Snippets</div>
+                                <% } %>
+                            <% if (cards.length===0) { %>
+                                <div id="no-data"
+                                    style="text-align: center; width: 100%; font-size: 20px; color: gray; margin-top: 20px; display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 20px;">
+                                    <img src="/assets/Stickers/nothing.png" alt="" >
+                                    <a href="/card/create"
+                                        style="border: 1px solid gray; padding: 5px 10px; border-radius: 5px;">+ Create
+                                        Snippet</a>
+                                    No Snippets found. Create a new Snippet to get started!
+                                </div>
+                                <% } %>
+                                    <div id="cards">
+                                        <% cards.forEach(e=> { %>
+                                            <div class="card" style="z-index: 1 !important;" id="card-<%= e._id%>">
+                                                <div class="header-info">
+                                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                                        <img src="<%= image %>" alt="" width="40" height="40"
+                                                            style="border-radius: 50%;">
+                                                        <div class="title">
+                                                            <h3>
+                                                                <%= e.title%>
+                                                            </h3>
+                                                            <div>
+                                                                <span class="author"><strong>
+                                                                        <%= author%>
+                                                                    </strong></span>,
+                                                                <span class="lan">
+                                                                    <%= e.category%>
+                                                                </span>,
+                                                                <span class="time">
+                                                                    <%= new Date(e.metadata.createdAt).toLocaleString()
+                                                                        %>
+                                                                </span>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="menu_top" onclick="toggleMenu('<%= e._id %>')">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
+                                                            <circle cx="12" cy="12" r="1" />
+                                                            <circle cx="12" cy="5" r="1" />
+                                                            <circle cx="12" cy="19" r="1" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <div class="code" title="<%= e.content%>">
+                                                    <code>
+                                                <%= e.content %>
+                              </code>
+                                                </div>
+                                                <div class="tags">
+                                                    <% e.tags.forEach(tag=> { %>
+                                                        <span>
+                                                            <%= tag %>
+                                                        </span>
+                                                        <% }) %>
+                                                </div>
+
+                                                <div class="options">
+                                                    <div class="open">
+                                                        <a href="/card/<%= e.id%>"
+                                                            style="display: flex; justify-content: center;align-items: center; gap: 10px;">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="lucide lucide-badge-info-icon lucide-badge-info">
+                                                                <path
+                                                                    d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                                                                <line x1="12" x2="12" y1="16" y2="12" />
+                                                                <line x1="12" x2="12.01" y1="8" y2="8" />
+                                                            </svg>
+                                                            View Details
+                                                        </a>
+                                                    </div>
+                                                    <div class="sub_menu">
+                                                        <div class="pin" onclick="pinIt('<%= e._id %>')"
+                                                            data-id="<%= e._id%>">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="lucide lucide-pin-icon lucide-pin">
+                                                                <path d="M12 17v5" />
+                                                                <path
+                                                                    d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
+                                                            </svg>
+                                                        </div>
+
+                                                        <div class="fav" onclick="favIt('<%= e._id %>')"
+                                                            data-id="<%= e._id%>">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="lucide lucide-star-icon lucide-star">
+                                                                <path
+                                                                    d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+                                                            </svg>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="menu active" id="menu-<%= e._id %>"
+                                                    onclick="toggleMenu('<%= e._id %>')">
+                                                    <li onclick="editCard('<%= e._id %>')">Edit</li>
+                                                    <li onclick="deleteCard('<%= e._id %>')">Delete</li>
+                                                    <li onclick="pinIt('<%= e._id %>')">Pin</li>
+                                                </div>
+                                            </div>
+
+                                            <% }) %>
+                                    </div>
+                        </div>
             </main>
         </div>
     </div>
-
+    <script src="/scripts/home.js"></script>
     <script>
-     
+        let results = document.getElementById("results");
+        let list = document.getElementById("results-list");
+        let searchInput = document.querySelector(".searchResult");
+
+        let debounceTimer;
+
+        searchInput.addEventListener("input", function (e) {
+            e.stopPropagation();
+            let query = e.target.value.trim();
+
+            clearTimeout(debounceTimer);
+
+            // list.textContent = "Searching...";
+
+            if (!query) {
+                results.classList.remove("active");
+                return;
+            }
+
+            debounceTimer = setTimeout(async () => {
+                results.classList.add("active");
+
+                try {
+                    let rs = await fetch(`/search?query=${encodeURIComponent(query)}`);
+                    let data = await rs.json();
+                    let unique = new Set();
+
+                    data.findCards.slice(0, 3).forEach(item => {
+                        if (!unique.has(item.title)) {
+                            unique.add(item.title);
+                            let a = document.createElement("a");
+                            a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> ${item.title}`;
+                            a.href = `/card/${item._id}`;
+                            a.target = "_blank";
+                            list.innerHTML = "";
+                            list.appendChild(a);
+                        }
+                    });
+
+                    if (list.children.length === 0) {
+                        let li = document.createElement("li");
+                        li.textContent = "No results found";
+                        list.appendChild(li);
+                    }
+                } catch (err) {
+                    console.error("Search error:", err);
+                }
+            }, 300);
+        });
+
+
+
+
+        async function testInternetSpeed() {
+            const speedDiv = document.getElementById("wifi-speed");
+            // Tiny file (about 43 bytes)
+            const fileUrl = "https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js";
+            const fileSizeInBytes = 87236;
+
+            const startTime = performance.now();
+            try {
+                const response = await fetch(fileUrl + "?_=" + Date.now(), { cache: "no-store" });
+                await response.arrayBuffer();
+                const endTime = performance.now();
+
+                const duration = (endTime - startTime) / 1000; // seconds
+                const bitsLoaded = fileSizeInBytes * 8;
+                let speedMbps = (bitsLoaded / duration / 1024 / 1024).toFixed(2);
+                speedMbps = speedMbps.toString().padStart(5, "0");
+                speedDiv.textContent = `${speedMbps} Mbps`;
+
+            } catch (err) {
+                speedDiv.textContent = "Speed test failed";
+                console.error("Speed Test Error:", err);
+            }
+        }
+
+        testInternetSpeed();
+        setInterval(testInternetSpeed, 1500); // test every 1.5s
+
+
+
+
+
+
+
+        function getGreeting(author) {
+            const hour = new Date().getHours();
+            const name = author.split(" ")[0];
+            let greet = "";
+
+            if (hour < 12) {
+                greet = "Good Morning";
+            } else if (hour < 18) {
+                greet = "Good Afternoon";
+            } else if (hour < 21) {
+                greet = "Good Evening";
+            } else {
+                greet = "Good Night";
+            }
+            return `${greet}, ${name}`;
+        }
+
+        document.getElementById("greeting").innerText = getGreeting("<%= author %>");
+
+        function setActiveStyle(element, active) {
+            if (active) {
+                element.style.fill = "black";
+                element.style.transition = "0.3s ease";
+            } else {
+                element.style.fill = "none";
+            }
+        }
+
+        async function pinIt(id) {
+            const pinIcon = document.querySelector(`.pin[data-id="${id}"] svg`);
+            try {
+                const res = await fetch(`/card/pin/${id}`, {
+                    method: "PUT",
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    setActiveStyle(pinIcon, data.card.isPinned);
+                }
+            } catch (err) {
+                console.error("Error pinning:", err);
+            }
+        }
+
+        async function favIt(id) {
+            const favIcon = document.querySelector(`.fav[data-id="${id}"] svg`);
+            try {
+                const res = await fetch(`/card/fav/${id}`, {
+                    method: "PUT",
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    setActiveStyle(favIcon, data.card.isFavorite);
+                }
+            } catch (err) {
+                console.error("Error favoriting:", err);
+            }
+        }
+        function toggleMenu(id) {
+            document.querySelectorAll(".menu-popup").forEach(m => {
+                if (m.id !== "menu-" + id) m.classList.remove("active");
+            });
+
+            let menu = document.getElementById("menu-" + id);
+            menu.classList.toggle("active");
+        }
+
+        async function deleteCard(id) {
+            try {
+                const res = await fetch(`/card/${id}`, {
+                    method: "DELETE",
+                    credentials: "include"
+                });
+
+                if (res.ok) {
+                    const cardEl = document.getElementById(`card-${id}`);
+                    if (cardEl) {
+                        cardEl.remove();
+                    }
+                    window.location.reload();
+                } else {
+                    console.error("Failed to delete card:", await res.text());
+                }
+            } catch (err) {
+                console.error("Delete error:", err);
+            }
+        }
+
+        function editCard(id) {
+            window.location.assign(`/card/${id}`)
+        }
+
+        let search = document.getElementById("search");
+        search.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                let query = search.value;
+                if (query.trim() !== "") {
+                    window.location.href = `/search?query=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+        document.addEventListener("keydown", function (e) {
+            if (e.ctrlKey && e.key === "k") {
+                e.preventDefault();
+                search.focus();
+            }
+        });
+
     </script>
 </body>
 

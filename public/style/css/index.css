@@ -11,6 +11,17 @@
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
   font-weight: bolder;
 }
+* img {
+  pointer-events: none;
+}
+* a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: black;
+  text-transform: capitalize;
+}
 * ::-webkit-scrollbar {
   width: 3px;
   border-radius: 500px;
@@ -39,12 +50,15 @@
   width: 100%;
   padding-inline: 10px;
   padding-block: 10px;
+  border-top: none;
 }
 * body header .logo {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: bolder;
 }
 * body header .logo img {
   width: 50px;
@@ -89,22 +103,68 @@
   border-radius: 50px;
   object-fit: cover;
 }
-* body header nav .search {
+* body header nav .searchResult {
+  position: relative;
+  width: 700px;
+}
+* body header nav .searchResult .search {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 10px;
   border: 1px solid gray;
-  padding: 10px 20px;
-  border-radius: 50px;
+  width: 700px;
+  border-radius: 10px;
+  padding-inline: 10px;
+  padding-block: 5px;
   cursor: pointer;
 }
-* body header nav .search:hover span {
-  text-decoration: underline;
+* body header nav .searchResult .search input {
+  padding-block: 10px;
+  padding-inline: 5px;
+  width: 90%;
+  border: none;
+  border-radius: 50px;
+  outline: none;
+  font-family: "Segoe UI", Tahoma, sans-serif;
 }
-* body header nav .search svg {
+* body header nav .searchResult .search input::placeholder {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+* body header nav .searchResult .search input:not(:placeholder-shown) + kbd {
+  display: none;
+}
+* body header nav .searchResult .search svg {
   width: 23px !important;
   height: 23px !important;
+}
+* body header nav .searchResult .results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: inherit;
+  z-index: 100000;
+  background: #f1f1f1;
+  padding: 10px;
+  display: none;
+  border-radius: 10px;
+}
+* body header nav .searchResult .results.active {
+  display: block !important;
+}
+* body header nav .searchResult .results ul {
+  list-style: none;
+}
+* body header nav .searchResult .results ul a {
+  font-size: large;
+  padding: 5px 10px;
+}
+* body header nav .searchResult .results ul a svg {
+  width: 20px;
+  height: 20px;
+}
+* body header nav .searchResult .results ul a:hover {
+  background: rgb(228.25, 228.25, 228.25);
+  border-radius: 10px;
 }
 * body .container {
   overflow-y: hidden;
@@ -164,11 +224,54 @@
   height: 90vh;
   overflow: scroll;
   padding: 10px;
-  background: url("https://files.passeidireto.com/483b9c33-a9c4-480a-ac3c-2192719ab56a/bg1.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
+}
+* body .container main .title1 {
+  font-weight: bolder;
+  color: gray;
+  margin-block: 5px;
+}
+* body .container main .folders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+* body .container main .folders .folder {
+  border-radius: 10px;
+  width: 300px;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  box-shadow: 1px 2px 4px rgba(173, 173, 173, 0.589);
+  border: 1px solid rgba(128, 128, 128, 0.322);
+  background: #f1f1f1;
+}
+* body .container main .folders .folder svg {
+  fill: #edce44 !important;
+  stroke: none;
+  width: 35px;
+  height: 35px;
+}
+* body .container main .folders .folder .menu svg {
+  width: 20px;
+  height: 20px;
+  fill: none !important;
+  stroke: black;
+}
+* body .container main .folders .folder .name {
+  font-size: larger;
+  text-transform: capitalize;
+  font-weight: bolder;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 10px;
+  flex-direction: column;
 }
 * body .container main .quiteoftheday {
   padding: 10px;
@@ -187,6 +290,18 @@
   font-weight: bolder;
   color: gray;
 }
+* body .container main .recentSnippets #no-data a {
+  color: rgb(0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: medium;
+  transition: all 0.5s;
+}
+* body .container main .recentSnippets #no-data a:hover {
+  background: #000;
+  color: white;
+}
 * body .container main #cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
@@ -196,12 +311,15 @@
   width: 500px;
   margin: 10px;
   break-inside: avoid;
-  border: 1px solid white;
+  z-index: 10;
+  position: relative;
+  box-shadow: 1px 2px 4px rgba(173, 173, 173, 0.589);
+  border: 1px solid rgba(128, 128, 128, 0.322);
+  background-color: #f1f1f1 !important;
   position: relative;
   border-radius: 10px;
   background: transparent;
   backdrop-filter: blur(10px);
-  border: 1px solid lightgray;
 }
 * body .container main #cards .card .header-info {
   padding: 5px;
@@ -229,6 +347,10 @@
   margin: 10px;
   padding: 10px;
   border-radius: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 * body .container main #cards .card .tags {
   display: flex;
@@ -302,6 +424,71 @@
 }
 * body .container main #cards .card .menu li:hover {
   background: rgba(0, 0, 0, 0.2196078431);
+}
+
+header,
+main {
+  border: 1px solid rgba(128, 128, 128, 0.226);
+}
+
+main {
+  border-top: none !important;
+}
+
+@media screen and (max-width: 700px) {
+  header .logo {
+    word-wrap: none;
+  }
+  header nav {
+    display: none !important;
+  }
+  header .openList {
+    display: block !important;
+    cursor: pointer;
+  }
+  aside {
+    position: absolute;
+    width: 300px !important;
+    background: #f1f1f1;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-20px);
+    transition: all 0.5s ease;
+  }
+  aside.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+  main {
+    width: 100% !important;
+  }
+  main .folders {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  main .folders .folder {
+    width: 90% !important;
+  }
+  main #cards {
+    display: flex !important;
+    justify-content: center !important;
+    flex-direction: column;
+    align-items: center;
+    width: 100% !important;
+  }
+  main #cards .card {
+    width: 90% !important;
+  }
+}
+.pin svg.active {
+  fill: gray;
+}
+
+.fav svg.active {
+  fill: gray;
 }
 
 /*# sourceMappingURL=index.css.map */

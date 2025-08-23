@@ -250,7 +250,7 @@
                                     </svg>
                                 </div>
                             </div>
-                            <div class="code">
+                            <div class="code" title="<%= e.content%>">
                                 <code>
                                                 <%= e.content %>
                               </code>
@@ -306,7 +306,6 @@
 
     <script>
         function toggleMenu(id) {
-            // Close all other menus first
             document.querySelectorAll(".menu-popup").forEach(m => {
                 if (m.id !== "menu-" + id) m.classList.remove("active");
             });
@@ -315,7 +314,6 @@
             menu.classList.toggle("active");
         }
 
-        // Example actions
         function deleteCard(id) {
             fetch(`http://127.0.0.1:5000/card/${id}`, {
                 method: "delete",
@@ -331,7 +329,6 @@
             window.location.assign('http://127.0.0.1:5000/card')
         }
 
-        // Close menu if clicked outside
         document.addEventListener("click", (e) => {
             if (!e.target.closest(".card")) {
                 document.querySelectorAll(".menu-popup").forEach(m => m.classList.remove("active"));

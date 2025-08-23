@@ -15,11 +15,13 @@ describe("sendMail module", () => {
     );
 
     expect(result).toBe("Email Sent!");
-    expect(sendMailMock).toHaveBeenCalledWith({
-      from: process.env.EMAIL,
-      to: "test@example.com",
-      subject: "Hello",
-        text: "This is a test",
-    });
+    expect(sendMailMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        from: `"Code Snippet Manager" <${process.env.EMAIL}>`,
+        to: "test@example.com",
+        subject: "Hello",
+        html: expect.stringContaining("This is a test"),
+      })
+    );
   });
 });

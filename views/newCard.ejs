@@ -223,6 +223,10 @@
                         <label for="title">What is the title?</label>
                         <input type="text" id="title" name="title" placeholder="Enter your title">
                     </div>
+                    <div class="title">
+                        <label for="folderName">What is the folder name?</label>
+                        <input type="text" id="folderName" name="folderName" placeholder="Enter your folder name">
+                    </div>
                     <div class="des">
                         <label for="des">
                             And what is the Description?
@@ -303,6 +307,7 @@
             let description = document.getElementById("des").value;
             let category = document.getElementById("category").value;
             let content = document.getElementById("code").value;
+            let folderName = document.getElementById("folderName").value
             let tags = document.getElementById("tags").value
                 .split(",")
                 .map(tag => tag.trim());
@@ -312,7 +317,7 @@
             loader.style.background = "yellow"
             try {
                 let startTime = performance.now();
-                let res = await fetch("http://127.0.0.1:5000/card", {
+                let res = await fetch("/card", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -323,10 +328,10 @@
                         description,
                         category,
                         content,
-                        tags
+                        tags,
+                        folderName
                     })
                 });
-
 
                 let data = await res.json();
                 const endTime = performance.now();
