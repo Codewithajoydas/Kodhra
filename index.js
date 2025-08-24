@@ -133,6 +133,12 @@ app.use("/search", authMiddleware, searchRouter);
 app.use("/tags", authMiddleware, tagsRouter);
 app.use("/pin", authMiddleware, pinRouter);
 
+app.use((err, req, res, next) => {
+  console.error("Error:", err.message);
+  res.status(500).json({ error: "Server error", details: err.message });
+});
+
+
 app.use((req, res, next) => {
   res.status(404).render("pageNotFound");
 });
