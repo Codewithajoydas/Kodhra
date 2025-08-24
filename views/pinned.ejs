@@ -3,9 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Cards</title>
     <link rel="stylesheet" href="/style/css/index.css" />
-    <link rel="stylesheet" href="/style/css/createSnippet.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
   </head>
@@ -15,26 +14,56 @@
       <header>
         <span class="logo">
           <img src="/assets/logo.png" alt="code snippet manager" />
-          Code Snippet Manager
+          <span
+            >Code Snippet Manager
+            <sub
+              style="
+                font-family: 'Segoe UI', Tahoma, sans-serif;
+                font-size: 10px;
+              "
+              >V.1.0.1</sub
+            ></span
+          >
         </span>
         <nav>
-          <div class="search">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-search-icon lucide-search"
-            >
-              <path d="m21 21-4.34-4.34" />
-              <circle cx="11" cy="11" r="8" />
-            </svg>
-            <span>Search</span>
+          <div class="searchResult">
+            <label class="search" for="search" style="cursor: text">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-search-icon lucide-search"
+              >
+                <path d="m21 21-4.34-4.34" />
+                <circle cx="11" cy="11" r="8" />
+              </svg>
+
+              <input
+                type="search"
+                placeholder="Search Snippets..."
+                id="search"
+                autocomplete="off"
+              />
+              <kbd
+                style="
+                  background: rgba(128, 128, 128, 0.21);
+                  color: rgb(122, 122, 122);
+                  padding: 5px;
+                  border-radius: 5px;
+                  box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
+                "
+                >ctrl+k</kbd
+              >
+            </label>
+            <div class="results" id="results">
+              <ul id="results-list"></ul>
+            </div>
           </div>
           <div class="notification">
             <svg
@@ -74,9 +103,27 @@
             </svg>
           </div>
           <div class="profile">
-            <img src="<%= image%>" alt="" />
+            <img src="<%= image %>" alt="" />
           </div>
         </nav>
+        <div class="openList" style="display: none">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-list-filter-icon lucide-list-filter"
+          >
+            <path d="M3 6h18" />
+            <path d="M7 12h10" />
+            <path d="M10 18h4" />
+          </svg>
+        </div>
       </header>
       <div class="container">
         <aside>
@@ -105,7 +152,7 @@
                 Dashboard</a
               >
             </li>
-            <li>
+            <li class="active">
               <a href="/card"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -223,7 +270,7 @@
 
             <!-- Creation Shortcuts -->
             <span>Creation Shortcuts</span>
-            <li class="active">
+            <li class="">
               <a href="/card/create"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -458,181 +505,289 @@
           </ul>
         </aside>
         <main>
-          <div class="div1">
-            <div class="title">
-              <label for="title">What is the title?</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                placeholder="Enter your title"
-              />
-            </div>
-            <div class="title">
-              <label for="folderName">What is the folder name?</label>
-              <input
-                type="text"
-                id="folderName"
-                name="folderName"
-                placeholder="Enter your folder name"
-              />
-            </div>
-            <div class="des">
-              <label for="des"> And what is the Description? </label>
-              <textarea
-                type="text"
-                id="des"
-                name="description"
-                rows="15"
-                placeholder="Enter your Description.."
-              ></textarea>
-            </div>
-            <div class="lan">
-              <label for="lan"> Last what is language you prefer? </label>
-              <select name="language" id="category">
-                <option value="JavaScript">JavaScript</option>
-                <option value="C">C</option>
-                <option value="C++">C++</option>
-                <option value="C#">C#</option>
-                <option value="Java">Java</option>
-                <option value="TypeScript">TypeScript</option>
-                <option value="Python">Python</option>
-                <option value="Ruby">Ruby</option>
-                <option value="PHP">PHP</option>
-                <option value="Go">Go</option>
-                <option value="Rust">Rust</option>
-                <option value="Swift">Swift</option>
-                <option value="Kotlin">Kotlin</option>
-                <option value="Objective-C">Objective-C</option>
-                <option value="Scala">Scala</option>
-                <option value="Perl">Perl</option>
-                <option value="R">R</option>
-                <option value="Dart">Dart</option>
-                <option value="Haskell">Haskell</option>
-                <option value="Lua">Lua</option>
-                <option value="Elixir">Elixir</option>
-                <option value="Clojure">Clojure</option>
-                <option value="Shell">Shell (Bash)</option>
-                <option value="PowerShell">PowerShell</option>
-                <option value="SQL">SQL</option>
-                <option value="GraphQL">GraphQL</option>
-                <option value="MATLAB">MATLAB</option>
-                <option value="Assembly">Assembly</option>
-                <option value="Fortran">Fortran</option>
-                <option value="COBOL">COBOL</option>
-                <option value="Erlang">Erlang</option>
-                <option value="VB.NET">VB.NET</option>
-              </select>
-            </div>
-          </div>
-          <div class="div2">
-            <div class="code">
-              <label for="code">Finally Write Your Code Below</label>
-              <textarea
-                type="text"
-                name="content"
-                id="code"
-                rows="25"
-                placeholder="Write code..."
-              ></textarea>
-            </div>
-            <div class="tags" style="margin-top: 10px">
-              <label for="tags">Tags (Comma Separated)</label>
-              <input
-                type="text"
-                name="tags"
-                placeholder="Enter Tags..."
-                id="tags"
-              />
-            </div>
-            <button type="submit" onclick="submitData()">
-              Submit the snippet
-            </button>
-          </div>
-          <div class="loading" style="display: none">
-            <span
-              style="
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-                color: black;
-              "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-loader-circle-icon lucide-loader-circle"
+          <span style="font-weight: bolder; color: gray; margin-block: 5px"
+            >All Code Snippets</span
+          >
+          <div id="cards">
+            <div id="cards">
+              <% card.forEach(e=> { %>
+              <div
+                class="card"
+                style="z-index: 1 !important"
+                id="card-<%= e._id%>"
+                ondblclick="window.open('/card/<%= e._id %>', '_blank')"
               >
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-              Sending Data...</span
-            >
+                <div class="header-info">
+                  <div style="display: flex; align-items: center; gap: 10px">
+                    <img
+                      src="<%= image %>"
+                      alt=""
+                      width="40"
+                      height="40"
+                      style="border-radius: 50%"
+                    />
+                    <div class="title">
+                      <h3><%= e.title%></h3>
+                      <div>
+                        <span class="author"
+                          ><strong> <%= author%> </strong></span
+                        >, <span class="lan"> <%= e.category%> </span>,
+                        <span class="time">
+                          <%= new Date(e.metadata.createdAt).toLocaleString() %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="menu_top" onclick="toggleMenu('<%= e._id %>')">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical"
+                    >
+                      <circle cx="12" cy="12" r="1" />
+                      <circle cx="12" cy="5" r="1" />
+                      <circle cx="12" cy="19" r="1" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="code" title="<%= e.content%>">
+                  <code> <%= e.content %> </code>
+                </div>
+                <div class="tags">
+                  <% e.tags.forEach(tag=> { %>
+                  <span> <%= tag %> </span>
+                  <% }) %>
+                </div>
+
+                <div class="options">
+                  <div class="open">
+                    <a
+                      href="/card/<%= e.id%>"
+                      style="
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 10px;
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-badge-info-icon lucide-badge-info"
+                      >
+                        <path
+                          d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
+                        />
+                        <line x1="12" x2="12" y1="16" y2="12" />
+                        <line x1="12" x2="12.01" y1="8" y2="8" />
+                      </svg>
+                      View Details
+                    </a>
+                  </div>
+                  <div class="sub_menu">
+                    <div
+                      class="pin"
+                      onclick="pinIt('<%= e._id %>')"
+                      data-id="<%= e._id%>"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-pin-icon lucide-pin"
+                      >
+                        <path d="M12 17v5" />
+                        <path
+                          d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"
+                        />
+                      </svg>
+                    </div>
+
+                    <div
+                      class="fav"
+                      onclick="favIt('<%= e._id %>')"
+                      data-id="<%= e._id%>"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-star-icon lucide-star"
+                      >
+                        <path
+                          d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="menu active"
+                  id="menu-<%= e._id %>"
+                  onclick="toggleMenu('<%= e._id %>')"
+                >
+                  <li onclick="editCard('<%= e._id %>')">Edit</li>
+                  <li onclick="deleteCard('<%= e._id %>')">Delete</li>
+                  <li onclick="pinIt('<%= e._id %>')">Pin</li>
+                </div>
+              </div>
+
+              <% }) %>
+            </div>
           </div>
         </main>
       </div>
     </div>
 
     <script>
-      async function submitData() {
-        let title = document.getElementById("title").value;
-        let description = document.getElementById("des").value;
-        let category = document.getElementById("category").value;
-        let content = document.getElementById("code").value;
-        let folderName = document.getElementById("folderName").value;
-        let tags = document
-          .getElementById("tags")
-          .value.split(",")
-          .map((tag) => tag.trim());
-        let loader = document.querySelector(".loading");
-        let msgloader = document.querySelector(".loading span");
-        loader.style.display = "flex";
-        loader.style.background = "yellow";
+      let results = document.getElementById("results");
+      let list = document.getElementById("results-list");
+      let searchInput = document.querySelector(".searchResult");
+
+      let debounceTimer;
+
+      searchInput.addEventListener("input", function (e) {
+        e.stopPropagation();
+        let query = e.target.value.trim();
+
+        clearTimeout(debounceTimer);
+
+        // list.textContent = "Searching...";
+
+        if (!query) {
+          results.classList.remove("active");
+          return;
+        }
+
+        debounceTimer = setTimeout(async () => {
+          results.classList.add("active");
+
+          try {
+            let rs = await fetch(`/search?query=${encodeURIComponent(query)}`);
+            let data = await rs.json();
+            let unique = new Set();
+
+            data.findCards.slice(0, 3).forEach((item) => {
+              if (!unique.has(item.title)) {
+                unique.add(item.title);
+                let a = document.createElement("a");
+                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> ${item.title}`;
+                a.href = `/card/${item._id}`;
+                a.target = "_blank";
+                list.innerHTML = "";
+                list.appendChild(a);
+              }
+            });
+
+            if (list.children.length === 0) {
+              let li = document.createElement("li");
+              li.textContent = "No results found";
+              list.appendChild(li);
+            }
+          } catch (err) {
+            console.error("Search error:", err);
+          }
+        }, 300);
+      });
+
+      function toggleMenu(id) {
+        document.querySelectorAll(".menu-popup").forEach((m) => {
+          if (m.id !== "menu-" + id) m.classList.remove("active");
+        });
+
+        let menu = document.getElementById("menu-" + id);
+        menu.classList.toggle("active");
+      }
+
+      function setActiveStyle(element, active) {
+        if (active) {
+          element.style.fill = "black";
+          element.style.transition = "0.3s ease";
+        } else {
+          element.style.fill = "none";
+        }
+      }
+
+      async function pinIt(id) {
+        const pinIcon = document.querySelector(`.pin[data-id="${id}"] svg`);
         try {
-          let startTime = performance.now();
-          let res = await fetch("/card", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+          const res = await fetch(`/card/pin/${id}`, {
+            method: "PUT",
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            setActiveStyle(pinIcon, data.card.isPinned);
+          }
+        } catch (err) {
+          console.error("Error pinning:", err);
+        }
+      }
+
+      async function favIt(id) {
+        const favIcon = document.querySelector(`.fav[data-id="${id}"] svg`);
+        try {
+          const res = await fetch(`/card/fav/${id}`, {
+            method: "PUT",
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            setActiveStyle(favIcon, data.card.isFavorite);
+          }
+        } catch (err) {
+          console.error("Error favoriting:", err);
+        }
+      }
+
+      async function deleteCard(id) {
+        try {
+          const res = await fetch(`/card/${id}`, {
+            method: "DELETE",
             credentials: "include",
-            body: JSON.stringify({
-              title,
-              description,
-              category,
-              content,
-              tags,
-              folderName,
-            }),
           });
 
-          let data = await res.json();
-          const endTime = performance.now();
-          const duration = ((endTime - startTime) / 1000).toFixed(2);
-          loader.style.display = "flex";
-          loader.style.background = "lightgreen";
-          msgloader.textContent = `🎉 Snippet created in just ${duration}s`;
-          let timeout = setTimeout(() => {
-            loader.style.display = "none";
-            clearInterval(timeout);
-          }, 3000);
+          if (res.ok) {
+            const cardEl = document.getElementById(`card-${id}`);
+            if (cardEl) {
+              cardEl.remove();
+            }
+            window.location.reload();
+          } else {
+            console.error("Failed to delete card:", await res.text());
+          }
         } catch (err) {
-          console.error("Error submitting data:", err);
-          loader.style.display = "flex";
-          loader.style.background = "#ff474c";
-          msgloader.textContent = `🌋 Error submitting data`;
-          let timeout = setTimeout(() => {
-            loader.style.display = "none";
-            clearInterval(timeout);
-          }, 3000);
+          console.error("Delete error:", err);
         }
+      }
+      function editCard(id) {
+        window.location.assign(`/card/${id}`);
       }
     </script>
   </body>

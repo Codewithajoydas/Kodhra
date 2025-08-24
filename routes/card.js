@@ -10,7 +10,7 @@ cardRouter.get("/", async (req, res) => {
   const decode = jwt.verify(token, process.env.SECRET);
   const { _id, userName, email, userImage } = decode.checkUser;
   const card = await cardSchema.find({ author: _id });
-  res.render("allCards", { card, image: userImage, userName });
+  res.render("allCards", { card, image: userImage, author:userName });
 });
 cardRouter.get("/create", async (req, res) => {
   const token = req.cookies.token;

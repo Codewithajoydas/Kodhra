@@ -3,9 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Home | Code Snippet Manager</title>
     <link rel="stylesheet" href="/style/css/index.css" />
-    <link rel="stylesheet" href="/style/css/createSnippet.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
   </head>
@@ -15,26 +14,56 @@
       <header>
         <span class="logo">
           <img src="/assets/logo.png" alt="code snippet manager" />
-          Code Snippet Manager
+          <span
+            >Code Snippet Manager
+            <sub
+              style="
+                font-family: 'Segoe UI', Tahoma, sans-serif;
+                font-size: 10px;
+              "
+              >V.1.0.1</sub
+            ></span
+          >
         </span>
         <nav>
-          <div class="search">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-search-icon lucide-search"
-            >
-              <path d="m21 21-4.34-4.34" />
-              <circle cx="11" cy="11" r="8" />
-            </svg>
-            <span>Search</span>
+          <div class="searchResult">
+            <label class="search" for="search" style="cursor: text">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-search-icon lucide-search"
+              >
+                <path d="m21 21-4.34-4.34" />
+                <circle cx="11" cy="11" r="8" />
+              </svg>
+
+              <input
+                type="search"
+                placeholder="Search Snippets..."
+                id="search"
+                autocomplete="off"
+              />
+              <kbd
+                style="
+                  background: rgba(128, 128, 128, 0.21);
+                  color: rgb(122, 122, 122);
+                  padding: 5px;
+                  border-radius: 5px;
+                  box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
+                "
+                >ctrl+k</kbd
+              >
+            </label>
+            <div class="results" id="results">
+              <ul id="results-list"></ul>
+            </div>
           </div>
           <div class="notification">
             <svg
@@ -74,9 +103,27 @@
             </svg>
           </div>
           <div class="profile">
-            <img src="<%= image%>" alt="" />
+            <img src="<%= image %>" alt="" />
           </div>
         </nav>
+        <div class="openList" style="display: none">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-list-filter-icon lucide-list-filter"
+          >
+            <path d="M3 6h18" />
+            <path d="M7 12h10" />
+            <path d="M10 18h4" />
+          </svg>
+        </div>
       </header>
       <div class="container">
         <aside>
@@ -152,7 +199,7 @@
                 Folders</a
               >
             </li>
-            <li>
+            <li class="active">
               <a href="/tags"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -223,7 +270,7 @@
 
             <!-- Creation Shortcuts -->
             <span>Creation Shortcuts</span>
-            <li class="active">
+            <li>
               <a href="/card/create"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -458,182 +505,262 @@
           </ul>
         </aside>
         <main>
-          <div class="div1">
-            <div class="title">
-              <label for="title">What is the title?</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                placeholder="Enter your title"
-              />
-            </div>
-            <div class="title">
-              <label for="folderName">What is the folder name?</label>
-              <input
-                type="text"
-                id="folderName"
-                name="folderName"
-                placeholder="Enter your folder name"
-              />
-            </div>
-            <div class="des">
-              <label for="des"> And what is the Description? </label>
-              <textarea
-                type="text"
-                id="des"
-                name="description"
-                rows="15"
-                placeholder="Enter your Description.."
-              ></textarea>
-            </div>
-            <div class="lan">
-              <label for="lan"> Last what is language you prefer? </label>
-              <select name="language" id="category">
-                <option value="JavaScript">JavaScript</option>
-                <option value="C">C</option>
-                <option value="C++">C++</option>
-                <option value="C#">C#</option>
-                <option value="Java">Java</option>
-                <option value="TypeScript">TypeScript</option>
-                <option value="Python">Python</option>
-                <option value="Ruby">Ruby</option>
-                <option value="PHP">PHP</option>
-                <option value="Go">Go</option>
-                <option value="Rust">Rust</option>
-                <option value="Swift">Swift</option>
-                <option value="Kotlin">Kotlin</option>
-                <option value="Objective-C">Objective-C</option>
-                <option value="Scala">Scala</option>
-                <option value="Perl">Perl</option>
-                <option value="R">R</option>
-                <option value="Dart">Dart</option>
-                <option value="Haskell">Haskell</option>
-                <option value="Lua">Lua</option>
-                <option value="Elixir">Elixir</option>
-                <option value="Clojure">Clojure</option>
-                <option value="Shell">Shell (Bash)</option>
-                <option value="PowerShell">PowerShell</option>
-                <option value="SQL">SQL</option>
-                <option value="GraphQL">GraphQL</option>
-                <option value="MATLAB">MATLAB</option>
-                <option value="Assembly">Assembly</option>
-                <option value="Fortran">Fortran</option>
-                <option value="COBOL">COBOL</option>
-                <option value="Erlang">Erlang</option>
-                <option value="VB.NET">VB.NET</option>
-              </select>
-            </div>
-          </div>
-          <div class="div2">
-            <div class="code">
-              <label for="code">Finally Write Your Code Below</label>
-              <textarea
-                type="text"
-                name="content"
-                id="code"
-                rows="25"
-                placeholder="Write code..."
-              ></textarea>
-            </div>
-            <div class="tags" style="margin-top: 10px">
-              <label for="tags">Tags (Comma Separated)</label>
-              <input
-                type="text"
-                name="tags"
-                placeholder="Enter Tags..."
-                id="tags"
-              />
-            </div>
-            <button type="submit" onclick="submitData()">
-              Submit the snippet
-            </button>
-          </div>
-          <div class="loading" style="display: none">
-            <span
+          <span style="font-weight: bolder; color: gray; margin-block: 5px"
+            >All Code Snippets</span
+          ><br /><br />
+          <ul
+            style="
+              list-style: none;
+              padding: 0;
+              margin: 0;
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              gap: 15px;
+            "
+          >
+            <% tags.forEach(tag=> { %>
+            <li
               style="
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-                color: black;
+                flex: 1 1 calc(25% - 20px);
+                max-width: 200px;
+                min-width: 140px;
               "
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-loader-circle-icon lucide-loader-circle"
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background-color: #fff;
+                  border-radius: 12px;
+                  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+                  padding: 15px;
+                  height: 100%;
+                  transition: all 0.25s ease-in-out;
+                  cursor: pointer;
+                "
+                class="tag-card"
               >
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-              Sending Data...</span
-            >
-          </div>
+                <a
+                  href="/search?query=<%= tag %>"
+                  style="
+                    text-decoration: none;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    width: 100%;
+                    gap: 6px;
+                  "
+                  class="tag-link"
+                >
+                  <p
+                    style="
+                      font-size: 1rem;
+                      font-weight: 600;
+                      margin: 0;
+                      color: #222;
+                      text-align: center;
+                    "
+                  >
+                    <%= tag %>
+                  </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="color: #444; transition: transform 0.2s ease"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 16 16 12 12 8" />
+                    <line x1="16" y1="12" x2="21" y2="12" />
+                  </svg>
+                </a>
+              </div>
+            </li>
+            <% }) %>
+          </ul>
         </main>
       </div>
     </div>
-
+    <script src="/scripts/home.js"></script>
     <script>
-      async function submitData() {
-        let title = document.getElementById("title").value;
-        let description = document.getElementById("des").value;
-        let category = document.getElementById("category").value;
-        let content = document.getElementById("code").value;
-        let folderName = document.getElementById("folderName").value;
-        let tags = document
-          .getElementById("tags")
-          .value.split(",")
-          .map((tag) => tag.trim());
-        let loader = document.querySelector(".loading");
-        let msgloader = document.querySelector(".loading span");
-        loader.style.display = "flex";
-        loader.style.background = "yellow";
-        try {
-          let startTime = performance.now();
-          let res = await fetch("/card", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              title,
-              description,
-              category,
-              content,
-              tags,
-              folderName,
-            }),
-          });
+      let results = document.getElementById("results");
+      let list = document.getElementById("results-list");
+      let searchInput = document.querySelector(".searchResult");
 
-          let data = await res.json();
+      let debounceTimer;
+
+      searchInput.addEventListener("input", function (e) {
+        e.stopPropagation();
+        let query = e.target.value.trim();
+
+        clearTimeout(debounceTimer);
+
+        // list.textContent = "Searching...";
+
+        if (!query) {
+          results.classList.remove("active");
+          return;
+        }
+
+        debounceTimer = setTimeout(async () => {
+          results.classList.add("active");
+
+          try {
+            let rs = await fetch(`/search?query=${encodeURIComponent(query)}`);
+            let data = await rs.json();
+            let unique = new Set();
+
+            data.findCards.slice(0, 3).forEach((item) => {
+              if (!unique.has(item.title)) {
+                unique.add(item.title);
+                let a = document.createElement("a");
+                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> ${item.title}`;
+                a.href = `/card/${item._id}`;
+                a.target = "_blank";
+                list.innerHTML = "";
+                list.appendChild(a);
+              }
+            });
+
+            if (list.children.length === 0) {
+              let li = document.createElement("li");
+              li.textContent = "No results found";
+              list.appendChild(li);
+            }
+          } catch (err) {
+            console.error("Search error:", err);
+          }
+        }, 300);
+      });
+
+      async function testInternetSpeed() {
+        const speedDiv = document.getElementById("wifi-speed");
+        // Tiny file (about 43 bytes)
+        const fileUrl =
+          "https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js";
+        const fileSizeInBytes = 87236;
+
+        const startTime = performance.now();
+        try {
+          const response = await fetch(fileUrl + "?_=" + Date.now(), {
+            cache: "no-store",
+          });
+          await response.arrayBuffer();
           const endTime = performance.now();
-          const duration = ((endTime - startTime) / 1000).toFixed(2);
-          loader.style.display = "flex";
-          loader.style.background = "lightgreen";
-          msgloader.textContent = `🎉 Snippet created in just ${duration}s`;
-          let timeout = setTimeout(() => {
-            loader.style.display = "none";
-            clearInterval(timeout);
-          }, 3000);
+
+          const duration = (endTime - startTime) / 1000; // seconds
+          const bitsLoaded = fileSizeInBytes * 8;
+          let speedMbps = (bitsLoaded / duration / 1024 / 1024).toFixed(2);
+          speedMbps = speedMbps.toString().padStart(5, "0");
+          speedDiv.textContent = `${speedMbps} Mbps`;
         } catch (err) {
-          console.error("Error submitting data:", err);
-          loader.style.display = "flex";
-          loader.style.background = "#ff474c";
-          msgloader.textContent = `🌋 Error submitting data`;
-          let timeout = setTimeout(() => {
-            loader.style.display = "none";
-            clearInterval(timeout);
-          }, 3000);
+          speedDiv.textContent = "Speed test failed";
+          console.error("Speed Test Error:", err);
         }
       }
+
+      testInternetSpeed();
+      setInterval(testInternetSpeed, 1500); // test every 1.5s
+
+      function setActiveStyle(element, active) {
+        if (active) {
+          element.style.fill = "black";
+          element.style.transition = "0.3s ease";
+        } else {
+          element.style.fill = "none";
+        }
+      }
+
+      async function pinIt(id) {
+        const pinIcon = document.querySelector(`.pin[data-id="${id}"] svg`);
+        try {
+          const res = await fetch(`/card/pin/${id}`, {
+            method: "PUT",
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            setActiveStyle(pinIcon, data.card.isPinned);
+          }
+        } catch (err) {
+          console.error("Error pinning:", err);
+        }
+      }
+
+      async function favIt(id) {
+        const favIcon = document.querySelector(`.fav[data-id="${id}"] svg`);
+        try {
+          const res = await fetch(`/card/fav/${id}`, {
+            method: "PUT",
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            setActiveStyle(favIcon, data.card.isFavorite);
+          }
+        } catch (err) {
+          console.error("Error favoriting:", err);
+        }
+      }
+      function toggleMenu(id) {
+        document.querySelectorAll(".menu-popup").forEach((m) => {
+          if (m.id !== "menu-" + id) m.classList.remove("active");
+        });
+
+        let menu = document.getElementById("menu-" + id);
+        menu.classList.toggle("active");
+      }
+
+      async function deleteCard(id) {
+        try {
+          const res = await fetch(`/card/${id}`, {
+            method: "DELETE",
+            credentials: "include",
+          });
+
+          if (res.ok) {
+            const cardEl = document.getElementById(`card-${id}`);
+            if (cardEl) {
+              cardEl.remove();
+            }
+            window.location.reload();
+          } else {
+            console.error("Failed to delete card:", await res.text());
+          }
+        } catch (err) {
+          console.error("Delete error:", err);
+        }
+      }
+
+      function editCard(id) {
+        window.location.assign(`/card/${id}`);
+      }
+
+      let search = document.getElementById("search");
+      search.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          let query = search.value;
+          if (query.trim() !== "") {
+            window.location.href = `/search?query=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.ctrlKey && e.key === "k") {
+          e.preventDefault();
+          search.focus();
+        }
+      });
     </script>
   </body>
 </html>

@@ -11,7 +11,7 @@
       "Lucida Sans", Arial, sans-serif;
     font-weight: bolder;
   }
-  img{
+  img {
     pointer-events: none;
   }
   a {
@@ -266,7 +266,7 @@
               font-weight: bolder;
               display: flex;
               justify-content: center;
-              align-items: end;
+              align-items: start;
               gap: 10px;
               flex-direction: column;
             }
@@ -290,13 +290,13 @@
             color: gray;
           }
           #no-data {
-            a{
+            a {
               color: rgb(0, 0, 0);
               display: flex;
               justify-content: center;
               align-items: center;
               font-size: medium;
-              transition: all .5s;
+              transition: all 0.5s;
               &:hover {
                 background: #000;
                 color: white;

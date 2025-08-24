@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const sendMail = require("../utils/sendmail.module.js")
+const sendMail = require("../utils/sendmail.module.js");
 router.get("/", (req, res) => {
   res.render("login");
 });

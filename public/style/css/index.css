@@ -269,7 +269,7 @@
   font-weight: bolder;
   display: flex;
   justify-content: center;
-  align-items: end;
+  align-items: start;
   gap: 10px;
   flex-direction: column;
 }

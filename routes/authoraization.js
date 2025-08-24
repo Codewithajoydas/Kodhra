@@ -33,9 +33,9 @@ signup.post("/", upload.single("userImage"), async (req, res) => {
     return res.status(400).redirect("/login");
   }
   const hashPassword = await bcrypt.hash(password, 10);
- const uploadedImage = await cloudinary.uploader.upload(req.file.path, {
-   folder: "my_images",
- });
+  const uploadedImage = await cloudinary.uploader.upload(req.file.path, {
+    folder: "my_images",
+  });
   console.log(uploadedImage);
   const createUser = await User.create({
     userName,

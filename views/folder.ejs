@@ -3,9 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Cards</title>
     <link rel="stylesheet" href="/style/css/index.css" />
-    <link rel="stylesheet" href="/style/css/createSnippet.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
   </head>
@@ -15,26 +14,56 @@
       <header>
         <span class="logo">
           <img src="/assets/logo.png" alt="code snippet manager" />
-          Code Snippet Manager
+          <span
+            >Code Snippet Manager
+            <sub
+              style="
+                font-family: 'Segoe UI', Tahoma, sans-serif;
+                font-size: 10px;
+              "
+              >V.1.0.1</sub
+            ></span
+          >
         </span>
         <nav>
-          <div class="search">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-search-icon lucide-search"
-            >
-              <path d="m21 21-4.34-4.34" />
-              <circle cx="11" cy="11" r="8" />
-            </svg>
-            <span>Search</span>
+          <div class="searchResult">
+            <label class="search" for="search" style="cursor: text">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-search-icon lucide-search"
+              >
+                <path d="m21 21-4.34-4.34" />
+                <circle cx="11" cy="11" r="8" />
+              </svg>
+
+              <input
+                type="search"
+                placeholder="Search Snippets..."
+                id="search"
+                autocomplete="off"
+              />
+              <kbd
+                style="
+                  background: rgba(128, 128, 128, 0.21);
+                  color: rgb(122, 122, 122);
+                  padding: 5px;
+                  border-radius: 5px;
+                  box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
+                "
+                >ctrl+k</kbd
+              >
+            </label>
+            <div class="results" id="results">
+              <ul id="results-list"></ul>
+            </div>
           </div>
           <div class="notification">
             <svg
@@ -74,9 +103,27 @@
             </svg>
           </div>
           <div class="profile">
-            <img src="<%= image%>" alt="" />
+            <img src="<%= image %>" alt="" />
           </div>
         </nav>
+        <div class="openList" style="display: none">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-list-filter-icon lucide-list-filter"
+          >
+            <path d="M3 6h18" />
+            <path d="M7 12h10" />
+            <path d="M10 18h4" />
+          </svg>
+        </div>
       </header>
       <div class="container">
         <aside>
@@ -131,27 +178,28 @@
                 All Code Snippets</a
               >
             </li>
-            <li>
-              <a href="/folder"
-                ><svg
+            <li class="active">
+              <a href="/folder">
+                <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-folder-icon lucide-folder"
+                  class="lucide lucide-folder"
                 >
                   <path
                     d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
                   />
                 </svg>
-                Folders</a
-              >
+                Folders
+              </a>
             </li>
+
             <li>
               <a href="/tags"
                 ><svg
@@ -223,7 +271,7 @@
 
             <!-- Creation Shortcuts -->
             <span>Creation Shortcuts</span>
-            <li class="active">
+            <li class="">
               <a href="/card/create"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -458,181 +506,212 @@
           </ul>
         </aside>
         <main>
-          <div class="div1">
-            <div class="title">
-              <label for="title">What is the title?</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                placeholder="Enter your title"
-              />
-            </div>
-            <div class="title">
-              <label for="folderName">What is the folder name?</label>
-              <input
-                type="text"
-                id="folderName"
-                name="folderName"
-                placeholder="Enter your folder name"
-              />
-            </div>
-            <div class="des">
-              <label for="des"> And what is the Description? </label>
-              <textarea
-                type="text"
-                id="des"
-                name="description"
-                rows="15"
-                placeholder="Enter your Description.."
-              ></textarea>
-            </div>
-            <div class="lan">
-              <label for="lan"> Last what is language you prefer? </label>
-              <select name="language" id="category">
-                <option value="JavaScript">JavaScript</option>
-                <option value="C">C</option>
-                <option value="C++">C++</option>
-                <option value="C#">C#</option>
-                <option value="Java">Java</option>
-                <option value="TypeScript">TypeScript</option>
-                <option value="Python">Python</option>
-                <option value="Ruby">Ruby</option>
-                <option value="PHP">PHP</option>
-                <option value="Go">Go</option>
-                <option value="Rust">Rust</option>
-                <option value="Swift">Swift</option>
-                <option value="Kotlin">Kotlin</option>
-                <option value="Objective-C">Objective-C</option>
-                <option value="Scala">Scala</option>
-                <option value="Perl">Perl</option>
-                <option value="R">R</option>
-                <option value="Dart">Dart</option>
-                <option value="Haskell">Haskell</option>
-                <option value="Lua">Lua</option>
-                <option value="Elixir">Elixir</option>
-                <option value="Clojure">Clojure</option>
-                <option value="Shell">Shell (Bash)</option>
-                <option value="PowerShell">PowerShell</option>
-                <option value="SQL">SQL</option>
-                <option value="GraphQL">GraphQL</option>
-                <option value="MATLAB">MATLAB</option>
-                <option value="Assembly">Assembly</option>
-                <option value="Fortran">Fortran</option>
-                <option value="COBOL">COBOL</option>
-                <option value="Erlang">Erlang</option>
-                <option value="VB.NET">VB.NET</option>
-              </select>
-            </div>
-          </div>
-          <div class="div2">
-            <div class="code">
-              <label for="code">Finally Write Your Code Below</label>
-              <textarea
-                type="text"
-                name="content"
-                id="code"
-                rows="25"
-                placeholder="Write code..."
-              ></textarea>
-            </div>
-            <div class="tags" style="margin-top: 10px">
-              <label for="tags">Tags (Comma Separated)</label>
-              <input
-                type="text"
-                name="tags"
-                placeholder="Enter Tags..."
-                id="tags"
-              />
-            </div>
-            <button type="submit" onclick="submitData()">
-              Submit the snippet
-            </button>
-          </div>
-          <div class="loading" style="display: none">
-            <span
-              style="
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-                color: black;
-              "
+          <span style="font-weight: bolder; color: gray; margin-block: 5px"
+            >All Folders</span
+          ><br /><br />
+          <div class="folders">
+            <% folders.forEach((e)=>{%>
+            <div
+              class="folder"
+              draggable="true"
+              ondblclick="window.open('/folder/<%= e._id %>', '_blank')"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-loader-circle-icon lucide-loader-circle"
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 10px;
+                "
               >
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-              Sending Data...</span
-            >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-folder-icon lucide-folder"
+                >
+                  <path
+                    d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
+                  />
+                </svg>
+                <span class="name" style="line-height: 14px">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      gap: 10px;
+                    "
+                  >
+                    <%= e.folderName %>
+                  </div>
+                  <span
+                    datetime="<%= e.timestamps.updatedAt%>"
+                    style="font-size: 10px"
+                  >
+                    <%= new Date(e.timestamps.updatedAt).toLocaleString() %>
+                  </span>
+                </span>
+              </div>
+              <div
+                class="menu"
+                onclick="sharebtn('<%=userId %>', '<%=e._id%>')"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-share2-icon lucide-share-2"
+                >
+                  <circle cx="18" cy="5" r="3" />
+                  <circle cx="6" cy="12" r="3" />
+                  <circle cx="18" cy="19" r="3" />
+                  <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
+                  <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
+                </svg>
+              </div>
+            </div>
+            <%})%>
           </div>
         </main>
       </div>
     </div>
 
     <script>
-      async function submitData() {
-        let title = document.getElementById("title").value;
-        let description = document.getElementById("des").value;
-        let category = document.getElementById("category").value;
-        let content = document.getElementById("code").value;
-        let folderName = document.getElementById("folderName").value;
-        let tags = document
-          .getElementById("tags")
-          .value.split(",")
-          .map((tag) => tag.trim());
-        let loader = document.querySelector(".loading");
-        let msgloader = document.querySelector(".loading span");
-        loader.style.display = "flex";
-        loader.style.background = "yellow";
+      let results = document.getElementById("results");
+      let list = document.getElementById("results-list");
+      let searchInput = document.querySelector(".searchResult");
+
+      let debounceTimer;
+
+      searchInput.addEventListener("input", function (e) {
+        e.stopPropagation();
+        let query = e.target.value.trim();
+
+        clearTimeout(debounceTimer);
+
+        // list.textContent = "Searching...";
+
+        if (!query) {
+          results.classList.remove("active");
+          return;
+        }
+
+        debounceTimer = setTimeout(async () => {
+          results.classList.add("active");
+
+          try {
+            let rs = await fetch(`/search?query=${encodeURIComponent(query)}`);
+            let data = await rs.json();
+            let unique = new Set();
+
+            data.findCards.slice(0, 3).forEach((item) => {
+              if (!unique.has(item.title)) {
+                unique.add(item.title);
+                let a = document.createElement("a");
+                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> ${item.title}`;
+                a.href = `/card/${item._id}`;
+                a.target = "_blank";
+                list.innerHTML = "";
+                list.appendChild(a);
+              }
+            });
+
+            if (list.children.length === 0) {
+              let li = document.createElement("li");
+              li.textContent = "No results found";
+              list.appendChild(li);
+            }
+          } catch (err) {
+            console.error("Search error:", err);
+          }
+        }, 300);
+      });
+
+      function toggleMenu(id) {
+        document.querySelectorAll(".menu-popup").forEach((m) => {
+          if (m.id !== "menu-" + id) m.classList.remove("active");
+        });
+
+        let menu = document.getElementById("menu-" + id);
+        menu.classList.toggle("active");
+      }
+
+      function setActiveStyle(element, active) {
+        if (active) {
+          element.style.fill = "black";
+          element.style.transition = "0.3s ease";
+        } else {
+          element.style.fill = "none";
+        }
+      }
+
+      async function pinIt(id) {
+        const pinIcon = document.querySelector(`.pin[data-id="${id}"] svg`);
         try {
-          let startTime = performance.now();
-          let res = await fetch("/card", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+          const res = await fetch(`/card/pin/${id}`, {
+            method: "PUT",
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            setActiveStyle(pinIcon, data.card.isPinned);
+          }
+        } catch (err) {
+          console.error("Error pinning:", err);
+        }
+      }
+
+      async function favIt(id) {
+        const favIcon = document.querySelector(`.fav[data-id="${id}"] svg`);
+        try {
+          const res = await fetch(`/card/fav/${id}`, {
+            method: "PUT",
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            setActiveStyle(favIcon, data.card.isFavorite);
+          }
+        } catch (err) {
+          console.error("Error favoriting:", err);
+        }
+      }
+
+      async function deleteCard(id) {
+        try {
+          const res = await fetch(`/card/${id}`, {
+            method: "DELETE",
             credentials: "include",
-            body: JSON.stringify({
-              title,
-              description,
-              category,
-              content,
-              tags,
-              folderName,
-            }),
           });
 
-          let data = await res.json();
-          const endTime = performance.now();
-          const duration = ((endTime - startTime) / 1000).toFixed(2);
-          loader.style.display = "flex";
-          loader.style.background = "lightgreen";
-          msgloader.textContent = `🎉 Snippet created in just ${duration}s`;
-          let timeout = setTimeout(() => {
-            loader.style.display = "none";
-            clearInterval(timeout);
-          }, 3000);
+          if (res.ok) {
+            const cardEl = document.getElementById(`card-${id}`);
+            if (cardEl) {
+              cardEl.remove();
+            }
+            window.location.reload();
+          } else {
+            console.error("Failed to delete card:", await res.text());
+          }
         } catch (err) {
-          console.error("Error submitting data:", err);
-          loader.style.display = "flex";
-          loader.style.background = "#ff474c";
-          msgloader.textContent = `🌋 Error submitting data`;
-          let timeout = setTimeout(() => {
-            loader.style.display = "none";
-            clearInterval(timeout);
-          }, 3000);
+          console.error("Delete error:", err);
         }
+      }
+      function editCard(id) {
+        window.location.assign(`/card/${id}`);
       }
     </script>
   </body>
