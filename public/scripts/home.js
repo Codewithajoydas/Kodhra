@@ -18,4 +18,3 @@ function sharebtn(userId, folderId) {
       .catch((err) => console.error("Failed to copy:", err));
   }
 }
-

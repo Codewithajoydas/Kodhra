@@ -9,8 +9,6 @@ searchRouter.get("/", async (req, res) => {
   const { _id } = decode.checkUser;
   const cards = await Card.find({ author: _id });
   const userIds = cards.map((card) => card.author);
-
-  console.log(userIds);
   const { query } = req.query;
   const findCards = await Card.find({
     $and: [

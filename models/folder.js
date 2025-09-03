@@ -17,16 +17,20 @@ const folderSchema = new mongoose.Schema({
       ref: "Card",
     },
   ],
-  timestamps: {
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
-  }
+  path: [{ type: mongoose.Schema.Types.ObjectId, ref: "Folder" }],
+  parent: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Folder",
+    default: null,
+  },
+  ispinned: {
+    type: Boolean,
+    default: false,
+  },
+ 
+}, {
+  timestamps: true
 });
+
 
 module.exports = mongoose.model("Folder", folderSchema);

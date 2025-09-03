@@ -36,6 +36,15 @@ const UserSchema = new mongoose.Schema(
       enum: ["active", "suspended"],
       default: "active",
     },
+    provider: {
+      type: String,
+      enum: ["local", "google", "github"],
+      default: "local",
+    },
+    providerId: {
+      type: String,
+      default: "",
+    },
     emailVerified: {
       type: Boolean,
       default: false,

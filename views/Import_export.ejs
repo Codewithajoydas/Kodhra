@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Import-export | Code Snippet Manager</title>
+    <link rel="stylesheet" href="/style/css/index.css" />
+    <link rel="stylesheet" href="style/css/import_export.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+    <style>
+      .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        position: fixed;
+        background: white;
+        z-index: 100000;
+        top: 0;
+        font-size: clamp(30px, 3vw, 40px);
+
+        font-weight: bolder;
+      }
+
+      .spain {
+        width: 0.5em;
+        height: 0.5em;
+        background: #000000;
+        border-radius: 50%;
+        margin: 5px;
+        animation: spin 0.6s ease-in-out infinite;
+      }
+
+      .spain:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .spain:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .spain:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: translateY(0);
+        }
+
+        50% {
+          transform: translateY(-10px);
+        }
+
+        100% {
+          transform: translateY(0);
+        }
+      }
+    </style>
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+
+  </head>
+
+  <body data-theme="light">
+    <div class="loader">
+      <div style="display: flex; justify-content: center; align-items: end">
+        Loading
+        <div class="spain"></div>
+        <div class="spain"></div>
+        <div class="spain"></div>
+      </div>
+    </div>
+    <div class="content">
+      <header>
+        <span class="logo">
+          <img src="/assets/logo.png" alt="code snippet manager" />
+          <span
+            >Code Snippet Manager
+            <sub
+              style="
+                font-family: 'Segoe UI', Tahoma, sans-serif;
+                font-size: 10px;
+              "
+              >V.1.0.1</sub
+            ></span
+          >
+        </span>
+        <nav>
+          <div class="searchResult">
+            <label class="search" for="search" style="cursor: text">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-search-icon lucide-search"
+              >
+                <path d="m21 21-4.34-4.34" />
+                <circle cx="11" cy="11" r="8" />
+              </svg>
+
+              <input
+                type="search"
+                placeholder="Search Snippets..."
+                id="search"
+                autocomplete="off"
+              />
+              <kbd
+                style="
+                  background: rgba(128, 128, 128, 0.21);
+                  color: rgb(122, 122, 122);
+                  padding: 5px;
+                  border-radius: 5px;
+                  box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
+                "
+                >ctrl+k</kbd
+              >
+            </label>
+            <div class="results" id="results">
+              <ul id="results-list"></ul>
+            </div>
+          </div>
+          <div class="notification">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-bell-icon lucide-bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+              <path
+                d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+              />
+            </svg>
+          </div>
+          <div class="help">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-info-icon lucide-info"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4" />
+              <path d="M12 8h.01" />
+            </svg>
+          </div>
+          <div class="profile">
+            <img src="<%= image %>" alt="" />
+          </div>
+        </nav>
+        <div class="openList" style="display: none">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-list-filter-icon lucide-list-filter"
+          >
+            <path d="M3 6h18" />
+            <path d="M7 12h10" />
+            <path d="M10 18h4" />
+          </svg>
+        </div>
+      </header>
+      <div class="container">
+        <aside>
+          <ul>
+            <!-- Main Pages -->
+            <span>Main Pages</span>
+            <li>
+              <a href="/"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard"
+                >
+                  <rect width="7" height="9" x="3" y="3" rx="1" />
+                  <rect width="7" height="5" x="14" y="3" rx="1" />
+                  <rect width="7" height="9" x="14" y="12" rx="1" />
+                  <rect width="7" height="5" x="3" y="16" rx="1" />
+                </svg>
+                Dashboard</a
+              >
+            </li>
+            <li>
+              <a href="/card"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-earth-icon lucide-earth"
+                >
+                  <path d="M21.54 15H17a2 2 0 0 0-2 2v4.54" />
+                  <path
+                    d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"
+                  />
+                  <path
+                    d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"
+                  />
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
+                All Code Snippets</a
+              >
+            </li>
+            <li>
+              <a href="/folder"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-folder-icon lucide-folder"
+                >
+                  <path
+                    d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
+                  />
+                </svg>
+                Folders</a
+              >
+            </li>
+            <li>
+              <a href="/tags"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-tags-icon lucide-tags"
+                >
+                  <path
+                    d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z"
+                  />
+                  <path
+                    d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193"
+                  />
+                  <circle cx="10.5" cy="6.5" r=".5" fill="currentColor" />
+                </svg>
+                Tags</a
+              >
+            </li>
+            <li>
+              <a href="/pin"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-pin-icon lucide-pin"
+                >
+                  <path d="M12 17v5" />
+                  <path
+                    d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"
+                  />
+                </svg>
+                Pinned</a
+              >
+            </li>
+            <li>
+              <a href="/fav"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-star-icon lucide-star"
+                >
+                  <path
+                    d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+                  />
+                </svg>
+                Favorites</a
+              >
+            </li>
+
+            <!-- Creation Shortcuts -->
+            <span>Creation Shortcuts</span>
+            <li>
+              <a href="/card/create"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-square-dashed-bottom-code-icon lucide-square-dashed-bottom-code"
+                >
+                  <path d="M10 9.5 8 12l2 2.5" />
+                  <path d="M14 21h1" />
+                  <path d="m14 9.5 2 2.5-2 2.5" />
+                  <path
+                    d="M5 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2"
+                  />
+                  <path d="M9 21h1" />
+                </svg>
+                New Snippet</a
+              >
+            </li>
+            <li>
+              <a href="/create-folder"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-folder-pen-icon lucide-folder-pen"
+                >
+                  <path
+                    d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5"
+                  />
+                  <path
+                    d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"
+                  />
+                </svg>
+                New Folder</a
+              >
+            </li>
+
+            <!-- Search & Explore -->
+            <span>Search & Explore</span>
+            <li>
+              <a href="/search"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-search-icon lucide-search"
+                >
+                  <path d="m21 21-4.34-4.34" />
+                  <circle cx="11" cy="11" r="8" />
+                </svg>
+                Search</a
+              >
+            </li>
+            <li>
+              <a href="/explore"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-telescope-icon lucide-telescope"
+                >
+                  <path
+                    d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"
+                  />
+                  <path d="m13.56 11.747 4.332-.924" />
+                  <path d="m16 21-3.105-6.21" />
+                  <path
+                    d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"
+                  />
+                  <path d="m6.158 8.633 1.114 4.456" />
+                  <path d="m8 21 3.105-6.21" />
+                  <circle cx="12" cy="13" r="2" />
+                </svg>
+                Explore Public Snippets</a
+              >
+            </li>
+
+            <!-- Settings & Tools -->
+            <span>Settings & Tools</span>
+            <li class="active">
+              <a href="/import-export">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-cloud-download-icon lucide-cloud-download"
+                >
+                  <path d="M12 13v8l-4-4" />
+                  <path d="m12 21 4-4" />
+                  <path
+                    d="M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284"
+                  />
+                </svg>
+                Import / Export</a
+              >
+            </li>
+            <li>
+              <a href="/settings"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-cog-icon lucide-cog"
+                >
+                  <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" />
+                  <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                  <path d="M12 2v2" />
+                  <path d="M12 22v-2" />
+                  <path d="m17 20.66-1-1.73" />
+                  <path d="M11 10.27 7 3.34" />
+                  <path d="m20.66 17-1.73-1" />
+                  <path d="m3.34 7 1.73 1" />
+                  <path d="M14 12h8" />
+                  <path d="M2 12h2" />
+                  <path d="m20.66 7-1.73 1" />
+                  <path d="m3.34 17 1.73-1" />
+                  <path d="m17 3.34-1 1.73" />
+                  <path d="m11 13.73-4 6.93" />
+                </svg>
+                Settings</a
+              >
+            </li>
+            <li>
+              <a href="/account"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-user-lock-icon lucide-user-lock"
+                >
+                  <circle cx="10" cy="7" r="4" />
+                  <path d="M10.3 15H7a4 4 0 0 0-4 4v2" />
+                  <path d="M15 15.5V14a2 2 0 0 1 4 0v1.5" />
+                  <rect width="8" height="5" x="13" y="16" rx=".899" />
+                </svg>
+                Account</a
+              >
+            </li>
+
+            <!-- Auth -->
+            <span>Auth</span>
+            <li>
+              <a href="/login"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-scan-face-icon lucide-scan-face"
+                >
+                  <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                  <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                  <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                  <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                  <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                  <path d="M9 9h.01" />
+                  <path d="M15 9h.01" />
+                </svg>
+                Login</a
+              >
+            </li>
+            <li>
+              <a href="/signup"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-key-icon lucide-key"
+                >
+                  <path
+                    d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"
+                  />
+                  <path d="m21 2-9.6 9.6" />
+                  <circle cx="7.5" cy="15.5" r="5.5" />
+                </svg>
+                Sign Up</a
+              >
+            </li>
+          </ul>
+        </aside>
+        <main data-barba="container" data-barba-namespace="import-export">
+          <div class="import">
+            <div class="upload">
+              <label for="fileInput">Click Here To Select File</label>
+              <input type="file" id="fileInput" hidden/>
+              <button id="uploadBtn">Upload File</button>
+              <p style="font-size: smaller">
+                Please upload a json file with the following structure:
+              </p>
+              <pre style="font-size: smaller">
+{"name": "card name", "description": "card description", "tags": ["tag1", "tag2"], "snippet": "code snippet"}</pre
+              >
+              <a href="template.json" download>Download Template</a>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script src="/scripts/home.js"></script>
+    <script>
+      let results = document.getElementById("results");
+      let list = document.getElementById("results-list");
+      let searchInput = document.querySelector(".searchResult");
+
+      let debounceTimer;
+
+      searchInput.addEventListener("input", function (e) {
+        e.stopPropagation();
+        let query = e.target.value.trim();
+        clearTimeout(debounceTimer);
+        if (!query) {
+          results.classList.remove("active");
+          return;
+        }
+        debounceTimer = setTimeout(async () => {
+          results.classList.add("active");
+          try {
+            let rs = await fetch(`/search?query=${encodeURIComponent(query)}`);
+            let data = await rs.json();
+            let unique = new Set();
+            data.findCards.slice(0, 3).forEach((item) => {
+              if (!unique.has(item.title)) {
+                unique.add(item.title);
+                let a = document.createElement("a");
+                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> ${item.title}`;
+                a.href = `/card/${item._id}`;
+                a.target = "_blank";
+                list.innerHTML = "";
+                list.appendChild(a);
+              }
+            });
+            if (list.children.length === 0) {
+              let li = document.createElement("li");
+              li.textContent = "No results found";
+              list.appendChild(li);
+            }
+          } catch (err) {
+            console.error("Search error:", err);
+          }
+        }, 300);
+      });
+
+      function setActiveStyle(element, active) {
+        if (active) {
+          element.style.fill = "black";
+          element.style.transition = "0.3s ease";
+        } else {
+          element.style.fill = "none";
+        }
+      }
+      async function pinIt(id) {
+        const pinIcon = document.querySelector(`.pin[data-id="${id}"] svg`);
+        try {
+          const res = await fetch(`/card/pin/${id}`, {
+            method: "PUT",
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            setActiveStyle(pinIcon, data.card.isPinned);
+          }
+        } catch (err) {
+          console.error("Error pinning:", err);
+        }
+      }
+      async function favIt(id) {
+        const favIcon = document.querySelector(`.fav[data-id="${id}"] svg`);
+        try {
+          const res = await fetch(`/card/fav/${id}`, {
+            method: "PUT",
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            setActiveStyle(favIcon, data.card.isFavorite);
+          }
+        } catch (err) {
+          console.error("Error favoriting:", err);
+        }
+      }
+      function toggleMenu(id) {
+        document.querySelectorAll(".menu-popup").forEach((m) => {
+          if (m.id !== "menu-" + id) m.classList.remove("active");
+        });
+
+        let menu = document.getElementById("menu-" + id);
+        menu.classList.toggle("active");
+      }
+
+      async function deleteCard(id) {
+        try {
+          const res = await fetch(`/card/${id}`, {
+            method: "DELETE",
+            credentials: "include",
+          });
+
+          if (res.ok) {
+            const cardEl = document.getElementById(`card-${id}`);
+            if (cardEl) {
+              cardEl.remove();
+            }
+            window.location.reload();
+          } else {
+            console.error("Failed to delete card:", await res.text());
+          }
+        } catch (err) {
+          console.error("Delete error:", err);
+        }
+      }
+
+      function editCard(id) {
+        window.location.assign(`/card/${id}`);
+      }
+
+      let search = document.getElementById("search");
+      search.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          let query = search.value;
+          if (query.trim() !== "") {
+            window.location.href = `/search?query=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.ctrlKey && e.key === "k") {
+          e.preventDefault();
+          search.focus();
+        }
+      });
+
+      document.getElementById("uploadBtn").addEventListener("click", () => {
+        const file = document.getElementById("fileInput").files[0];
+        if (!file) return alert("Please select a file!");
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("/import-export", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => console.log(data))
+          .catch((err) => console.error(err));
+      });
+    </script>
+    <script>
+      window.onload = () => {
+        let loader = document.querySelector(".loader");
+        loader.style.display = "none";
+      };
+    </script>
+    <script src="\scripts\shortcut.js"></script>
+    <script src="\scripts\index.js"></script>
+
+  </body>
+</html>

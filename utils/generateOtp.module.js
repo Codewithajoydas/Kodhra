@@ -38,7 +38,7 @@ function getOtp(len) {
   for (let i = 1; i <= len; i++) {
     otp += arry[Math.floor(Math.random() * arry.length)];
   }
-  return otp;
+  return otp.toUpperCase();
 }
 
 module.exports = getOtp;

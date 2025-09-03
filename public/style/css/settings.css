@@ -1,0 +1,45 @@
+main .settings-panel {
+  columns: 2;
+}
+main .settings-panel section {
+  display: flex;
+  flex-direction: column;
+  break-inside: avoid;
+  gap: 10px;
+  margin-block: 10px;
+}
+main .settings-panel section h3 {
+  color: gray;
+  font-size: 15px;
+}
+main .settings-panel section input,
+main .settings-panel section textarea,
+main .settings-panel section select {
+  width: 100%;
+  border: none;
+  border: 1px solid gray;
+  padding: 10px;
+}
+main .settings-panel section label {
+  width: 400px;
+}
+main .settings-panel section label input {
+  width: 100%;
+}
+main .settings-panel section label input[type=checkbox] {
+  width: unset;
+}
+
+input {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input::placeholder {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input[type=color] {
+  padding: 0 !important;
+}
+
+/*# sourceMappingURL=settings.css.map */

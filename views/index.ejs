@@ -7,9 +7,87 @@
     <link rel="stylesheet" href="/style/css/index.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script
+      src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js"
+      type="module"
+    ></script>
+    <link
+      rel="preload"
+      href="/gEzG0w1WVY.lottie"
+      as="fetch"
+      crossorigin="anonymous"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+    <style>
+      .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        position: fixed;
+        background: white;
+        z-index: 100000;
+        top: 0;
+        font-size: clamp(30px, 3vw, 40px);
+
+        font-weight: bolder;
+      }
+
+      .spain {
+        width: 0.5em;
+        height: 0.5em;
+        background: #000000;
+        border-radius: 50%;
+        margin: 5px;
+        animation: spin 0.6s ease-in-out infinite;
+      }
+
+      .spain:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .spain:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .spain:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: translateY(0);
+        }
+
+        50% {
+          transform: translateY(-10px);
+        }
+
+        100% {
+          transform: translateY(0);
+        }
+      }
+    </style>
   </head>
 
-  <body>
+  <body data-theme="light">
+    <div class="loader">
+      <dotlottie-wc
+        src="gEzG0w1WVY.lottie"
+        style="width: 400px; height: 400px"
+        speed="1"
+        autoplay
+        loop
+      ></dotlottie-wc>
+    </div>
     <div class="content">
       <header>
         <span class="logo">
@@ -542,6 +620,12 @@
               class="folder"
               draggable="true"
               ondblclick="window.open('/folder/<%= e._id %>', '_blank')"
+              data-id="<%= e._id %>"
+              data-menus="delete, pin, rename, move, share"
+              data-userId="<%= userId %>"
+              data-mtype="folder"
+              data-contextMenu="true"
+              data-cardname="<%= e.folderName %>"
             >
               <div
                 style="
@@ -574,16 +658,16 @@
                       justify-content: center;
                       align-items: center;
                       gap: 10px;
+                      display: block;
+                      width: 120px;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
                     "
+                    title="<%= e.folderName %>"
                   >
                     <%= e.folderName %>
                   </div>
-                  <span
-                    datetime="<%= e.timestamps.updatedAt%>"
-                    style="font-size: 10px"
-                  >
-                    <%= new Date(e.timestamps.updatedAt).toLocaleString() %>
-                  </span>
                 </span>
               </div>
               <div
@@ -651,6 +735,12 @@
                 style="z-index: 1 !important"
                 id="card-<%= e._id%>"
                 ondblclick="window.open('/card/<%= e._id %>', '_blank')"
+                data-id="<%= e._id %>"
+                data-menus="delete, pin, edit, move, share"
+                data-userId="<%= userId %>"
+                data-contextMenu="true"
+                data-cardName="<%= e.title %>"
+                data-mtype="card"
               >
                 <div class="header-info">
                   <div style="display: flex; align-items: center; gap: 10px">
@@ -673,7 +763,15 @@
                       </div>
                     </div>
                   </div>
-                  <div class="menu_top" onclick="toggleMenu('<%= e._id %>')">
+                  <div
+                    class="menu_top"
+                    data-menu-id="<%= e._id %>"
+                    data-id="<%= e._id %>"
+                    data-menus="delete, pin, edit, move, share"
+                    data-userId="<%= userId %>"
+                    data-cardName="<%= e.title %>"
+                    data-mtype="card"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -744,7 +842,7 @@
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
-                        fill="none"
+                        fill="<%= e.isPinned ? 'black' : 'none' %>"
                         stroke="currentColor"
                         stroke-width="2"
                         stroke-linecap="round"
@@ -768,7 +866,7 @@
                         width="24"
                         height="24"
                         viewBox="0 0 24 24"
-                        fill="none"
+                        fill="<%= e.isFavorite? 'black' : 'none' %>"
                         stroke="currentColor"
                         stroke-width="2"
                         stroke-linecap="round"
@@ -782,15 +880,11 @@
                     </div>
                   </div>
                 </div>
-                <div
-                  class="menu active"
-                  id="menu-<%= e._id %>"
-                  onclick="toggleMenu('<%= e._id %>')"
-                >
-                  <li onclick="editCard('<%= e._id %>')">Edit</li>
-                  <li onclick="deleteCard('<%= e._id %>')">Delete</li>
-                  <li onclick="pinIt('<%= e._id %>')">Pin</li>
-                </div>
+                <!-- <div class="menu active" id="menu-<%= e._id %>" data-id="<%= e._id %>">
+                              <li onclick="editCard('<%= e._id %>')">Edit</li>
+                              <li onclick="deleteCard('<%= e._id %>')">Delete</li>
+                              <li onclick="pinIt('<%= e._id %>')">Pin</li>
+                            </div> -->
               </div>
 
               <% }) %>
@@ -799,6 +893,132 @@
         </main>
       </div>
     </div>
+
+    <div
+      id="context_menu"
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+        z-index: 1000000;
+        width: 200px;
+      "
+    >
+      <ul id="context_menu_list"></ul>
+    </div>
+
+    <div id="movefolderdiv">
+      <label for="moveFolder">
+        Where you want to move your Folder
+        <select name="" id="moveFolder"></select>
+      </label>
+      <button onclick="move()">Move</button>
+    </div>
+
+    <div class="move_folder">
+      <div class="header_title" style="font-weight: bolder">
+        <div class="span">Move " folderName"</div>
+      </div>
+      <hr />
+      <div class="folders_name">
+        <ul>
+          <% folders.forEach((folder, i)=> { %>
+          <li>
+            <label>
+              <input
+                type="radio"
+                name="moveFolder"
+                value="<%= folder._id %>"
+                id="moveFolder<%= i %>"
+              />
+              <div class="folder">
+                <div class="folder_icon">
+                  <!-- SVG folder icon -->
+                </div>
+                <div
+                  class="folder_name"
+                  style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="#EDCE44"
+                    stroke="none"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-folder-icon lucide-folder"
+                  >
+                    <path
+                      d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"
+                    />
+                  </svg>
+                  <span
+                    style="
+                      display: block;
+                      width: 120px;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                    "
+                    title="<%= folder.folderName %>"
+                  >
+                    <%= folder.folderName %>
+                  </span>
+                </div>
+              </div>
+            </label>
+          </li>
+          <% }) %>
+        </ul>
+        <button class="move_btn" onclick="moveIt()">Move</button>
+      </div>
+    </div>
+    <div class="toast" data-type="success">
+      <div class="toast-content">
+        <span class="toast-message">
+          🎉 Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+          Dignissimos, a!
+        </span>
+        <div class="close">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-octagon-x-icon lucide-octagon-x"
+          >
+            <path d="m15 9-6 6" />
+            <path
+              d="M2.586 16.726A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2h6.624a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586z"
+            />
+            <path d="m9 9 6 6" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function move() {
+        alert("Hello Move function!");
+        document.getElementById("movefolderdiv").style.display = "none";
+        document.querySelector("main").style.overflow = "auto";
+      }
+    </script>
+
     <script src="/scripts/home.js"></script>
     <script>
       let results = document.getElementById("results");
@@ -813,8 +1033,6 @@
 
         clearTimeout(debounceTimer);
 
-        // list.textContent = "Searching...";
-
         if (!query) {
           results.classList.remove("active");
           return;
@@ -826,18 +1044,13 @@
           try {
             let rs = await fetch(`/search?query=${encodeURIComponent(query)}`);
             let data = await rs.json();
-            let unique = new Set();
-
-            data.findCards.slice(0, 3).forEach((item) => {
-              if (!unique.has(item.title)) {
-                unique.add(item.title);
-                let a = document.createElement("a");
-                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> ${item.title}`;
-                a.href = `/card/${item._id}`;
-                a.target = "_blank";
-                list.innerHTML = "";
-                list.appendChild(a);
-              }
+            data.findCards.forEach((item) => {
+              let a = document.createElement("a");
+              a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> ${item.title}`;
+              a.href = `/card/${item._id}`;
+              a.target = "_blank";
+              list.innerHTML = "";
+              list.appendChild(a);
             });
 
             if (list.children.length === 0) {
@@ -940,14 +1153,24 @@
           console.error("Error favoriting:", err);
         }
       }
-      function toggleMenu(id) {
-        document.querySelectorAll(".menu-popup").forEach((m) => {
-          if (m.id !== "menu-" + id) m.classList.remove("active");
-        });
 
-        let menu = document.getElementById("menu-" + id);
-        menu.classList.toggle("active");
-      }
+      // document.querySelectorAll(".menu_top").forEach((el) => {
+      //   el.addEventListener("click", (e) => {
+      //     e.stopPropagation();
+      //     toggleMenu(e, el.dataset.id);
+      //   });
+      // });
+
+      // function toggleMenu(e, id) {
+      //   e.stopPropagation();
+      //   console.log(e);
+      //   document.querySelectorAll(".menu-popup").forEach((m) => {
+      //     if (m.id !== "menu-" + id) m.classList.remove("active");
+      //   });
+
+      //   let menu = document.getElementById("menu-" + id);
+      //   menu.classList.toggle("active");
+      // }
 
       async function deleteCard(id) {
         try {
@@ -990,5 +1213,207 @@
         }
       });
     </script>
+    <script>
+      window.onload = () => {
+        let loader = document.querySelector(".loader");
+        loader.style.display = "none";
+      };
+    </script>
+    <script>
+      let context_menu = document.getElementById("context_menu");
+      let menuListEl = document.getElementById("context_menu_list");
+
+      document.querySelectorAll(".menu_top").forEach((card) => {
+        card.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const icons = {
+            delete: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
+            edit: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-pen-icon lucide-folder-pen"><path d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5"/><path d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>`,
+            move: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-icon lucide-move"><path d="M12 2v20"/><path d="m15 19-3 3-3-3"/><path d="m19 9 3 3-3 3"/><path d="M2 12h20"/><path d="m5 9-3 3 3 3"/><path d="m9 5 3-3 3 3"/></svg>`,
+            share: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`,
+            pin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pin-icon lucide-pin"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>`,
+          };
+
+          let { id, menuId, menus, userid, cardname, mtype } =
+            e.currentTarget.dataset;
+          console.log(mtype);
+          const actions = {
+            edit: () => editCard(id),
+            share: () => shareCard(userid, id),
+            pin: () => pinIt(id),
+            move: () => moveCard(id, cardname, mtype),
+            fav: () => favIt(id),
+            delete: () => deleteCard(id),
+          };
+          let menuItems = menus.split(",").map((i) => i.trim());
+          context_menu.style.display = "block";
+          context_menu.style.visibility = "hidden";
+          context_menu.style.left = "0px";
+          context_menu.style.top = "0px";
+
+          let menuWidth = context_menu.offsetWidth;
+          let menuHeight = context_menu.offsetHeight;
+
+          let x = e.clientX;
+          let y = e.clientY;
+
+          if (x + menuWidth > window.innerWidth)
+            x = window.innerWidth - menuWidth - 10;
+          if (y + menuHeight > window.innerHeight)
+            y = window.innerHeight - menuHeight - 10;
+
+          context_menu.style.left = x + "px";
+          context_menu.style.top = y + "px";
+          context_menu.style.visibility = "visible";
+          context_menu.style.display = "block";
+
+          menuListEl.innerHTML = "";
+
+          menuItems.forEach((item) => {
+            let li = document.createElement("li");
+            li.innerHTML = `${icons[item]} ${item}`;
+            menuListEl.appendChild(li);
+            if (actions[item]) {
+              li.addEventListener("click", (ev) => {
+                ev.stopPropagation();
+                actions[item]();
+                context_menu.style.display = "none";
+              });
+            }
+          });
+        });
+      });
+
+      let move_folder = document.querySelector(".move_folder");
+      let getFoldername = document.querySelector(".header_title .span");
+      let folderId;
+      let cardId;
+      let movetype;
+      let folder = document
+        .querySelectorAll("input[name='moveFolder']")
+        .forEach((fl) => {
+          fl.addEventListener("change", (e) => {
+            folderId = e.target.value;
+          });
+        });
+
+      async function moveCard(id, cardName, mtype) {
+        cardId = id;
+        movetype = mtype;
+        getFoldername.textContent = `Move \"${cardName}\" :`;
+        move_folder.style.display = "block";
+        move_folder.style.visibility = "visible";
+      }
+
+      const toast = document.querySelector(".toast");
+      const toastCloseBtn = document.querySelector(".toast .close");
+      const toastMessage = document.querySelector(".toast-message");
+
+      let toastTimeoutId = null;
+
+      function showToast(message, type = "success", duration = 5000) {
+        if (toastTimeoutId) clearTimeout(toastTimeoutId);
+        toastMessage.textContent = message;
+        toast.dataset.type = type;
+        toast.style.display = "block";
+        toastTimeoutId = setTimeout(() => {
+          toast.style.display = "none";
+          toastTimeoutId = null;
+        }, duration);
+      }
+      toastCloseBtn.addEventListener("click", () => {
+        toast.style.display = "none";
+        if (toastTimeoutId) {
+          clearTimeout(toastTimeoutId);
+          toastTimeoutId = null;
+        }
+      });
+
+      async function moveIt() {
+        const selected = document.querySelector(
+          "input[name='moveFolder']:checked"
+        );
+        if (!selected) {
+          showToast("⚠️ Please select a folder before moving.", "error");
+          return;
+        }
+
+        const folderId = selected.value;
+
+        try {
+          const res = await fetch(`moveit/${movetype}/${folderId}/${cardId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          });
+
+          if (!res.ok) {
+            let errorMsg = "Move failed. Please try again.";
+            try {
+              const data = await res.json();
+              if (data?.error) errorMsg = data.error;
+            } catch {}
+            showToast(`🚨 ${errorMsg}`, "error");
+          } else {
+            showToast(`🎉 Successfully moved ${movetype}!`, "success");
+          }
+        } catch (err) {
+          console.error("Error in moveIt:", err);
+          showToast(
+            "🚨 Unexpected error. Please check your connection.",
+            "error"
+          );
+        }
+      }
+
+      document.addEventListener("click", () => {
+        move_folder.style.display = "none";
+        context_menu.style.display = "none";
+        move_folder.querySelectorAll("input").forEach((inp) => {
+          if (inp.type === "radio" || inp.type === "checkbox") {
+            inp.checked = false;
+            folderId = null;
+          } else {
+            inp.value = "";
+          }
+        });
+      });
+      move_folder.addEventListener("click", (e) => {
+        e.stopPropagation();
+      });
+    </script>
+    <script>
+      const mf = document.querySelector(".move_folder");
+      let isDragging = false;
+      let offsetX, offsetY;
+      mf.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        isDragging = true;
+        offsetX = e.clientX - mf.offsetLeft;
+        offsetY = e.clientY - mf.offsetTop;
+        mf.style.position = "absolute";
+        mf.style.zIndex = 1000;
+      });
+      document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        mf.style.left = e.clientX - offsetX + "px";
+        mf.style.top = e.clientY - offsetY + "px";
+      });
+      document.addEventListener("mouseup", () => {
+        isDragging = false;
+      });
+    </script>
+    <script>
+      // if ("serviceWorker" in navigator) {
+      //     navigator.serviceWorker
+      //       .register("/service-worker.js")
+      //       .then((e) => console.log(`Service Worker registered ${e.installing}`))
+      //       .catch((err) => console.error("SW registration failed:", err));
+      //   }
+    </script>
+    <script src="\scripts\shortcut.js"></script>
+    <script src="\scripts\index.js"></script>
+    <script src="\scripts\context_menu.js"></script>
+    <script src="\scripts\search.js"></script>
   </body>
 </html>

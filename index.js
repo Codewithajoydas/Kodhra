@@ -21,7 +21,7 @@ const client = require("./config/redis.config.js");
 const path = require("path");
 const cors = require("cors");
 const Folder = require("./models/folder");
-
+app.use(express.json({ limit: "50mb" }));
 app.use(
   cors({
     origin: "http://127.0.0.1:5000",
@@ -43,7 +43,11 @@ const shareLink = require("./utils/shareLink.module");
 const folderRouter = require("./routes/folder");
 const searchRouter = require("./routes/search");
 const tagsRouter = require("./routes/tags");
-const pinRouter = require('./routes/pin');
+const pinRouter = require("./routes/pin");
+const ioRouter = require("./routes/import_export");
+const favRouter = require("./routes/fav");
+const sRouter = require("./routes/setting");
+const moveRouter = require("./routes/move");
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 app.use(express.json());
 
@@ -64,10 +68,14 @@ app.get("/", authMiddleware, async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
   const userEmail = decode.checkUser.email;
-  const folders = await Folder.find({ author: decode.checkUser._id });
+  const folders = await Folder.find({
+    author: decode.checkUser._id,
+    parent: null,
+  });
+
   const cards = await Card.find({ author: decode.checkUser._id })
     .sort({ createdAt: -1 })
-    .limit(5);
+    .limit(15);
 
   res.render("index", {
     image: decode.checkUser?.userImage || decode.user?.avatar,
@@ -97,22 +105,24 @@ app.post("/card", async (req, res) => {
       author: _id,
     });
 
-    const folderNames = Array.isArray(folderName) ? folderName : [folderName];
-
-    for (const name of folderNames) {
-      let folder = await Folder.findOne({ folderName: name, author: _id });
-      if (!folder) {
-        folder = await Folder.create({
-          folderName: name,
-          cards: [createCard._id],
+    try {
+      const findFolder = await Folder.findOne({
+        author: _id,
+        folderName: folderName,
+      });
+      if (!findFolder) {
+        const newFolder = await Folder.create({
           author: _id,
+          folderName,
+          cards: [createCard._id],
         });
       } else {
-        folder.cards.push(createCard._id);
-        await folder.save();
+        findFolder.cards.push(createCard._id);
+        await findFolder.save();
       }
+    } catch (error) {
+      res.json({ error });
     }
-
     res.json({ createCard });
   } catch (err) {
     console.error(err);
@@ -132,12 +142,15 @@ app.use("/folder", authMiddleware, folderRouter);
 app.use("/search", authMiddleware, searchRouter);
 app.use("/tags", authMiddleware, tagsRouter);
 app.use("/pin", authMiddleware, pinRouter);
+app.use("/fav", authMiddleware, favRouter);
+app.use("/import-export", authMiddleware, ioRouter);
+app.use("/settings", authMiddleware, sRouter);
+app.use("/moveit", authMiddleware, moveRouter);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);
   res.status(500).json({ error: "Server error", details: err.message });
 });
-
 
 app.use((req, res, next) => {
   res.status(404).render("pageNotFound");

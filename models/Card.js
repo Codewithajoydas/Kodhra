@@ -39,6 +39,7 @@ const cardSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    visibility: { type: Boolean, default: true },
     metadata: {
       createdAt: { type: Date, default: Date.now },
       updatedAt: { type: Date, default: Date.now },
@@ -50,3 +51,4 @@ const cardSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Card", cardSchema);
+

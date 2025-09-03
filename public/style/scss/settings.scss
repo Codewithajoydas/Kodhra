@@ -1,0 +1,43 @@
+main {
+  .settings-panel {
+    columns: 2;
+    section {
+      display: flex;
+      flex-direction: column;
+      break-inside: avoid;
+      gap: 10px;
+      margin-block: 10px;
+      h3 {
+        color: gray;
+        font-size: 15px;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        border: none;
+        border: 1px solid gray;
+        padding: 10px;
+      }
+      label {
+        width: 400px;
+        input {
+          width: 100%;
+        }
+        input[type="checkbox"] {
+          width: unset;
+        }
+      }
+    }
+  }
+}
+
+input {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+input::placeholder {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+input[type="color"] {
+  padding: 0 !important;
+}

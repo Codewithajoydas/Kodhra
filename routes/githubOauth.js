@@ -5,6 +5,7 @@ const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const axios = require("axios");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 dotenv.config();
 gitroute.get("/", (req, res) => {
   const redirect_uri = "http://localhost:5000/auth/github/callback";
@@ -14,8 +15,7 @@ gitroute.get("/", (req, res) => {
 });
 
 gitroute.get("/callback", async (req, res) => {
-  const code = req.query.code; 
-
+  const code = req.query.code;
   try {
     const tokenResponse = await axios.post(
       "https://github.com/login/oauth/access_token",
@@ -26,9 +26,7 @@ gitroute.get("/callback", async (req, res) => {
       },
       { headers: { Accept: "application/json" } }
     );
-
     const accessToken = tokenResponse.data.access_token;
-
     const userResponse = await axios.get("https://api.github.com/user", {
       headers: { Authorization: `token ${accessToken}` },
     });
@@ -39,30 +37,32 @@ gitroute.get("/callback", async (req, res) => {
         headers: { Authorization: `token ${accessToken}` },
       }
     );
-
     const primaryEmail =
       emailResponse.data.find((e) => e.primary && e.verified)?.email || null;
 
-    const user = {
-      id: userResponse.data.id,
-      name: userResponse.data.name,
-      login: userResponse.data.login,
-      avatar: userResponse.data.avatar_url,
-      email: primaryEmail,
-    };
+    let checkUser = await User.findOne({ email: primaryEmail });
+    const { name, id, avatar_url } = userResponse.data;
+    if (!checkUser) {
+      const newUser = await User.create({
+        providerId: id,
+        userName: name,
+        userImage: avatar_url,
+        provider: "github",
+        email: primaryEmail,
+      });
+      let token = jwt.sign({ newUser }, process.env.SECRET);
+      res.cookie("token", token).redirect("/");
+    } else {
+      checkUser.providerId = id;
+      checkUser.userName = name;
+      checkUser.userImage = avatar_url;
+      checkUser.provider = "github";
 
-    const myToken = jwt.sign({ user }, process.env.SECRET, {
-      expiresIn: "1d",
-    });
+      await checkUser.save();
 
-    res.cookie("token", myToken, {
-      httpOnly: true,
-      secure: false, 
-      sameSite: "lax", 
-      maxAge: 24 * 60 * 60 * 1000, 
-    });
-
-    res.json({ user });
+      let token = jwt.sign({ checkUser }, process.env.SECRET);
+      res.cookie("token", token).redirect("/");
+    }
   } catch (err) {
     console.error(err.response?.data || err.message);
     res.status(500).json({ error: "GitHub login failed" });

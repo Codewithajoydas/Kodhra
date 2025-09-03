@@ -1,0 +1,39 @@
+main .import {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  gap: 40px;
+}
+main .import .upload,
+main .import .download {
+  border: 0.5px solid gray;
+  padding: 100px;
+  display: flex;
+  flex: 1;
+  background: linear-gradient(40deg, rgba(65, 65, 65, 0.144), #f1f1ff 70%);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  font-weight: 500;
+  border-radius: 10px;
+}
+main .import .upload button,
+main .import .download button {
+  border: unset;
+  background: black;
+  padding: 20px 30px;
+  color: white;
+  border-radius: 10px;
+}
+main .import .upload a,
+main .import .download a {
+  color: blue;
+  font-size: smaller;
+}
+main .import .upload a:hover,
+main .import .download a:hover {
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=import_export.css.map */

@@ -1,0 +1,36 @@
+main {
+  .import {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    gap: 40px;
+    .upload,
+    .download {
+      border: 0.5px solid gray;
+      padding: 100px;
+      display: flex;
+      flex: 1;
+      background: linear-gradient(40deg, rgba(65, 65, 65, 0.144), #f1f1ff 70%);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 20px;
+      font-weight: 500;
+      border-radius: 10px;
+      button {
+        border: unset;
+        background: black;
+        padding: 20px 30px;
+        color: white;
+        border-radius: 10px;
+      }
+      a{
+        color: blue;
+        font-size: smaller;
+        &:hover{
+            text-decoration: underline;
+        }
+      }
+    }
+  }
+}

@@ -8,9 +8,134 @@
     <link rel="stylesheet" href="/style/css/createSnippet.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+    <!-- CodeMirror Core -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+
+    <!-- Languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+    <!-- C, C++, C#, Java, Scala, Kotlin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/php/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/ruby/ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/go/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/rust/rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/swift/swift.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/shell/shell.min.js"></script>
+    <!-- Bash -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/powershell/powershell.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <!-- Needed for HTML, XML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/yaml/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/perl/perl.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/r/r.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/haskell/haskell.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/lua/lua.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/erlang/erlang.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/dart/dart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clojure/clojure.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/matlab/matlab.min.js"></script>
+    <!-- HTML mode -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <!-- dependency -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <!-- dependency -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+    <!-- dependency -->
+
+    <!-- CSS mode -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+
+    <style>
+      .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        position: fixed;
+        background: white;
+        z-index: 100000;
+        top: 0;
+        font-size: clamp(30px, 3vw, 40px);
+
+        font-weight: bolder;
+      }
+
+      .spain {
+        width: 0.5em;
+        height: 0.5em;
+        background: #000000;
+        border-radius: 50%;
+        margin: 5px;
+        animation: spin 0.6s ease-in-out infinite;
+      }
+
+      .spain:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .spain:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .spain:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: translateY(0);
+        }
+
+        50% {
+          transform: translateY(-10px);
+        }
+
+        100% {
+          transform: translateY(0);
+        }
+      }
+    </style>
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
   </head>
 
-  <body>
+  <body data-theme="light">
+    <div class="loader">
+      <div style="display: flex; justify-content: center; align-items: end">
+        Loading
+        <div class="spain"></div>
+        <div class="spain"></div>
+        <div class="spain"></div>
+      </div>
+    </div>
     <div class="content">
       <header>
         <span class="logo">
@@ -457,7 +582,7 @@
             </li>
           </ul>
         </aside>
-        <main>
+        <main data-barba="container" data-barba-namespace="newcard">
           <div class="div1">
             <div class="title">
               <label for="title">What is the title?</label>
@@ -491,6 +616,8 @@
               <label for="lan"> Last what is language you prefer? </label>
               <select name="language" id="category">
                 <option value="JavaScript">JavaScript</option>
+                <option value="CSS">CSS</option>
+                <option value="HTML">HTML</option>
                 <option value="C">C</option>
                 <option value="C++">C++</option>
                 <option value="C#">C#</option>
@@ -635,5 +762,60 @@
         }
       }
     </script>
+    <script>
+      window.onload = () => {
+        let loader = document.querySelector(".loader");
+        loader.style.display = "none";
+      };
+      let lan = document.getElementById("category");
+      const modeMap = {
+        JavaScript: "javascript",
+        C: "text/x-csrc",
+        "C++": "text/x-c++src",
+        "C#": "text/x-csharp",
+        Java: "text/x-java",
+        TypeScript: "text/typescript",
+        Python: "python",
+        Ruby: "ruby",
+        PHP: "php",
+        Go: "go",
+        Rust: "rust",
+        Swift: "swift",
+        Kotlin: "text/x-kotlin",
+        "Objective-C": "text/x-objectivec",
+        Scala: "text/x-scala",
+        Perl: "perl",
+        R: "r",
+        Dart: "dart",
+        Haskell: "haskell",
+        Lua: "lua",
+        Elixir: "elixir",
+        Clojure: "clojure",
+        Shell: "shell",
+        PowerShell: "powershell",
+        SQL: "sql",
+        GraphQL: "graphql",
+        MATLAB: "octave", // MATLAB uses octave mode
+        Assembly: "gas", // GNU assembly
+        Fortran: "fortran",
+        COBOL: "cobol",
+        Erlang: "erlang",
+        "VB.NET": "vb",
+        HTML: "htmlmixed",
+        CSS: "css",
+      };
+
+      let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        mode: modeMap[lan.value],
+        lineWrapping: true,
+      });
+      lan.addEventListener("change", function () {
+        let val = modeMap[this.value];
+        editor.setOption("mode", val);
+      });
+    </script>
+    <script src="\scripts\shortcut.js"></script>
+    <script src="\scripts\index.js"></script>
   </body>
 </html>

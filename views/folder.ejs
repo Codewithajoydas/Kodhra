@@ -3,13 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cards</title>
+    <title>Folders | Code Snippet Manager</title>
     <link rel="stylesheet" href="/style/css/index.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+
+    <style>
+      .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        position: fixed;
+        background: white;
+        z-index: 100000;
+        top: 0;
+        font-size: clamp(30px, 3vw, 40px);
+
+        font-weight: bolder;
+      }
+
+      .spain {
+        width: 0.5em;
+        height: 0.5em;
+        background: #000000;
+        border-radius: 50%;
+        margin: 5px;
+        animation: spin 0.6s ease-in-out infinite;
+      }
+
+      .spain:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .spain:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .spain:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: translateY(0);
+        }
+
+        50% {
+          transform: translateY(-10px);
+        }
+
+        100% {
+          transform: translateY(0);
+        }
+      }
+    </style>
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+
   </head>
 
-  <body>
+  <body data-theme="light">
+    <div class="loader">
+      <div style="display: flex; justify-content: center; align-items: end">
+        Loading
+        <div class="spain"></div>
+        <div class="spain"></div>
+        <div class="spain"></div>
+      </div>
+    </div>
+
     <div class="content">
       <header>
         <span class="logo">
@@ -505,7 +570,7 @@
             </li>
           </ul>
         </aside>
-        <main>
+        <main data-barba="container" data-barba-namespace="folder">
           <span style="font-weight: bolder; color: gray; margin-block: 5px"
             >All Folders</span
           ><br /><br />
@@ -714,5 +779,14 @@
         window.location.assign(`/card/${id}`);
       }
     </script>
+    <script>
+      window.onload = () => {
+        let loader = document.querySelector(".loader");
+        loader.style.display = "none";
+      };
+    </script>
+    <script src="\scripts\shortcut.js"></script>
+    <script src="\scripts\index.js"></script>
+
   </body>
 </html>
