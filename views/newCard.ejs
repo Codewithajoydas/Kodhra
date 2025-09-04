@@ -684,6 +684,7 @@
                 align-items: center;
                 gap: 10px;
                 color: black;
+                background: none;
               "
             >
               <svg
@@ -707,61 +708,6 @@
       </div>
     </div>
 
-    <script>
-      async function submitData() {
-        let title = document.getElementById("title").value;
-        let description = document.getElementById("des").value;
-        let category = document.getElementById("category").value;
-        let content = document.getElementById("code").value;
-        let folderName = document.getElementById("folderName").value;
-        let tags = document
-          .getElementById("tags")
-          .value.split(",")
-          .map((tag) => tag.trim());
-        let loader = document.querySelector(".loading");
-        let msgloader = document.querySelector(".loading span");
-        loader.style.display = "flex";
-        loader.style.background = "yellow";
-        try {
-          let startTime = performance.now();
-          let res = await fetch("/card", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              title,
-              description,
-              category,
-              content,
-              tags,
-              folderName,
-            }),
-          });
-
-          let data = await res.json();
-          const endTime = performance.now();
-          const duration = ((endTime - startTime) / 1000).toFixed(2);
-          loader.style.display = "flex";
-          loader.style.background = "lightgreen";
-          msgloader.textContent = `🎉 Snippet created in just ${duration}s`;
-          let timeout = setTimeout(() => {
-            loader.style.display = "none";
-            clearInterval(timeout);
-          }, 3000);
-        } catch (err) {
-          console.error("Error submitting data:", err);
-          loader.style.display = "flex";
-          loader.style.background = "#ff474c";
-          msgloader.textContent = `🌋 Error submitting data`;
-          let timeout = setTimeout(() => {
-            loader.style.display = "none";
-            clearInterval(timeout);
-          }, 3000);
-        }
-      }
-    </script>
     <script>
       window.onload = () => {
         let loader = document.querySelector(".loader");
@@ -815,6 +761,70 @@
         editor.setOption("mode", val);
       });
     </script>
+    <script>
+      async function submitData() {
+        let title = document.getElementById("title").value;
+        let description = document.getElementById("des").value;
+        let category = document.getElementById("category").value;
+        let content = (document.getElementById("code").value =
+          editor.getValue());
+        let folderName = document.getElementById("folderName").value;
+        let tags = document
+          .getElementById("tags")
+          .value.split(",")
+          .map((tag) => tag.trim());
+        let loader = document.querySelector(".loading");
+        let msgloader = document.querySelector(".loading span");
+        loader.style.display = "flex";
+        try {
+          let startTime = performance.now();
+          let res = await fetch("/card", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              title,
+              description,
+              category,
+              content,
+              tags,
+              folderName,
+            }),
+          });
+
+          let data = await res.json();
+          const endTime = performance.now();
+          const duration = ((endTime - startTime) / 1000).toFixed(2);
+          if (res.ok) {
+            loader.style.background = "lightgreen";
+            loader.style.display = "flex";
+            msgloader.textContent = `🎉 Snippet created in just ${duration}s`;
+          } else {
+            loader.style.background = "pink";
+            loader.style.display = "flex";
+            msgloader.textContent = `🚫 Snippet Not Created!`;
+          }
+
+          let timeout = setTimeout(() => {
+            loader.style.display = "none";
+            loader.style.background = "none";
+            clearTimeout(timeout);
+          }, 3000);
+        } catch (err) {
+          console.error("Error submitting data:", err);
+          loader.style.background = "#ff474c";
+          loader.style.display = "flex";
+          msgloader.textContent = `🌋 Error submitting data`;
+          let timeout = setTimeout(() => {
+            loader.style.display = "none";
+            clearInterval(timeout);
+          }, 3000);
+        }
+      }
+    </script>
+
     <script src="\scripts\shortcut.js"></script>
     <script src="\scripts\index.js"></script>
   </body>

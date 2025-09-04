@@ -35,7 +35,6 @@ window.addEventListener("keydown", (e) => {
     e.preventDefault();
     let rs = document.querySelector(".results");
     rs.classList.remove("active");
-    document.querySelector("input").blur();
     document.querySelector("input").value = "";
   }
 });

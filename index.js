@@ -48,6 +48,7 @@ const ioRouter = require("./routes/import_export");
 const favRouter = require("./routes/fav");
 const sRouter = require("./routes/setting");
 const moveRouter = require("./routes/move");
+const deleteRouter = require('./routes/delete');
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 app.use(express.json());
 
@@ -146,7 +147,7 @@ app.use("/fav", authMiddleware, favRouter);
 app.use("/import-export", authMiddleware, ioRouter);
 app.use("/settings", authMiddleware, sRouter);
 app.use("/moveit", authMiddleware, moveRouter);
-
+app.use("/delete", authMiddleware, deleteRouter);
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);
   res.status(500).json({ error: "Server error", details: err.message });

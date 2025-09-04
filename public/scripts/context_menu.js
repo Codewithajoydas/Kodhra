@@ -9,15 +9,14 @@ const icons = {
 document.querySelectorAll("[data-contextMenu='true']").forEach((item) => {
   item.addEventListener("contextmenu", (e) => {
     e.preventDefault();
-    let { id, menus, userid, cardname, mtype } =
-      e.currentTarget.dataset;
-          console.log(mtype);
-    
+    let { id, menus, userid, cardname, mtype } = e.currentTarget.dataset;
+    console.log(mtype);
+
     const card = e.target.closest("[data-contextMenu='true']");
     if (!card) return;
 
     const actions = {
-      delete: () => deleteFolder(card.dataset.id),
+      delete: () => deleteFolder(mtype, card.dataset.id),
       rename: () => renameFolder(card.dataset.id),
       move: () => moveCard(id, cardname, mtype),
       share: () => shareFolder(card.dataset.id, card.dataset.userid),
@@ -73,10 +72,10 @@ window.addEventListener("click", () => {
   document.getElementById("context_menu").style.display = "none";
 });
 
-function deleteFolder(e) {
-  let answer = confirm("Are you sure you want to delete this folder?");
+function deleteFolder(type, e) {
+  let answer = confirm(`Are you sure you want to delete this ${type}?`);
   if (answer) {
-    fetch(`/folder/${e}`, {
+    fetch(`/delete/${type}/${e}`, {
       method: "DELETE",
       credentials: "include",
     })
@@ -143,4 +142,3 @@ function shareFolder(e, userId) {
     .then(() => alert("Copied to clipboard: " + link))
     .catch((err) => console.error("Failed to copy:", err));
 }
-

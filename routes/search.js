@@ -26,12 +26,8 @@ searchRouter.get("/", async (req, res) => {
   });
 
     if(findCards.length === 0) {
-      return res.status(200).render("search", {
-        message: "No cards found",
-        cards: [],
-        user: decode.checkUser,
-      });
-    }
+      return res.status(200).json({ message: "No cards found" });
+  }
   res.json({ findCards });
 });
 
