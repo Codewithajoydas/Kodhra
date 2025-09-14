@@ -46,3 +46,4 @@ document.addEventListener("mousedown", (e) => {
   clickSound.currentTime = 0;
   clickSound.play();
 });
+

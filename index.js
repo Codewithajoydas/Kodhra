@@ -48,7 +48,26 @@ const ioRouter = require("./routes/import_export");
 const favRouter = require("./routes/fav");
 const sRouter = require("./routes/setting");
 const moveRouter = require("./routes/move");
-const deleteRouter = require('./routes/delete');
+const deleteRouter = require("./routes/delete");
+const imageRouter = require("./routes/getimage");
+const http = require("http");
+const server = http.createServer(app);
+const socket = require('./routes/socket');
+const notificationRouter = require("./routes/notification");
+const sendNotification = require('./utils/sendNotification.module');
+const io = socket.init(server);
+
+io.on("connection", (socket) => {
+  socket.on("register", (userId) => {
+    socket.join(userId);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
+
+
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 app.use(express.json());
 
@@ -65,26 +84,31 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 
 // HOME ROUTER
-app.get("/", authMiddleware, async (req, res) => {
-  const token = req.cookies.token;
-  const decode = jwt.verify(token, process.env.SECRET);
-  const userEmail = decode.checkUser.email;
-  const folders = await Folder.find({
-    author: decode.checkUser._id,
-    parent: null,
-  });
+app.get("/", authMiddleware, async (req, res, next) => {
+  try {
+    const token = req.cookies.token;
+    const decode = jwt.verify(token, process.env.SECRET);
 
-  const cards = await Card.find({ author: decode.checkUser._id })
-    .sort({ createdAt: -1 })
-    .limit(15);
+    const folders = await Folder.find({
+      author: decode.checkUser._id,
+      parent: null,
+    });
+    const cards = await Card.find({ author: decode.checkUser._id })
+      .sort({ createdAt: -1 })
+      .limit(50);
 
-  res.render("index", {
-    image: decode.checkUser?.userImage || decode.user?.avatar,
-    cards,
-    author: decode.checkUser.userName,
-    userId: decode.checkUser._id,
-    folders,
-  });
+    res.render("index", {
+      image: decode.checkUser?.userImage || decode.user?.avatar,
+      cards,
+      author: decode.checkUser.userName,
+      userId: decode.checkUser._id,
+      folders,
+      app_url:process.env.APP_URL
+    });
+  
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.post("/card", async (req, res) => {
@@ -94,9 +118,7 @@ app.post("/card", async (req, res) => {
     const token = req.cookies.token;
     const decode = jwt.verify(token, process.env.SECRET);
     const { _id } = decode.checkUser;
-
     if (!_id) return res.status(401).json({ error: "Unauthorized" });
-
     const createCard = await Card.create({
       title,
       description,
@@ -124,6 +146,12 @@ app.post("/card", async (req, res) => {
     } catch (error) {
       res.json({ error });
     }
+    sendNotification(
+      "Card Created Succesfully",
+      `${title} has been added to your card snippets snippets`,
+      `/card/${createCard._id}`,
+      _id
+    );
     res.json({ createCard });
   } catch (err) {
     console.error(err);
@@ -148,14 +176,36 @@ app.use("/import-export", authMiddleware, ioRouter);
 app.use("/settings", authMiddleware, sRouter);
 app.use("/moveit", authMiddleware, moveRouter);
 app.use("/delete", authMiddleware, deleteRouter);
-app.use((err, req, res, next) => {
-  console.error("Error:", err.message);
-  res.status(500).json({ error: "Server error", details: err.message });
+app.use("/images", authMiddleware, imageRouter);
+app.use("/notifications", authMiddleware, notificationRouter);
+/*
+Demo routes remove it before deployment
+*/
+app.get("/democards", async (req, res) => {
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userEmail = decode.checkUser.email;
+  const folders = await Folder.find({
+    author: decode.checkUser._id,
+    parent: null,
+  });
+
+  const cards = await Card.find({ author: decode.checkUser._id })
+    .sort({ createdAt: -1 })
+    .limit(15);
+
+  res.render("demo", {
+    image: decode.checkUser?.userImage || decode.user?.avatar,
+    cards,
+    author: decode.checkUser.userName,
+    userId: decode.checkUser._id,
+    folders,
+  });
 });
 
 app.use((req, res, next) => {
   res.status(404).render("pageNotFound");
 });
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log("Server running on http://localhost:5000");
 });

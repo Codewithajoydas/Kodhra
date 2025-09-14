@@ -31,13 +31,25 @@ folderRouter.get("/", async (req, res) => {
 });
 
 folderRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+  const image = decode.checkUser.userImage;
+  const author = decode.checkUser.userName || decode.checkUser.login;
   try {
-    const { id } = req.params;
-    const folder = await Folder.findById({ _id: id });
-    res.json({ data: folder });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error", details: err.message });
+    const folder = await Folder.findById(id);
+    if (!folder) {
+      return res
+        .status(404)
+        .json({ error: "Folder not found please provide folder name!" });
+    }
+    const folders = await Folder.find({ parent: id });
+    const getCardId = folder.cards.map((e) => e._id);
+    const cards = await Card.find({ _id: { $in: getCardId } });
+    res.render("folderCards", { cards, folders, image, userId, author, app_url:process.env.APP_URL   });
+  } catch (error) {
+    res.json({ "Internal Server Error": error.message });
   }
 });
 

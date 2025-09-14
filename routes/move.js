@@ -4,6 +4,9 @@ const moveRouter = express.Router();
 const Folder = require("../models/folder");
 const Card = require("../models/Card");
 const { find } = require("../models/User");
+const { getIO } = require("./socket");
+const sendNotification = require("../utils/sendNotification.module");
+const folder = require("../models/folder");
 
 moveRouter.put("/folder/:parentId/:childId", async (req, res) => {
   try {
@@ -78,6 +81,12 @@ moveRouter.put("/card/:parentId/:childId", async (req, res) => {
   }
   findFolder.cards.push(childId);
   await findFolder.save();
+  sendNotification(
+    "Card Moved",
+    `Card moved to folder ${findFolder.folderName}`,
+    `/folder/${findFolder._id}`,
+    userId
+  );
   res.json({ message: "Card moved to folder successfully" });
 });
 

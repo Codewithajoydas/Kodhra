@@ -41,11 +41,11 @@ gitroute.get("/callback", async (req, res) => {
       emailResponse.data.find((e) => e.primary && e.verified)?.email || null;
 
     let checkUser = await User.findOne({ email: primaryEmail });
-    const { name, id, avatar_url } = userResponse.data;
+    const { name, id, avatar_url, login } = userResponse.data;
     if (!checkUser) {
       const newUser = await User.create({
         providerId: id,
-        userName: name,
+        userName: name ?? login,
         userImage: avatar_url,
         provider: "github",
         email: primaryEmail,
@@ -54,7 +54,7 @@ gitroute.get("/callback", async (req, res) => {
       res.cookie("token", token).redirect("/");
     } else {
       checkUser.providerId = id;
-      checkUser.userName = name;
+      checkUser.userName = name ?? login;
       checkUser.userImage = avatar_url;
       checkUser.provider = "github";
 

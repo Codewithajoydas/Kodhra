@@ -1,867 +1,1274 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cards | Code Snippet Manager</title>
-    <link rel="stylesheet" href="/style/css/index.css" />
-    <script src="https://unpkg.com/@barba/core"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
-    <style>
-      .loader {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100%;
-        position: fixed;
-        background: white;
-        z-index: 100000;
-        top: 0;
-        font-size: clamp(30px, 3vw, 40px);
 
-        font-weight: bolder;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cards | Code Snippet Manager</title>
+  <link rel="stylesheet" href="/style/css/index.css" />
+  <script src="https://unpkg.com/@barba/core"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+  <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+  <link rel="preload" href="/gEzG0w1WVY.lottie" as="fetch" crossorigin="anonymous" />
+  <script>
+    function showToast(message, type = "success", duration = 5000) {
+      if (toastTimeoutId) clearTimeout(toastTimeoutId);
+      toastMessage.textContent = message;
+      toast.dataset.type = type;
+      toast.style.display = "block";
+      toastTimeoutId = setTimeout(() => {
+        toast.style.display = "none";
+        toastTimeoutId = null;
+      }, duration);
+    }
+    toastCloseBtn.addEventListener("click", () => {
+      toast.style.display = "none";
+      if (toastTimeoutId) {
+        clearTimeout(toastTimeoutId);
+        toastTimeoutId = null;
+      }
+    });
+  </script>
+  <style>
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+      position: fixed;
+      background: white;
+      z-index: 100000;
+      top: 0;
+      font-size: clamp(30px, 3vw, 40px);
+
+      font-weight: bolder;
+    }
+
+    .spain {
+      width: 0.5em;
+      height: 0.5em;
+      background: #000000;
+      border-radius: 50%;
+      margin: 5px;
+      animation: spin 0.6s ease-in-out infinite;
+    }
+
+    .spain:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .spain:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .spain:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: translateY(0);
       }
 
-      .spain {
-        width: 0.5em;
-        height: 0.5em;
-        background: #000000;
-        border-radius: 50%;
-        margin: 5px;
-        animation: spin 0.6s ease-in-out infinite;
+      50% {
+        transform: translateY(-10px);
       }
 
-      .spain:nth-child(1) {
-        animation-delay: 0.1s;
+      100% {
+        transform: translateY(0);
       }
+    }
+  </style>
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+</head>
 
-      .spain:nth-child(2) {
-        animation-delay: 0.2s;
-      }
+<body data-theme="light">
+  <div class="loader">
+    <dotlottie-wc src="gEzG0w1WVY.lottie" style="width: 400px; height: 400px" speed="1" autoplay loop></dotlottie-wc>
 
-      .spain:nth-child(3) {
-        animation-delay: 0.3s;
-      }
+  </div>
 
-      @keyframes spin {
-        0% {
-          transform: translateY(0);
-        }
-
-        50% {
-          transform: translateY(-10px);
-        }
-
-        100% {
-          transform: translateY(0);
-        }
-      }
-    </style>
-    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-  </head>
-
-  <body data-theme="light">
-    <div class="loader">
-      <div style="display: flex; justify-content: center; align-items: end">
-        Loading
-        <div class="spain"></div>
-        <div class="spain"></div>
-        <div class="spain"></div>
-      </div>
-    </div>
-
-    <div class="content">
-      <header>
-        <span class="logo">
-          <img src="/assets/logo.png" alt="code snippet manager" />
-          <span
-            >Code Snippet Manager
-            <sub
-              style="
+  <div class="content">
+    <header style="z-index: 1">
+      <span class="logo">
+        <img src="/assets/logo.png" alt="code snippet manager" />
+        <span>Code Snippet Manager
+          <sub style="
                 font-family: 'Segoe UI', Tahoma, sans-serif;
                 font-size: 10px;
-              "
-              >V.1.0.1</sub
-            ></span
-          >
-        </span>
-        <nav>
-          <div class="searchResult">
-            <label class="search" for="search" style="cursor: text">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-search-icon lucide-search"
-              >
-                <path d="m21 21-4.34-4.34" />
-                <circle cx="11" cy="11" r="8" />
-              </svg>
+              ">V.1.0.1</sub></span>
+      </span>
+      <nav>
+        <div class="searchResult">
+          <label class="search" for="search" style="cursor: text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-search-icon lucide-search">
+              <path d="m21 21-4.34-4.34" />
+              <circle cx="11" cy="11" r="8" />
+            </svg>
 
-              <input
-                type="search"
-                placeholder="Search Snippets..."
-                id="search"
-                autocomplete="off"
-              />
-              <kbd
-                style="
+            <input type="search" placeholder="Search Snippets..." id="search" autocomplete="off" />
+            <kbd style="
                   background: rgba(128, 128, 128, 0.21);
                   color: rgb(122, 122, 122);
                   padding: 5px;
                   border-radius: 5px;
                   box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
-                "
-                >ctrl+k</kbd
-              >
-            </label>
-            <div class="results" id="results">
-              <ul id="results-list"></ul>
-            </div>
+                ">ctrl+k</kbd>
+          </label>
+          <div class="results" id="results">
+            <ul id="results-list"></ul>
           </div>
-          <div class="notification">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-bell-icon lucide-bell"
-            >
-              <path d="M10.268 21a2 2 0 0 0 3.464 0" />
-              <path
-                d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
-              />
-            </svg>
-          </div>
-          <div class="help">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-info-icon lucide-info"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 16v-4" />
-              <path d="M12 8h.01" />
-            </svg>
-          </div>
-          <div class="profile">
-            <img src="<%= image %>" alt="" />
-          </div>
-        </nav>
-        <div class="openList" style="display: none">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-list-filter-icon lucide-list-filter"
-          >
-            <path d="M3 6h18" />
-            <path d="M7 12h10" />
-            <path d="M10 18h4" />
+        </div>
+        <div class="notification">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-bell-icon lucide-bell">
+            <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+            <path
+              d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
           </svg>
         </div>
-      </header>
-      <div class="container">
-        <aside>
-          <ul>
-            <!-- Main Pages -->
-            <span>Main Pages</span>
-            <li>
-              <a href="/"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard"
-                >
-                  <rect width="7" height="9" x="3" y="3" rx="1" />
-                  <rect width="7" height="5" x="14" y="3" rx="1" />
-                  <rect width="7" height="9" x="14" y="12" rx="1" />
-                  <rect width="7" height="5" x="3" y="16" rx="1" />
-                </svg>
-                Dashboard</a
-              >
-            </li>
-            <li class="active">
-              <a href="/card"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-earth-icon lucide-earth"
-                >
-                  <path d="M21.54 15H17a2 2 0 0 0-2 2v4.54" />
-                  <path
-                    d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"
-                  />
-                  <path
-                    d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"
-                  />
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
-                All Code Snippets</a
-              >
-            </li>
-            <li>
-              <a href="/folder"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-folder-icon lucide-folder"
-                >
-                  <path
-                    d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"
-                  />
-                </svg>
-                Folders</a
-              >
-            </li>
-            <li>
-              <a href="/tags"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-tags-icon lucide-tags"
-                >
-                  <path
-                    d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z"
-                  />
-                  <path
-                    d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193"
-                  />
-                  <circle cx="10.5" cy="6.5" r=".5" fill="currentColor" />
-                </svg>
-                Tags</a
-              >
-            </li>
-            <li>
-              <a href="/pin"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-pin-icon lucide-pin"
-                >
-                  <path d="M12 17v5" />
-                  <path
-                    d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"
-                  />
-                </svg>
-                Pinned</a
-              >
-            </li>
-            <li>
-              <a href="/fav"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-star-icon lucide-star"
-                >
-                  <path
-                    d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                  />
-                </svg>
-                Favorites</a
-              >
-            </li>
+        <div class="help">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-info-icon lucide-info">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4" />
+            <path d="M12 8h.01" />
+          </svg>
+        </div>
+        <div class="profile">
+          <img src="<%= image %>" alt="" />
+        </div>
+      </nav>
+      <div class="openList" style="display: none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-list-filter-icon lucide-list-filter">
+          <path d="M3 6h18" />
+          <path d="M7 12h10" />
+          <path d="M10 18h4" />
+        </svg>
+      </div>
+    </header>
+    <div class="container">
+      <aside>
+        <ul>
+          <!-- Main Pages -->
+          <span>Main Pages</span>
+          <li>
+            <a href="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard">
+                <rect width="7" height="9" x="3" y="3" rx="1" />
+                <rect width="7" height="5" x="14" y="3" rx="1" />
+                <rect width="7" height="9" x="14" y="12" rx="1" />
+                <rect width="7" height="5" x="3" y="16" rx="1" />
+              </svg>
+              Dashboard</a>
+          </li>
+          <li class="active">
+            <a href="/card"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-earth-icon lucide-earth">
+                <path d="M21.54 15H17a2 2 0 0 0-2 2v4.54" />
+                <path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17" />
+                <path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05" />
+                <circle cx="12" cy="12" r="10" />
+              </svg>
+              All Code Snippets</a>
+          </li>
+          <li>
+            <a href="/folder"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-folder-icon lucide-folder">
+                <path
+                  d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+              </svg>
+              Folders</a>
+          </li>
+          <li>
+            <a href="/tags"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-tags-icon lucide-tags">
+                <path
+                  d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z" />
+                <path d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193" />
+                <circle cx="10.5" cy="6.5" r=".5" fill="currentColor" />
+              </svg>
+              Tags</a>
+          </li>
+          <li>
+            <a href="/pin"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-pin-icon lucide-pin">
+                <path d="M12 17v5" />
+                <path
+                  d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
+              </svg>
+              Pinned</a>
+          </li>
+          <li>
+            <a href="/fav"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-star-icon lucide-star">
+                <path
+                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+              </svg>
+              Favorites</a>
+          </li>
 
-            <!-- Creation Shortcuts -->
-            <span>Creation Shortcuts</span>
-            <li class="">
-              <a href="/card/create"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-square-dashed-bottom-code-icon lucide-square-dashed-bottom-code"
-                >
-                  <path d="M10 9.5 8 12l2 2.5" />
-                  <path d="M14 21h1" />
-                  <path d="m14 9.5 2 2.5-2 2.5" />
-                  <path
-                    d="M5 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2"
-                  />
-                  <path d="M9 21h1" />
-                </svg>
-                New Snippet</a
-              >
-            </li>
-            <li>
-              <a href="/create-folder"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-folder-pen-icon lucide-folder-pen"
-                >
-                  <path
-                    d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5"
-                  />
-                  <path
-                    d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"
-                  />
-                </svg>
-                New Folder</a
-              >
-            </li>
+          <!-- Creation Shortcuts -->
+          <span>Creation Shortcuts</span>
+          <li class="">
+            <a href="/card/create"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-square-dashed-bottom-code-icon lucide-square-dashed-bottom-code">
+                <path d="M10 9.5 8 12l2 2.5" />
+                <path d="M14 21h1" />
+                <path d="m14 9.5 2 2.5-2 2.5" />
+                <path d="M5 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2" />
+                <path d="M9 21h1" />
+              </svg>
+              New Snippet</a>
+          </li>
+          <li>
+            <a href="/create-folder"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-folder-pen-icon lucide-folder-pen">
+                <path
+                  d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5" />
+                <path
+                  d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+              </svg>
+              New Folder</a>
+          </li>
 
-            <!-- Search & Explore -->
-            <span>Search & Explore</span>
-            <li>
-              <a href="/search"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-search-icon lucide-search"
-                >
-                  <path d="m21 21-4.34-4.34" />
-                  <circle cx="11" cy="11" r="8" />
-                </svg>
-                Search</a
-              >
-            </li>
-            <li>
-              <a href="/explore"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-telescope-icon lucide-telescope"
-                >
-                  <path
-                    d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"
-                  />
-                  <path d="m13.56 11.747 4.332-.924" />
-                  <path d="m16 21-3.105-6.21" />
-                  <path
-                    d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"
-                  />
-                  <path d="m6.158 8.633 1.114 4.456" />
-                  <path d="m8 21 3.105-6.21" />
-                  <circle cx="12" cy="13" r="2" />
-                </svg>
-                Explore Public Snippets</a
-              >
-            </li>
+          <!-- Search & Explore -->
+          <span>Search & Explore</span>
+          <li>
+            <a href="/search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-search-icon lucide-search">
+                <path d="m21 21-4.34-4.34" />
+                <circle cx="11" cy="11" r="8" />
+              </svg>
+              Search</a>
+          </li>
+          <li>
+            <a href="/explore"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-telescope-icon lucide-telescope">
+                <path
+                  d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44" />
+                <path d="m13.56 11.747 4.332-.924" />
+                <path d="m16 21-3.105-6.21" />
+                <path
+                  d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z" />
+                <path d="m6.158 8.633 1.114 4.456" />
+                <path d="m8 21 3.105-6.21" />
+                <circle cx="12" cy="13" r="2" />
+              </svg>
+              Explore Public Snippets</a>
+          </li>
 
-            <!-- Settings & Tools -->
-            <span>Settings & Tools</span>
-            <li>
-              <a href="/import-export">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-cloud-download-icon lucide-cloud-download"
-                >
-                  <path d="M12 13v8l-4-4" />
-                  <path d="m12 21 4-4" />
-                  <path
-                    d="M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284"
-                  />
-                </svg>
-                Import / Export</a
-              >
-            </li>
-            <li>
-              <a href="/settings"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-cog-icon lucide-cog"
-                >
-                  <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" />
-                  <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
-                  <path d="M12 2v2" />
-                  <path d="M12 22v-2" />
-                  <path d="m17 20.66-1-1.73" />
-                  <path d="M11 10.27 7 3.34" />
-                  <path d="m20.66 17-1.73-1" />
-                  <path d="m3.34 7 1.73 1" />
-                  <path d="M14 12h8" />
-                  <path d="M2 12h2" />
-                  <path d="m20.66 7-1.73 1" />
-                  <path d="m3.34 17 1.73-1" />
-                  <path d="m17 3.34-1 1.73" />
-                  <path d="m11 13.73-4 6.93" />
-                </svg>
-                Settings</a
-              >
-            </li>
-            <li>
-              <a href="/account"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-user-lock-icon lucide-user-lock"
-                >
-                  <circle cx="10" cy="7" r="4" />
-                  <path d="M10.3 15H7a4 4 0 0 0-4 4v2" />
-                  <path d="M15 15.5V14a2 2 0 0 1 4 0v1.5" />
-                  <rect width="8" height="5" x="13" y="16" rx=".899" />
-                </svg>
-                Account</a
-              >
-            </li>
+          <!-- Settings & Tools -->
+          <span>Settings & Tools</span>
+          <li>
+            <a href="/import-export">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-cloud-download-icon lucide-cloud-download">
+                <path d="M12 13v8l-4-4" />
+                <path d="m12 21 4-4" />
+                <path d="M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284" />
+              </svg>
+              Import / Export</a>
+          </li>
+          <li>
+            <a href="/settings"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-cog-icon lucide-cog">
+                <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" />
+                <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                <path d="M12 2v2" />
+                <path d="M12 22v-2" />
+                <path d="m17 20.66-1-1.73" />
+                <path d="M11 10.27 7 3.34" />
+                <path d="m20.66 17-1.73-1" />
+                <path d="m3.34 7 1.73 1" />
+                <path d="M14 12h8" />
+                <path d="M2 12h2" />
+                <path d="m20.66 7-1.73 1" />
+                <path d="m3.34 17 1.73-1" />
+                <path d="m17 3.34-1 1.73" />
+                <path d="m11 13.73-4 6.93" />
+              </svg>
+              Settings</a>
+          </li>
+          <li>
+            <a href="/account"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-user-lock-icon lucide-user-lock">
+                <circle cx="10" cy="7" r="4" />
+                <path d="M10.3 15H7a4 4 0 0 0-4 4v2" />
+                <path d="M15 15.5V14a2 2 0 0 1 4 0v1.5" />
+                <rect width="8" height="5" x="13" y="16" rx=".899" />
+              </svg>
+              Account</a>
+          </li>
 
-            <!-- Auth -->
-            <span>Auth</span>
-            <li>
-              <a href="/login"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-scan-face-icon lucide-scan-face"
-                >
-                  <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-                  <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-                  <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-                  <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-                  <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                  <path d="M9 9h.01" />
-                  <path d="M15 9h.01" />
-                </svg>
-                Login</a
-              >
-            </li>
-            <li>
-              <a href="/signup"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-key-icon lucide-key"
-                >
-                  <path
-                    d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"
-                  />
-                  <path d="m21 2-9.6 9.6" />
-                  <circle cx="7.5" cy="15.5" r="5.5" />
-                </svg>
-                Sign Up</a
-              >
-            </li>
-          </ul>
-        </aside>
-        <main data-barba="container" data-barba-namespace="cards">
-          <span style="font-weight: bolder; color: gray; margin-block: 5px"
-            >All Code Snippets</span
-          >
-          <% if (card.length===0) { %> <%- include('partials/no-data', { msg:
-          'Add Cards to Favourites' }) %> <% } %>
-          <div id="cards">
-            <div id="cards">
-              <% card.forEach(e=> { %>
-              <div
-                class="card"
-                style="z-index: 1 !important"
-                id="card-<%= e._id%>"
-                ondblclick="window.open('/card/<%= e._id %>', '_blank')"
-              >
-                <div class="header-info">
-                  <div style="display: flex; align-items: center; gap: 10px">
-                    <img
-                      src="<%= image %>"
-                      alt=""
-                      width="40"
-                      height="40"
-                      style="border-radius: 50%"
-                    />
-                    <div class="title">
-                      <h3><%= e.title%></h3>
-                      <div>
-                        <span class="author"
-                          ><strong> <%= author%> </strong></span
-                        >, <span class="lan"> <%= e.category%> </span>,
-                        <span class="time">
-                          <%= new Date(e.metadata.createdAt).toLocaleString() %>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="menu_top" onclick="toggleMenu('<%= e._id %>')">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical"
-                    >
-                      <circle cx="12" cy="12" r="1" />
-                      <circle cx="12" cy="5" r="1" />
-                      <circle cx="12" cy="19" r="1" />
-                    </svg>
-                  </div>
-                </div>
-                <div class="code" title="<%= e.content%>">
-                  <code> <%= e.content %> </code>
-                </div>
-                <div class="tags">
-                  <% e.tags.forEach(tag=> { %>
-                  <span> <%= tag %> </span>
-                  <% }) %>
-                </div>
-
-                <div class="options">
-                  <div class="open">
-                    <a
-                      href="/card/<%= e.id%>"
-                      style="
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        gap: 10px;
-                      "
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="lucide lucide-badge-info-icon lucide-badge-info"
-                      >
-                        <path
-                          d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
-                        />
-                        <line x1="12" x2="12" y1="16" y2="12" />
-                        <line x1="12" x2="12.01" y1="8" y2="8" />
-                      </svg>
-                      View Details
-                    </a>
-                  </div>
-                  <div class="sub_menu">
-                    <div
-                      class="pin"
-                      onclick="pinIt('<%= e._id %>')"
-                      data-id="<%= e._id%>"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="lucide lucide-pin-icon lucide-pin"
-                      >
-                        <path d="M12 17v5" />
-                        <path
-                          d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"
-                        />
-                      </svg>
-                    </div>
-
-                    <div
-                      class="fav"
-                      onclick="favIt('<%= e._id %>')"
-                      data-id="<%= e._id%>"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="lucide lucide-star-icon lucide-star"
-                      >
-                        <path
-                          d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="menu active"
-                  id="menu-<%= e._id %>"
-                  onclick="toggleMenu('<%= e._id %>')"
-                >
-                  <li onclick="editCard('<%= e._id %>')">Edit</li>
-                  <li onclick="deleteCard('<%= e._id %>')">Delete</li>
-                  <li onclick="pinIt('<%= e._id %>')">Pin</li>
+          <!-- Auth -->
+          <span>Auth</span>
+          <li>
+            <a href="/login"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-scan-face-icon lucide-scan-face">
+                <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                <path d="M9 9h.01" />
+                <path d="M15 9h.01" />
+              </svg>
+              Login</a>
+          </li>
+          <li>
+            <a href="/signup"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-key-icon lucide-key">
+                <path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4" />
+                <path d="m21 2-9.6 9.6" />
+                <circle cx="7.5" cy="15.5" r="5.5" />
+              </svg>
+              Sign Up</a>
+          </li>
+        </ul>
+      </aside>
+      <main>
+        <div class="title1">
+          <span id="count">All Cards (<%= len %>)</span>
+          <div class="selectedCardsFeatures">
+            <button id="selectAll" onclick="selectAll()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="lucide lucide-grid2x2-check-icon lucide-grid-2x2-check">
+                <path d="M12 3v17a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H3" />
+                <path d="m16 19 2 2 4-4" />
+              </svg></button>
+            <button id="deleteSelected" onclick="deleteCards()"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash">
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                <path d="M3 6h18" />
+                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg></button>
+            <button id="downloadSelected" onclick="downloadCards()"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-down-icon lucide-file-down">
+                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                <path d="M12 18v-6" />
+                <path d="m9 15 3 3 3-3" />
+              </svg></button>
+            <button id="shareSelected" onclick="shareSelectedCards()"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2-icon lucide-share-2">
+                <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
+                <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
+              </svg></button>
+          </div>
+        </div>
+        <% if (card.length===0) { %> <%- include('partials/no-data', { msg: 'Add Cards to Favourites' }) %>
+            <% } %>
+              <div id="cards">
+                <% card.forEach(e=> { %>
+                  <%- include('partials/card', {e, userId, author}) %>
+                    <% }) %>
+              </div>
+              <div class="msg" style="text-align: center; font-size: large;"><img
+                  src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif" width="100px" alt=""
+                  style="filter: invert(10%);"></div>
+              <div class="fab">
+                <div class="fab-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-image-plus-icon lucide-image-plus">
+                    <path d="M16 5h6" />
+                    <path d="M19 2v6" />
+                    <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5" />
+                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                    <circle cx="9" cy="9" r="2" />
+                  </svg>
                 </div>
               </div>
+              <div class="images">
+                <h2 style="margin: 20px 0 0 20px;">Pick an image</h2>
+                <div style="display: flex; justify-content: center;align-items: center;">
+                  <label for="search2" id="sa">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="lucide lucide-search-icon lucide-search">
+                      <path d="m21 21-4.34-4.34" />
+                      <circle cx="11" cy="11" r="8" />
+                    </svg>
+                    <input type="search" id="search2" placeholder="Search images..." autocomplete="off">
+                  </label>
+                </div>
+                <div id="Suggestions">
+                  <span class="bg-topic">Abstract</span>
+                  <span class="bg-topic">Nature</span>
+                  <span class="bg-topic">Animals</span>
+                  <span class="bg-topic">People</span>
+                  <span class="bg-topic">Technology</span>
+                  <span class="bg-topic">Places</span>
+                  <span class="bg-topic">Objects</span>
+                  <span class="bg-topic">Architecture</span>
+                  <span class="bg-topic">Food</span>
+                  <span class="bg-topic">Music</span>
+                  <span class="bg-topic">Art</span>
+                  <span class="bg-topic">Travel</span>
+                  <span class="bg-topic">Science</span>
+                  <span class="bg-topic">Business</span>
+                  <span class="bg-topic">Health</span>
+                  <span class="bg-topic">Education</span>
+                  <span class="bg-topic">Entertainment</span>
+                  <span class="bg-topic">News</span>
+                  <span class="bg-topic">Sports</span>
+                  <span class="bg-topic">Politics</span>
+                  <span class="bg-topic">Religion</span>
+                  <span class="bg-topic">Coding</span>
+                  <span class="bg-topic">Design</span>
+                  <span class="bg-topic">Development</span>
+                  <span class="bg-topic">Programming</span>
+                  <span class="bg-topic">Web Development</span>
+                  <span class="bg-topic">Mobile Development</span>
+                  <span class="bg-topic">Game Development</span>
+                  <span class="bg-topic">Software Development</span>
+                  <span class="bg-topic">Data Science</span>
+                  <span class="bg-topic">Machine Learning</span>
+                  <span class="bg-topic">Artificial Intelligence</span>
+                  <span class="bg-topic">India</span>
+                  <span class="bg-topic">USA</span>
+                  <span class="bg-topic">UK</span>
+                  <span class="bg-topic">Australia</span>
+                  <span class="bg-topic">Canada</span>
+                  <span class="bg-topic">France</span>
+                  <span class="bg-topic">Germany</span>
+                  <span class="bg-topic">Italy</span>
+                  <span class="bg-topic">Spain</span>
+                  <span class="bg-topic">Japan</span>
+                  <span class="bg-topic">Korea</span>
+                  <span class="bg-topic">China</span>
+                  <span class="bg-topic">Taiwan</span>
+                  <span class="bg-topic">Hindu</span>
+                  <span class="bg-topic">Muslim</span>
+                  <span class="bg-topic">Christian</span>
+                  <span class="bg-topic">Islam</span>
+                  <span class="bg-topic">Sikh</span>
+                  <span class="bg-topic">Black</span>
+                  <span class="bg-topic">White</span>
+                  <span class="bg-topic">Asian</span>
+                  <span class="bg-topic">Latin</span>
+                  <span class="bg-topic">Indian</span>
+                  <span class="bg-topic">Others</span>
 
-              <% }) %>
-            </div>
-          </div>
-        </main>
+                </div>
+                <ul id="images_data">
+                </ul>
+                <div class="sentinel" style="margin:10px; text-align: center;">
+                  <span>
+                    Loading images...
+                  </span>
+                </div>
+              </div>
+              <div class="move_folder">
+                <div class="header_title" style="font-weight: bolder">
+                  <div class="span">Move " folderName"</div>
+                </div>
+                <hr />
+                <div class="folders_name">
+                  <ul>
+                    <% if (folders.length===0) { %>
+                      <span style="margin: 10px; color: red">No folder found</span>
+                      <% } %>
+                        <% folders.forEach((folder, i)=> { %>
+                          <li>
+                            <label>
+                              <input type="radio" name="moveFolder" value="<%= folder._id %>" id="moveFolder<%= i %>" />
+                              <div class="folder">
+                                <div class="folder_icon">
+                                  <!-- SVG folder icon -->
+                                </div>
+                                <div class="folder_name" style="
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    gap: 10px;
+                                  ">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="#EDCE44" stroke="none" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-folder-icon lucide-folder">
+                                    <path
+                                      d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
+                                  </svg>
+                                  <span style="
+                                      display: block;
+                                      width: 120px;
+                                      white-space: nowrap;
+                                      overflow: hidden;
+                                      text-overflow: ellipsis;
+                                    " title="<%= folder.folderName %>">
+                                    <%= folder.folderName %>
+                                  </span>
+                                </div>
+                              </div>
+                            </label>
+                          </li>
+                          <% }) %>
+                  </ul>
+                  <button class="move_btn" onclick="moveIt()" <%=folders.length===0 ? "disabled" : "" %> > Move
+                  </button>
+                </div>
+              </div>
+      </main>
+      <div id="context_menu" style="
+              position: absolute;
+              top: 0;
+              left: 0;
+              display: none;
+              z-index: 1000000;
+              width: 200px;
+            ">
+        <ul id="context_menu_list"></ul>
       </div>
     </div>
+  </div>
 
-    <script>
-      let results = document.getElementById("results");
-      let list = document.getElementById("results-list");
-      let searchInput = document.querySelector(".searchResult");
+<div class="toast" data-type="success">
+  <div class="toast-content">
+    <span class="toast-message"> </span>
+    <div class="close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-octagon-x-icon lucide-octagon-x">
+        <path d="m15 9-6 6" />
+        <path
+          d="M2.586 16.726A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2h6.624a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586z" />
+        <path d="m9 9 6 6" />
+      </svg>
+    </div>
+  </div>
+</div>
 
-      let debounceTimer;
 
-      searchInput.addEventListener("input", function (e) {
-        e.stopPropagation();
-        let query = e.target.value.trim();
+  <script>
 
-        clearTimeout(debounceTimer);
+    let pages = 1;
+    const cardsContainer = document.getElementById("cards");
 
-        // list.textContent = "Searching...";
+    const observers = new IntersectionObserver(async (entries) => {
+      const lastEntry = entries[0];
+      if (!lastEntry.isIntersecting) return;
 
+      pages++;
+      const res = await fetch(`/card/json?page=${pages}`);
+      const html = await res.text();
+
+      if (html.trim() === "") {
+        observers.unobserve(lastEntry.target);
+        document.querySelector(".msg").innerHTML = "No more data";
+        return;
+      }
+
+      cardsContainer.insertAdjacentHTML("beforeend", html);
+
+      observers.unobserve(lastEntry.target);
+
+      const newLastCard = cardsContainer.lastElementChild;
+      if (newLastCard) observers.observe(newLastCard);
+
+    }, {
+      root: null,
+      rootMargin: "0px 0px 700px 0px",
+      threshold: 0
+    });
+
+    const lastCard = cardsContainer.lastElementChild;
+    if (lastCard) observers.observe(lastCard);
+
+
+  </script>
+
+
+
+  <!-- <script>
+    document.querySelectorAll("input[name='grid']").forEach((input) => {
+      input.addEventListener("change", () => {
+        if (input.value === "grid") {
+          localStorage.setItem("view", "grid");
+          document.getElementById("cards").style.display = "grid";
+          document.getElementById("tableView").style.display = "none";
+        } else if (input.value === "list") {
+          localStorage.setItem("view", "list");
+          document.getElementById("tableView").style.display = "table";
+          document.getElementById("cards").style.display = "none";
+        }
+      });
+    });
+    window.addEventListener("DOMContentLoaded", () => {
+      let view = localStorage.getItem("view");
+      if (view === "grid") {
+        document.getElementById("grid").checked = true;
+        document.getElementById("cards").style.display = "grid";
+        document.getElementById("tableView").style.display = "none";
+      } else if (view === "list") {
+        document.getElementById("list").checked = true;
+        document.getElementById("tableView").style.display = "table";
+        document.getElementById("cards").style.display = "none";
+      }
+    });
+  </script> -->
+  <script src="/scripts/home.js"></script>
+  <script>
+    let results = document.getElementById("results");
+    results.addEventListener("click", (e) => {
+      e.stopPropagation();
+    })
+
+    document.body.addEventListener("click", () => {
+      results.classList.remove("active");
+    })
+    let list = document.getElementById("results-list");
+    let searchInput = document.querySelector(".searchResult");
+    let search1 = document.getElementById("search");
+    search1.addEventListener("click", (e) => {
+      e.stopPropagation()
+      results.classList.add("active");
+      if (search1.value.trim() === "") {
+        results.classList.remove("active");
+      }
+    })
+    function debounce(fn, delay) {
+      let timer;
+      return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    search1.addEventListener(
+      "input",
+      debounce(() => {
+        results.classList.add("active");
+        list.textContent = "Loading Suggestions...";
+        const query = search1.value.trim();
         if (!query) {
           results.classList.remove("active");
+          list.innerHTML = "";
           return;
         }
-
-        debounceTimer = setTimeout(async () => {
-          results.classList.add("active");
-
-          try {
-            let rs = await fetch(`/search?query=${encodeURIComponent(query)}`);
-            let data = await rs.json();
-            let unique = new Set();
-
-            data.findCards.slice(0, 3).forEach((item) => {
-              if (!unique.has(item.title)) {
-                unique.add(item.title);
-                let a = document.createElement("a");
-                a.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg> ${item.title}`;
-                a.href = `/card/${item._id}`;
-                a.target = "_blank";
-                list.innerHTML = "";
-                list.appendChild(a);
-              }
-            });
-
-            if (list.children.length === 0) {
-              let li = document.createElement("li");
-              li.textContent = "No results found";
+        searchv1(query).then((data) => {
+          list.innerHTML = "";
+          if (!Array.isArray(data) || data.length === 0) {
+            list.innerHTML = "<span style='color:red'>No Cards Found</span>";
+            return;
+          } else {
+            data.forEach((card) => {
+              const li = document.createElement("li");
+              li.innerHTML = `
+            <a href="/card/${card._id}">
+             <div class="name">
+               <svg xmlns="http://www.w3.org/2000/svg" 
+                   width="18" height="18" viewBox="0 0 24 24" 
+                   fill="none" stroke="currentColor" 
+                   stroke-width="2" stroke-linecap="round" 
+                   stroke-linejoin="round" 
+                   class="lucide lucide-search-icon lucide-search">
+                <path d="m21 21-4.34-4.34"/>
+                <circle cx="11" cy="11" r="8"/>
+              </svg> 
+              ${card.title}
+              </div>
+              <div class="arrow" onclick="applytext(event,'${card.title}')"><svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-left-icon lucide-arrow-up-left"><path d="M7 17V7h10"/><path d="M17 17 7 7"/></svg></div>
+            </a>`;
               list.appendChild(li);
-            }
-          } catch (err) {
-            console.error("Search error:", err);
+            });
           }
-        }, 300);
-      });
+        });
+      }, 500)
+    );
 
-      function toggleMenu(id) {
-        document.querySelectorAll(".menu-popup").forEach((m) => {
-          if (m.id !== "menu-" + id) m.classList.remove("active");
+    function applytext(e, t) {
+      e.preventDefault();
+      e.stopPropagation();
+      search1.value = t;
+
+    }
+
+
+    function setActiveStyle(element, active) {
+      if (active) {
+        element.style.fill = "black";
+        element.style.transition = "0.3s ease";
+      } else {
+        element.style.fill = "none";
+      }
+    }
+
+    async function pinIt(id) {
+      const pinIcon = document.querySelector(`.pin[data-id="${id}"] svg`);
+      try {
+        const res = await fetch(`/card/pin/${id}`, {
+          method: "PUT",
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          setActiveStyle(pinIcon, data.card.isPinned);
+        }
+      } catch (err) {
+        console.error("Error pinning:", err);
+      }
+    }
+
+    async function favIt(id) {
+      const favIcon = document.querySelector(`.fav[data-id="${id}"] svg`);
+      try {
+        const res = await fetch(`/card/fav/${id}`, {
+          method: "PUT",
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          setActiveStyle(favIcon, data.card.isFavorite);
+        }
+      } catch (err) {
+        console.error("Error favoriting:", err);
+      }
+    }
+
+    // document.querySelectorAll(".menu_top").forEach((el) => {
+    //   el.addEventListener("click", (e) => {
+    //     e.stopPropagation();
+    //     toggleMenu(e, el.dataset.id);
+    //   });
+    // });
+
+    // function toggleMenu(e, id) {
+    //   e.stopPropagation();
+    //   console.log(e);
+    //   document.querySelectorAll(".menu-popup").forEach((m) => {
+    //     if (m.id !== "menu-" + id) m.classList.remove("active");
+    //   });
+
+    //   let menu = document.getElementById("menu-" + id);
+    //   menu.classList.toggle("active");
+    // }
+
+    async function deleteCard(id) {
+      try {
+        const res = await fetch(`/card/${id}`, {
+          method: "DELETE",
+          credentials: "include",
         });
 
-        let menu = document.getElementById("menu-" + id);
-        menu.classList.toggle("active");
-      }
-
-      function setActiveStyle(element, active) {
-        if (active) {
-          element.style.fill = "black";
-          element.style.transition = "0.3s ease";
+        if (res.ok) {
+          const cardEl = document.getElementById(`card-${id}`);
+          if (cardEl) {
+            cardEl.remove();
+          }
+          window.location.reload();
         } else {
-          element.style.fill = "none";
+          console.error("Failed to delete card:", await res.text());
+        }
+      } catch (err) {
+        console.error("Delete error:", err);
+      }
+    }
+
+    function editCard(id) {
+      window.location.assign(`/card/${id}`);
+    }
+
+    let search = document.getElementById("search");
+    search.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        let query = search.value;
+        if (query.trim() !== "") {
+          window.location.href = `/search?query=${encodeURIComponent(query)}`;
         }
       }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && e.key === "k") {
+        e.preventDefault();
+        search.focus();
+      }
+    });
+  </script>
+  <script>
+    window.onload = () => {
+      let loader = document.querySelector(".loader");
+      let main = document.querySelector("main");
+      let imageurl = localStorage.getItem("image");
+      let bg_color = localStorage.getItem("bg_color");
+      let text_color = localStorage.getItem("text_color");
+      let accent = localStorage.getItem("accent");
+      console.log(accent)
+      if (bg_color) {
+        document.body.style.setProperty("--bg-color", bg_color);
+      }
+      if (text_color) {
+        document.body.style.setProperty("--color", text_color);
+      }
+      if (accent) {
+        document.body.style.setProperty("--accent", accent);
+      }
+      if (imageurl) {
+        main.style.backgroundImage = `url(${imageurl})`;
+      }
+      loader.style.display = "none";
+    };
+  </script>
+  <script>
+    let context_menu = document.getElementById("context_menu");
+    let menuListEl = document.getElementById("context_menu_list");
 
-      async function pinIt(id) {
-        const pinIcon = document.querySelector(`.pin[data-id="${id}"] svg`);
-        try {
-          const res = await fetch(`/card/pin/${id}`, {
-            method: "PUT",
-          });
-          const data = await res.json();
+    document.querySelectorAll(".menu_top").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const icons = {
+          delete: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
+          edit: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-pen-icon lucide-folder-pen"><path d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5"/><path d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>`,
+          move: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-icon lucide-move"><path d="M12 2v20"/><path d="m15 19-3 3-3-3"/><path d="m19 9 3 3-3 3"/><path d="M2 12h20"/><path d="m5 9-3 3 3 3"/><path d="m9 5 3-3 3 3"/></svg>`,
+          share: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`,
+          pin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pin-icon lucide-pin"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>`,
+        };
 
-          if (data.success) {
-            setActiveStyle(pinIcon, data.card.isPinned);
+        let { id, menuId, menus, userid, cardname, mtype } =
+          e.currentTarget.dataset;
+        console.log(mtype);
+        const actions = {
+          edit: () => editCard(id),
+          share: () => shareCard(userid, id),
+          pin: () => pinIt(id),
+          move: () => moveCard(id, cardname, mtype),
+          fav: () => favIt(id),
+          delete: () => deleteCard(id),
+        };
+        let menuItems = menus.split(",").map((i) => i.trim());
+        context_menu.style.display = "block";
+        context_menu.style.visibility = "hidden";
+        context_menu.style.left = "0px";
+        context_menu.style.top = "0px";
+
+        let menuWidth = context_menu.offsetWidth;
+        let menuHeight = context_menu.offsetHeight;
+
+        let x = e.clientX;
+        let y = e.clientY;
+
+        if (x + menuWidth > window.innerWidth)
+          x = window.innerWidth - menuWidth - 10;
+        if (y + menuHeight > window.innerHeight)
+          y = window.innerHeight - menuHeight - 10;
+
+        context_menu.style.left = x + "px";
+        context_menu.style.top = y + "px";
+        context_menu.style.visibility = "visible";
+        context_menu.style.display = "block";
+
+        menuListEl.innerHTML = "";
+
+        menuItems.forEach((item) => {
+          let li = document.createElement("li");
+          li.innerHTML = `${icons[item]} ${item}`;
+          menuListEl.appendChild(li);
+          if (actions[item]) {
+            li.addEventListener("click", (ev) => {
+              ev.stopPropagation();
+              actions[item]();
+              context_menu.style.display = "none";
+            });
           }
-        } catch (err) {
-          console.error("Error pinning:", err);
-        }
+        });
+      });
+    });
+
+    let move_folder = document.querySelector(".move_folder");
+    let getFoldername = document.querySelector(".header_title .span");
+    let folderId;
+    let cardId;
+    let movetype;
+    let folder = document
+      .querySelectorAll("input[name='moveFolder']")
+      .forEach((fl) => {
+        fl.addEventListener("change", (e) => {
+          folderId = e.target.value;
+        });
+      });
+
+    async function moveCard(id, cardName, mtype) {
+      cardId = id;
+      movetype = mtype;
+      getFoldername.textContent = `Move \"${cardName}\" :`;
+      move_folder.style.display = "block";
+      move_folder.style.visibility = "visible";
+    }
+
+    const toast = document.querySelector(".toast");
+    const toastCloseBtn = document.querySelector(".toast .close");
+    const toastMessage = document.querySelector(".toast-message");
+
+    let toastTimeoutId = null;
+
+
+
+    async function moveIt() {
+      const selected = document.querySelector(
+        "input[name='moveFolder']:checked"
+      );
+      if (!selected) {
+        showToast("⚠️ Please select a folder before moving.", "error");
+        return;
       }
 
-      async function favIt(id) {
-        const favIcon = document.querySelector(`.fav[data-id="${id}"] svg`);
-        try {
-          const res = await fetch(`/card/fav/${id}`, {
-            method: "PUT",
+      const folderId = selected.value;
+
+      try {
+        const res = await fetch(`moveit/${movetype}/${folderId}/${cardId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          let errorMsg = "Move failed. Please try again.";
+          try {
+            const data = await res.json();
+            if (data?.error) errorMsg = data.error;
+          } catch { }
+          showToast(`🚨 ${errorMsg}`, "error");
+        } else {
+          showToast(`🎉 Successfully moved ${movetype}!`, "success");
+        }
+      } catch (err) {
+        console.error("Error in moveIt:", err);
+        showToast(
+          "🚨 Unexpected error. Please check your connection.",
+          "error"
+        );
+      }
+    }
+
+    document.addEventListener("click", () => {
+      move_folder.style.display = "none";
+      context_menu.style.display = "none";
+      move_folder.querySelectorAll("input").forEach((inp) => {
+        if (inp.type === "radio" || inp.type === "checkbox") {
+          inp.checked = false;
+          folderId = null;
+        } else {
+          inp.value = "";
+        }
+      });
+    });
+    move_folder.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  </script>
+  <script>
+    const mf = document.querySelector(".move_folder");
+    let isDragging = false;
+    let offsetX, offsetY;
+    mf.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      isDragging = true;
+      offsetX = e.clientX - mf.offsetLeft;
+      offsetY = e.clientY - mf.offsetTop;
+      mf.style.position = "absolute";
+      mf.style.zIndex = 1000;
+    });
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      mf.style.left = e.clientX - offsetX + "px";
+      mf.style.top = e.clientY - offsetY + "px";
+    });
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
+  </script>
+  <script>
+    // if ("serviceWorker" in navigator) {
+    //     navigator.serviceWorker
+    //       .register("/service-worker.js")
+    //       .then((e) => console.log(`Service Worker registered ${e.installing}`))
+    //       .catch((err) => console.error("SW registration failed:", err));
+    //   }
+  </script>
+  <script>
+    const colorThief = new ColorThief();
+
+    let fab = document.querySelector(".fab");
+    let imagesDiv = document.querySelector(".images");
+    let sentinel = document.querySelector(".sentinel");
+    fab.addEventListener("click", (e) => {
+      e.stopPropagation()
+      imagesDiv.classList.toggle("active");
+    })
+    imagesDiv.addEventListener("click", (e) => {
+      e.stopPropagation()
+    })
+    document.addEventListener("click", (e) => {
+      imagesDiv.classList.remove("active");
+    })
+    let imagesList = document.querySelector(".images #images_data");
+    let search2 = document.getElementById("search2");
+
+    let main = document.querySelector("main");
+    let page = 1;
+    let img = "animals";
+    document.querySelectorAll(".bg-topic").forEach((e) => {
+      e.addEventListener("click", (e) => {
+        imagesList.innerHTML = "";
+        search2.value = e.target.innerHTML
+        img = e.target.innerHTML
+        images()
+      })
+    })
+    search2.addEventListener("change", (e) => {
+      imagesList.innerHTML = "";
+      let value = e.target.value.trim();
+      img = value;
+      if (img === "") img = "animals";
+      debounce(() => {
+        imagesList.innerHTML = "";
+        images();
+      }, 300)
+    })
+    async function images() {
+      try {
+        let res = await fetch(`/images?q=${img}&page=${page}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          console.log("Something went wrong!");
+          return;
+        }
+        let data = await res.json();
+        imagesList.innerHTML = "";
+        data.images.results.forEach((img) => {
+          // Create li
+          let li = document.createElement("li");
+          li.className = "li"
+          li.style.position = "relative";
+
+          // Create image
+          let imgEl = document.createElement("img");
+          imgEl.src = img.urls.regular;
+          imgEl.alt = img.alt_description || "Unsplash image";
+          imgEl.crossOrigin = "anonymous";
+
+          li.appendChild(imgEl);
+
+          // Create button wrapper
+          let btnDiv = document.createElement("div");
+          btnDiv.classList.add("select_bnt");
+
+          let selectBtn = document.createElement("button");
+          selectBtn.textContent = "Select";
+
+          selectBtn.addEventListener("click", () => {
+            console.log("Selected image:", img.urls.regular);
+            const color = colorThief.getPalette(imgEl, 5)
+            console.log(color)
+            const bg_color = `rgb(${color[0][0]}, ${color[0][1]}, ${color[0][2]})`;
+            const text_color = `rgb(${color[1][0]}, ${color[1][1]}, ${color[1][2]})`;
+            const accent = `rgb(${color[2][0]}, ${color[2][1]}, ${color[2][2]})`;
+            document.body.style.setProperty("--bg-color", bg_color);
+            document.body.style.setProperty("--color", text_color);
+            document.body.style.setProperty("--accent", accent);
+            localStorage.setItem("bg_color", bg_color);
+            localStorage.setItem("text_color", text_color);
+            localStorage.setItem("accent", accent);
+            console.log(accent)
+            main.style.background = `url(${img.urls.regular})`;
+            localStorage.setItem("image", img.urls.regular);
+            main.style.backgroundSize = "cover";
+            main.style.backgroundRepeat = "no-repeat";
+            main.style.backgroundPosition = "center";
           });
-          const data = await res.json();
 
-          if (data.success) {
-            setActiveStyle(favIcon, data.card.isFavorite);
-          }
-        } catch (err) {
-          console.error("Error favoriting:", err);
-        }
+          btnDiv.appendChild(selectBtn);
+          li.appendChild(btnDiv);
+
+          imagesList.appendChild(li);
+        });
+        page++;
+      } catch (err) {
+        console.error("Error fetching images:", err);
+      }
+    }
+    images();
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        images();
+      }
+    },
+      {
+        root: null,
+        rootMargin: "0px 0px 300px 0px",
+        threshold: 0
+      }
+    );
+    observer.observe(sentinel);
+    const hiddenElements = document.querySelectorAll('.hidden');
+    hiddenElements.forEach(element => {
+      observer.observe(element);
+    });
+
+  </script>
+
+
+ <script>
+  function getSelectedCards() {
+    const selected = [];
+    document.querySelectorAll(".card .select-card:checked").forEach(input => {
+      const card = input.closest(".card");
+      selected.push({
+        id: card.dataset.id,
+      });
+    });
+    return selected;
+  }
+
+  let selectedCardsFeatures = document.querySelector(".selectedCardsFeatures");
+  selectedCardsFeatures.style.opacity = "0";
+  selectedCardsFeatures.style.transition = ".2s";
+
+  // ✅ Event delegation: listen on container, not each input
+  document.querySelector("#cards").addEventListener("change", (e) => {
+    if (e.target.classList.contains("select-card")) {
+      if (getSelectedCards().length === 0) {
+        selectedCardsFeatures.style.opacity = "0";
+        document.getElementById("count").textContent = "All Cards (<%= len %>)";
+      } else {
+        selectedCardsFeatures.style.opacity = "1";
+        document.getElementById("count").textContent = `${getSelectedCards().length} Selected Card`;
+      }
+    }
+  });
+
+  function selectAll() {
+    const checkboxes = document.querySelectorAll(".card .select-card");
+    const allChecked = [...checkboxes].every(input => input.checked);
+
+    checkboxes.forEach(input => input.checked = !allChecked);
+
+    document.getElementById("count").textContent =
+      getSelectedCards().length === 0
+        ? "All Cards (<%= len %>)"
+        : `${getSelectedCards().length} Selected Card`;
+  }
+
+  async function deleteCards() {
+    let selected = getSelectedCards().map(e => e.id);
+    if (selected.length === 0) {
+      alert("No cards selected");
+      return;
+    }
+    let confirmDelete = window.confirm("Are you sure you want to delete these cards?");
+    if (confirmDelete) {
+      let res = await fetch("/card/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ selected }),
+      });
+
+      if (!res.ok) {
+        console.log("Something went wrong!");
+        return;
+      }
+      location.reload();
+    } else {
+      alert("Canceled");
+    }
+  }
+
+  async function downloadCards() {
+    let selected = getSelectedCards().map(e => e.id);
+    if (selected.length === 0) {
+      alert("No cards selected");
+      return;
+    }
+
+    const res = await fetch("/card/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ selected }),
+    });
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `cards-${selected.length}-items-${Date.now()}.json`;
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  }
+
+  function shareSelectedCards() {
+    alert("🚧 Sorry, this feature is not available right now.\nWe'll be adding it soon!");
+  }
+</script>
+
+<script>
+  document.querySelectorAll(".card").forEach((card) => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".menu_top, .pin, .fav, a, button, svg")) {
+        e.stopPropagation();
+        return;
       }
 
-      async function deleteCard(id) {
-        try {
-          const res = await fetch(`/card/${id}`, {
-            method: "DELETE",
-            credentials: "include",
-          });
+      const checkbox = card.querySelector(".select-card");
+      checkbox.checked = !checkbox.checked;
 
-          if (res.ok) {
-            const cardEl = document.getElementById(`card-${id}`);
-            if (cardEl) {
-              cardEl.remove();
-            }
-            window.location.reload();
-          } else {
-            console.error("Failed to delete card:", await res.text());
-          }
-        } catch (err) {
-          console.error("Delete error:", err);
-        }
-      }
-      function editCard(id) {
-        window.location.assign(`/card/${id}`);
-      }
-    </script>
-    <script>
-      window.onload = () => {
-        let loader = document.querySelector(".loader");
-        loader.style.display = "none";
-      };
-    </script>
-    <script src="\scripts\shortcut.js"></script>
-    <script src="\scripts\index.js"></script>
-  </body>
+      card.classList.toggle("selected", checkbox.checked);
+    });
+  });
+
+  document.querySelectorAll(".code").forEach((e) => {
+    e.addEventListener("click", (e) => {
+      e.stopPropagation()
+      navigator.clipboard.writeText(e.target.textContent);
+      showToast("Copied to clipboard!", "success");
+    })
+  })
+</script>
+
+  <script src="\scripts\shortcut.js"></script>
+  <script src="\scripts\index.js"></script>
+  <script src="\scripts\context_menu.js"></script>
+  <script src="\scripts\search.js"></script>
+</body>
+
 </html>

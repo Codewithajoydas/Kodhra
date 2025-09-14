@@ -1,0 +1,56 @@
+.advanced-search {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.014);
+  backdrop-filter: blur(10px);
+  min-width: 300px;
+  border: 1px solid var(--accent);
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: all !important;
+}
+.advanced-search.active {
+  opacity: 1;
+  visibility: visible;
+}
+.advanced-search .feildList {
+  columns: 2;
+}
+.advanced-search .feildList label {
+  text-align-last: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  break-inside: avoid;
+}
+.advanced-search .feildList label input,
+.advanced-search .feildList label textarea {
+  border: none;
+  border: 1px solid var(--accent);
+  padding: 10px;
+  border-radius: 5px;
+  background: none;
+  resize: none;
+}
+.advanced-search .feildList label input:focus, .advanced-search .feildList label input:hover,
+.advanced-search .feildList label textarea:focus,
+.advanced-search .feildList label textarea:hover {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.advanced-search .feildList label input::placeholder,
+.advanced-search .feildList label textarea::placeholder {
+  color: gray;
+}
+.advanced-search #searchBtn {
+  width: 60%;
+}
+
+/*# sourceMappingURL=ad_search.css.map */

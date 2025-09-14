@@ -4,6 +4,8 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendmail.module.js");
+const { getIO } = require("./socket");
+const sendNotification = require("../utils/sendNotification.module");
 router.get("/", (req, res) => {
   res.render("login");
 });
@@ -30,8 +32,12 @@ router.post("/", async (req, res) => {
       secure: false,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    sendMail(email, "Mail Came from Login Route", token);
-
+    sendNotification(
+      "Login Success",
+      "You have successfully logged in, now you can create snippets and folders ",
+      "/card/create",
+      checkUser._id
+    );
     res.redirect("/");
   } catch (error) {
     console.error("Something went wrong", error);

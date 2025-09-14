@@ -24,6 +24,9 @@ document.querySelectorAll("[data-contextMenu='true']").forEach((item) => {
     };
 
     let context_menu = document.getElementById("context_menu");
+    context_menu.addEventListener("contextmenu", (e) => { 
+      e.preventDefault()
+    })
     let context_menu_list = document.getElementById("context_menu_list");
     context_menu_list.innerHTML = "";
 
@@ -43,6 +46,7 @@ document.querySelectorAll("[data-contextMenu='true']").forEach((item) => {
         }
       });
     }
+    document.querySelector("body").classList.add("active");
     context_menu.style.display = "block";
     context_menu.style.visibility = "hidden";
     context_menu.style.left = "0px";
@@ -64,13 +68,67 @@ document.querySelectorAll("[data-contextMenu='true']").forEach((item) => {
   });
 });
 
-window.addEventListener("click", () => {
-  document.getElementById("context_menu").style.display = "none";
+let cards = document.getElementById("cards");
+cards.addEventListener("contextmenu", (e) => {
+  const card = e.target.closest("[data-contextMenu='true']");
+  if (!card) return;
+
+  e.preventDefault();
+
+  let { id, menus, userid, cardname, mtype } = card.dataset;
+
+  const actions = {
+    delete: () => deleteFolder(mtype, card.dataset.id),
+    rename: () => renameFolder(card.dataset.id),
+    move: () => moveCard(id, cardname, mtype),
+    share: () => shareFolder(card.dataset.id, card.dataset.userid),
+    pin: () => pinFolder(card.dataset.id),
+  };
+
+  let context_menu = document.getElementById("context_menu");
+  let context_menu_list = document.getElementById("context_menu_list");
+  context_menu_list.innerHTML = "";
+
+  if (menus) {
+    let list = menus.split(",").map((i) => i.trim());
+    list.forEach((item) => {
+      let li = document.createElement("li");
+      li.innerHTML = `${icons[item]}  ${item}`;
+      context_menu_list.appendChild(li);
+
+      if (actions[item]) {
+        li.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          actions[item]();
+          context_menu.style.display = "none";
+        });
+      }
+    });
+  }
+  context_menu.style.display = "block";
+  context_menu.style.visibility = "hidden";
+  context_menu.style.left = "0px";
+  context_menu.style.top = "0px";
+
+  let menuWidth = context_menu.offsetWidth;
+  let menuHeight = context_menu.offsetHeight;
+  let x = e.clientX;
+  let y = e.clientY;
+
+  if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 5;
+  if (y + menuHeight > window.innerHeight)
+    y = window.innerHeight - menuHeight - 5;
+  context_menu.style.left = x + "px";
+  context_menu.style.top = y + "px";
+  context_menu.style.visibility = "visible";
+  context_menu.style.display = "block";
 });
 
 window.addEventListener("click", () => {
   document.getElementById("context_menu").style.display = "none";
+  document.querySelector("body").classList.remove("active");
 });
+
 
 function deleteFolder(type, e) {
   let answer = confirm(`Are you sure you want to delete this ${type}?`);

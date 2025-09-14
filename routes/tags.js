@@ -28,7 +28,6 @@ tagsRouter.get("/", async (req, res) => {
     ]);
 
     res.render("tags", { tags, image, userName });
-    console.log(tags)
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

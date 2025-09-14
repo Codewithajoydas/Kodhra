@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cards | Code Snippet Manager</title>
+    <link rel="stylesheet" href="/style/css/index.css" />
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+    <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <%- include('partials/header', {image}) -%>
+
+        <div class="container">
+            <%- include('partials/sidebar') -%>
+                <main>
+                    <div class="recentSnippets">
+                        <div id="cards">
+                            <% cards.forEach((e)=>{ %>
+                                <%- include('partials/card', {e, userId, author}) -%>
+                                    <% }) %>
+                                </div>
+                                <div id="load-more" style="margin-top: 100px;"></div>
+                    </div>
+                </main>
+        </div>
+
+        <script>
+
+          let page = 1;
+            const cardsContainer = document.getElementById("cards");
+
+            const observer = new IntersectionObserver(async (entries) => {
+                const lastEntry = entries[0];
+                if (!lastEntry.isIntersecting) return;
+
+                page++;
+                const res = await fetch(`/card/json?page=${page}`);
+                const html = await res.text();
+
+                if (html.trim() === "") {
+                    observer.unobserve(lastEntry.target); // no more data
+                    return;
+                }
+
+                cardsContainer.insertAdjacentHTML("beforeend", html);
+
+                // unobserve old last card
+                observer.unobserve(lastEntry.target);
+
+                // find new last card and observe it
+                const newLastCard = cardsContainer.lastElementChild;
+                if (newLastCard) observer.observe(newLastCard);
+
+            }, { threshold: .5 });
+
+            // start observing the initial last card
+            const lastCard = cardsContainer.lastElementChild;
+            if (lastCard) observer.observe(lastCard);
+
+
+        </script>
+</body>
+
+</html>

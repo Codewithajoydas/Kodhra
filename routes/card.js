@@ -9,26 +9,61 @@ cardRouter.get("/", async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
   const { _id, userName, email, userImage } = decode.checkUser;
-  const card = await cardSchema.find({ author: _id });
-  res.render("allCards", { card, image: userImage, author:userName });
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 30;
+  const skip = (page - 1) * limit;
+  const card = await cardSchema.find({ author: _id }).skip(skip).limit(limit);
+  const len = await cardSchema.find({ author: _id }).countDocuments();
+  const folders = await Folder.find({
+    author: decode.checkUser._id,
+  });
+  res.render("allCards", {
+    card,
+    image: userImage,
+    author: userName,
+    userId: _id,
+    len,
+    folders,
+  });
 });
 cardRouter.get("/create", async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
+
   const { _id, userName, email, userImage } = decode.checkUser;
-  res.render("newCard", { id: _id, name: userName, email, image: userImage });
+  res.render("newCard", {
+    id: _id,
+    name: userName,
+    email,
+    image: userImage,
+    userId: _id,
+  });
 });
 
+cardRouter.get("/json", async (req, res) => {
+  const token = req.cookies.token;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 30;
+  const skip = (page - 1) * limit;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const { _id, userName, email, userImage } = decode.checkUser;
 
-
+  const card = await cardSchema.find({ author: _id }).skip(skip).limit(limit);
+  res.render("partials/cards", {
+    card,
+    image: userImage,
+    author: userName,
+    userId: _id,
+  });
+});
 
 cardRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: "Invalid Card ID" });
-      }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid Card ID" });
+    }
     const dlecard = await cardSchema.findByIdAndDelete(id);
     res.json({ 200: "Card Deleted Successfully" });
   } catch (error) {
@@ -38,9 +73,9 @@ cardRouter.delete("/:id", async (req, res) => {
 
 cardRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid Card ID" });
-    }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid Card ID" });
+  }
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
   const { _id, userName, userImage } = decode.checkUser;
@@ -50,9 +85,9 @@ cardRouter.get("/:id", async (req, res) => {
 
 cardRouter.put("/:id", async (req, res) => {
   const id = req.params.id;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Invalid Card ID" });
-    }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid Card ID" });
+  }
   const { title, description, content, imageUrl, tags, category } = req.body;
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
@@ -69,9 +104,9 @@ cardRouter.put("/:id", async (req, res) => {
 cardRouter.put("/pin/:id", async (req, res) => {
   try {
     const id = req.params.id;
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: "Invalid Card ID" });
-      }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid Card ID" });
+    }
     const card = await Card.findById(id);
 
     if (!card) {
@@ -98,9 +133,9 @@ cardRouter.put("/pin/:id", async (req, res) => {
 cardRouter.put("/fav/:id", async (req, res) => {
   try {
     const id = req.params.id;
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ error: "Invalid Card ID" });
-      }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid Card ID" });
+    }
     const card = await Card.findById(id);
 
     if (!card) {
@@ -126,6 +161,28 @@ cardRouter.put("/fav/:id", async (req, res) => {
   }
 });
 
+cardRouter.post("/delete", (req, res) => {
+  const getData = req.body.selected;
+  console.log(getData);
+  try {
+    cardSchema.deleteMany({ _id: { $in: getData } }).then(() => {
+      res.json({ message: "Card deleted successfully" });
+    });
+  } catch (err) {
+    res.json({ Error: "Something went wrong" });
+  }
+});
+
+cardRouter.post("/download", async (req, res) => {
+  try {
+    const getSelectedData = req.body.selected;
+    const cards = await Card.find({ _id: { $in: getSelectedData } });
+    res.send(JSON.stringify(cards, null, 2)); 
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to download cards" });
+  }
+});
 
 
 module.exports = cardRouter;
