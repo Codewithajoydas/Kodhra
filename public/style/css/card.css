@@ -1,0 +1,170 @@
+#cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+#cards .card {
+  min-width: 300px;
+  position: relative;
+  margin-block: 5px;
+  margin-inline: 5px;
+  border: 1px solid rgba(128, 128, 128, 0.322);
+  background: rgba(0, 0, 0, 0.027);
+  backdrop-filter: blur(100px);
+  position: relative;
+  border-radius: 10px;
+  background: transparent;
+  backdrop-filter: blur(10px);
+}
+#cards .card:has(.select-card:checked) {
+  border: 2px solid rgba(2, 2, 2, 0.201);
+  backdrop-filter: blur(100px);
+  object-fit: contain;
+}
+#cards .card .header-info {
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 10px;
+}
+#cards .card .header-info .menu_top {
+  cursor: pointer;
+}
+#cards .card .header-info .menu_top svg {
+  width: 20px;
+}
+#cards .card .header-info .title h3 {
+  font-size: 20px !important;
+}
+#cards .card .header-info .title div .author,
+#cards .card .header-info .title .lan,
+#cards .card .header-info .title .time {
+  font-size: smaller;
+}
+#cards .card .code {
+  background: rgba(0, 0, 0, 0.3882352941);
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "Courier New", Courier, monospace !important;
+}
+#cards .card .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  margin: 10px;
+}
+#cards .card .tags span {
+  padding: 5px 20px;
+  border-radius: 50px;
+  background: rgba(128, 128, 128, 0.103);
+  border: 0.5px solid gray;
+  font-size: small;
+  cursor: pointer;
+}
+#cards .card .options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}
+#cards .card .options .sub_menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+#cards .card .options .sub_menu svg {
+  width: 20px;
+  cursor: pointer;
+}
+#cards .card .options .open {
+  background: var(--accent);
+  padding: 10px 30px;
+  border-radius: 10px;
+}
+#cards .card .options .open a {
+  text-decoration: none;
+  background: none !important;
+}
+#cards .card .menu {
+  display: flex;
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  flex-direction: column;
+  break-inside: avoid;
+  gap: 10px;
+  background: var(--accent);
+  border: 1px solid gray;
+  width: 200px;
+  backdrop-filter: blur(100px) !important;
+  padding: 10px;
+  border-radius: 10px;
+  transition: all 0.5s;
+  opacity: 1;
+}
+#cards .card .menu.active {
+  display: none;
+  opacity: 0;
+}
+#cards .card .menu li {
+  text-decoration: none;
+  list-style: none;
+  border: 1px solid rgb(255, 255, 255);
+  color: var(--color);
+  padding: 10px 20px;
+  transition: all 0.5s;
+  border-radius: 10px;
+}
+#cards .card .menu li:hover {
+  background: rgba(0, 0, 0, 0.2196078431);
+}
+
+.cardContainer-header {
+  margin-block: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cardContainer-header .card-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  border: 1px solid var(--accent);
+  padding: 5px;
+  border-radius: 100px;
+}
+.cardContainer-header .card-options.disabled {
+  opacity: 0.5;
+}
+.cardContainer-header .card-options.disabled div {
+  cursor: not-allowed;
+}
+.cardContainer-header .card-options div {
+  width: 40px;
+  height: 40px;
+  background: var(--accent);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  cursor: pointer;
+}
+.cardContainer-header .card-options div:nth-child(1) {
+  font-size: small;
+}
+.cardContainer-header .card-options div svg {
+  min-width: 20px !important;
+  min-height: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/*# sourceMappingURL=card.css.map */

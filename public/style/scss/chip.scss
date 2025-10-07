@@ -1,0 +1,27 @@
+.chips {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  transition: all 0.2s ease;
+  gap: 5px;
+  .chip {
+    span {
+      font-size: medium;
+      border: 1px solid var(--accent);
+      white-space: nowrap;
+      padding: 5px 20px;
+      border-radius: 5px;
+    }
+    padding: 10px;
+    &.active{
+      span{
+        background: var(--color);
+        color: var(--bg-color);
+      }
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  display: none !important;
+}

@@ -1,14 +1,23 @@
-<header style="z-index: 99999999999999999999999999999999999">
+<header style="z-index: 1">
     <span class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-menu-icon lucide-menu" onclick="toggleMenu()">
+            <path d="M4 5h16" />
+            <path d="M4 12h16" />
+            <path d="M4 19h16" />
+        </svg>
         <img src="/assets/logo.png" alt="code snippet manager" />
         <span>Code Snippet Manager
             <sub style="
                 font-family: 'Segoe UI', Tahoma, sans-serif;
                 font-size: 10px;
-              ">V.1.0.1</sub></span>
+              ">
+                <%= appVersion || "1.0.0" %>
+            </sub></span>
     </span>
     <nav>
-        <div class="searchResult">
+        <div class="searchResult" data-tooltip="Search">
             <label class="search" for="search" style="cursor: text">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -26,11 +35,26 @@
                   box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
                 ">ctrl+k</kbd>
             </label>
-            <div class="results" id="results">
-                <ul id="results-list"></ul>
+            <div class="results" id="results" style="z-index: 99999999999999999999">
+                <ul id="results-list" style="z-index: 99999999999999999999"></ul>
             </div>
         </div>
-        <div class="notification">
+        <div class="filter" id="filter" data-tooltip="Filter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-sliders-horizontal-icon lucide-sliders-horizontal">
+                <path d="M10 5H3" />
+                <path d="M12 19H3" />
+                <path d="M14 3v4" />
+                <path d="M16 17v4" />
+                <path d="M21 12h-9" />
+                <path d="M21 19h-5" />
+                <path d="M21 5h-7" />
+                <path d="M8 10v4" />
+                <path d="M8 12H3" />
+            </svg>
+        </div>
+        <div class="notification" data-tooltip="Notifications">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-bell-icon lucide-bell">
@@ -38,8 +62,9 @@
                 <path
                     d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
             </svg>
+            <span class="number">0</span>
         </div>
-        <div class="help">
+        <a class="help" href="/csm-info-page.html" data-tooltip="Help">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-info-icon lucide-info">
@@ -47,8 +72,8 @@
                 <path d="M12 16v-4" />
                 <path d="M12 8h.01" />
             </svg>
-        </div>
-        <div class="profile">
+        </a>
+        <div class="profile" data-tooltip="Profile">
             <img src="<%= image %>" alt="" />
         </div>
     </nav>
@@ -61,4 +86,83 @@
             <path d="M10 18h4" />
         </svg>
     </div>
+    <div class="advanced-search">
+        <h3>Advanced Search</h3>
+        <div class="feildList">
+            <label for="title">
+                <span>Title:</span>
+                <input type="text" name="title" id="title" placeholder="Title" />
+            </label>
+            <label for="code"><span>Code:</span> <input type="text" name="code" id="code" placeholder="Code"></label>
+            <label for="description">
+                <span>Description:</span>
+                <textarea type="text" name="description" id="description" placeholder="Description" rows="5"></textarea>
+            </label>
+            <label for="language">
+                <span>Language:</span>
+                <input type="text" name="language" id="language" placeholder="Language" list="languages" />
+                <datalist id="languages">
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="CSS">CSS</option>
+                    <option value="HTML">HTML</option>
+                    <option value="C">C</option>
+                    <option value="C++">C++</option>
+                    <option value="C#">C#</option>
+                    <option value="Java">Java</option>
+                    <option value="TypeScript">TypeScript</option>
+                    <option value="Python">Python</option>
+                    <option value="Ruby">Ruby</option>
+                    <option value="PHP">PHP</option>
+                    <option value="Go">Go</option>
+                    <option value="Rust">Rust</option>
+                    <option value="Swift">Swift</option>
+                    <option value="Kotlin">Kotlin</option>
+                    <option value="Objective-C">Objective-C</option>
+                    <option value="Scala">Scala</option>
+                    <option value="Perl">Perl</option>
+                    <option value="R">R</option>
+                    <option value="Dart">Dart</option>
+                    <option value="Haskell">Haskell</option>
+                    <option value="Lua">Lua</option>
+                    <option value="Elixir">Elixir</option>
+                    <option value="Clojure">Clojure</option>
+                    <option value="Shell">Shell (Bash)</option>
+                    <option value="PowerShell">PowerShell</option>
+                    <option value="SQL">SQL</option>
+                    <option value="GraphQL">GraphQL</option>
+                    <option value="MATLAB">MATLAB</option>
+                    <option value="Assembly">Assembly</option>
+                    <option value="Fortran">Fortran</option>
+                    <option value="COBOL">COBOL</option>
+                    <option value="Erlang">Erlang</option>
+                    <option value="VB.NET">VB.NET</option>
+                </datalist>
+            </label>
+            <label for="folder">
+                <span>Folder:</span>
+                <input type="text" name="folder" id="folder" placeholder="Folder" />
+            </label>
+            <label for="date">
+                <span>Date:</span>
+                <input type="date" name="date" id="date" placeholder="Date" />
+            </label>
+        </div>
+        <button id="searchBtn" onclick="advance_search()">Search</button>
+
+    </div>
+
 </header>
+
+<div class="notification-bar">
+    <h3>Notifications</h3>
+    <ul class="notification-lists">
+    </ul>
+</div>
+
+
+<script type="module">
+    import { tooltip } from "/scripts/tooltip.js";
+    ["#filter", ".notification", ".help", ".profile"].forEach(e => {
+        tooltip(e);
+    })
+</script>

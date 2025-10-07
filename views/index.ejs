@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home | Code Snippet Manager</title>
   <link rel="stylesheet" href="/style/css/index.css" />
-  <link rel="stylesheet" href="/style/css/notificationBar.css">
+  <!-- <link rel="stylesheet" href="/style/css/notificationBar.css"> -->
+  <link rel="stylesheet" href="/style/css/Notification.css">
+  <link rel="stylesheet" href="/style/css/partials/Header.css">
   <link rel="stylesheet" href="/style/css/ad_search.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
@@ -78,322 +80,50 @@
     <dotlottie-wc src="gEzG0w1WVY.lottie" style="width: 400px; height: 400px" speed="1" autoplay loop></dotlottie-wc>
   </div>
   <div class="content">
-    <header style="z-index: 1">
-      <span class="logo">
-        <img src="/assets/logo.png" alt="code snippet manager" />
-        <span>Code Snippet Manager
-          <sub style="
-                font-family: 'Segoe UI', Tahoma, sans-serif;
-                font-size: 10px;
-              ">V.1.0.1</sub></span>
-      </span>
-      <nav>
-        <div class="searchResult">
-          <label class="search" for="search" style="cursor: text">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-search-icon lucide-search">
-              <path d="m21 21-4.34-4.34" />
-              <circle cx="11" cy="11" r="8" />
-            </svg>
-
-            <input type="search" placeholder="Search Snippets..." id="search" autocomplete="off" />
-            <kbd style="
-                  background: rgba(128, 128, 128, 0.21);
-                  color: rgb(122, 122, 122);
-                  padding: 5px;
-                  border-radius: 5px;
-                  box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
-                ">ctrl+k</kbd>
-          </label>
-          <div class="results" id="results" style="z-index: 99999999999999999999">
-            <ul id="results-list" style="z-index: 99999999999999999999"></ul>
-          </div>
-        </div>
-        <div class="filter" id="filter">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-sliders-horizontal-icon lucide-sliders-horizontal">
-            <path d="M10 5H3" />
-            <path d="M12 19H3" />
-            <path d="M14 3v4" />
-            <path d="M16 17v4" />
-            <path d="M21 12h-9" />
-            <path d="M21 19h-5" />
-            <path d="M21 5h-7" />
-            <path d="M8 10v4" />
-            <path d="M8 12H3" />
-          </svg>
-        </div>
-        <div class="notification">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-bell-icon lucide-bell">
-            <path d="M10.268 21a2 2 0 0 0 3.464 0" />
-            <path
-              d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
-          </svg>
-          <span class="number">0</span>
-        </div>
-        <div class="help">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-info-icon lucide-info">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 16v-4" />
-            <path d="M12 8h.01" />
-          </svg>
-        </div>
-        <div class="profile">
-          <img src="<%= image %>" alt="" />
-        </div>
-      </nav>
-      <div class="openList" style="display: none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-          class="lucide lucide-list-filter-icon lucide-list-filter">
-          <path d="M3 6h18" />
-          <path d="M7 12h10" />
-          <path d="M10 18h4" />
-        </svg>
-      </div>
-    </header>
-    <div class="container">
-      <aside>
-        <ul>
-          <!-- Main Pages -->
-          <span>Main Pages</span>
-          <li class="active">
-            <a href="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard">
-                <rect width="7" height="9" x="3" y="3" rx="1" />
-                <rect width="7" height="5" x="14" y="3" rx="1" />
-                <rect width="7" height="9" x="14" y="12" rx="1" />
-                <rect width="7" height="5" x="3" y="16" rx="1" />
-              </svg>
-              Dashboard</a>
-          </li>
-          <li>
-            <a href="/card"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-earth-icon lucide-earth">
-                <path d="M21.54 15H17a2 2 0 0 0-2 2v4.54" />
-                <path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17" />
-                <path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05" />
-                <circle cx="12" cy="12" r="10" />
-              </svg>
-              All Code Snippets</a>
-          </li>
-          <li>
-            <a href="/folder"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-folder-icon lucide-folder">
-                <path
-                  d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
-              </svg>
-              Folders</a>
-          </li>
-          <li>
-            <a href="/tags"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-tags-icon lucide-tags">
-                <path
-                  d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z" />
-                <path d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193" />
-                <circle cx="10.5" cy="6.5" r=".5" fill="currentColor" />
-              </svg>
-              Tags</a>
-          </li>
-          <li>
-            <a href="/pin"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-pin-icon lucide-pin">
-                <path d="M12 17v5" />
-                <path
-                  d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
-              </svg>
-              Pinned</a>
-          </li>
-          <li>
-            <a href="/fav"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-star-icon lucide-star">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
-              </svg>
-              Favorites</a>
-          </li>
-
-          <!-- Creation Shortcuts -->
-          <span>Creation Shortcuts</span>
-          <li>
-            <a href="/card/create"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-square-dashed-bottom-code-icon lucide-square-dashed-bottom-code">
-                <path d="M10 9.5 8 12l2 2.5" />
-                <path d="M14 21h1" />
-                <path d="m14 9.5 2 2.5-2 2.5" />
-                <path d="M5 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2" />
-                <path d="M9 21h1" />
-              </svg>
-              New Snippet</a>
-          </li>
-          <li>
-            <a href="/create-folder"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-folder-pen-icon lucide-folder-pen">
-                <path
-                  d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5" />
-                <path
-                  d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
-              </svg>
-              New Folder</a>
-          </li>
-
-          <!-- Search & Explore -->
-          <span>Search & Explore</span>
-          <li>
-            <a href="/search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-search-icon lucide-search">
-                <path d="m21 21-4.34-4.34" />
-                <circle cx="11" cy="11" r="8" />
-              </svg>
-              Search</a>
-          </li>
-          <li>
-            <a href="/explore"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-telescope-icon lucide-telescope">
-                <path
-                  d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44" />
-                <path d="m13.56 11.747 4.332-.924" />
-                <path d="m16 21-3.105-6.21" />
-                <path
-                  d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z" />
-                <path d="m6.158 8.633 1.114 4.456" />
-                <path d="m8 21 3.105-6.21" />
-                <circle cx="12" cy="13" r="2" />
-              </svg>
-              Explore Public Snippets</a>
-          </li>
-
-          <!-- Settings & Tools -->
-          <span>Settings & Tools</span>
-          <li>
-            <a href="/import-export">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-cloud-download-icon lucide-cloud-download">
-                <path d="M12 13v8l-4-4" />
-                <path d="m12 21 4-4" />
-                <path d="M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284" />
-              </svg>
-              Import / Export</a>
-          </li>
-          <li>
-            <a href="/settings"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-cog-icon lucide-cog">
-                <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" />
-                <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
-                <path d="M12 2v2" />
-                <path d="M12 22v-2" />
-                <path d="m17 20.66-1-1.73" />
-                <path d="M11 10.27 7 3.34" />
-                <path d="m20.66 17-1.73-1" />
-                <path d="m3.34 7 1.73 1" />
-                <path d="M14 12h8" />
-                <path d="M2 12h2" />
-                <path d="m20.66 7-1.73 1" />
-                <path d="m3.34 17 1.73-1" />
-                <path d="m17 3.34-1 1.73" />
-                <path d="m11 13.73-4 6.93" />
-              </svg>
-              Settings</a>
-          </li>
-          <li>
-            <a href="/account"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-user-lock-icon lucide-user-lock">
-                <circle cx="10" cy="7" r="4" />
-                <path d="M10.3 15H7a4 4 0 0 0-4 4v2" />
-                <path d="M15 15.5V14a2 2 0 0 1 4 0v1.5" />
-                <rect width="8" height="5" x="13" y="16" rx=".899" />
-              </svg>
-              Account</a>
-          </li>
-
-          <!-- Auth -->
-          <span>Auth</span>
-          <li>
-            <a href="/login"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-scan-face-icon lucide-scan-face">
-                <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-                <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-                <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-                <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-                <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                <path d="M9 9h.01" />
-                <path d="M15 9h.01" />
-              </svg>
-              Login</a>
-          </li>
-          <li>
-            <a href="/signup"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-key-icon lucide-key">
-                <path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4" />
-                <path d="m21 2-9.6 9.6" />
-                <circle cx="7.5" cy="15.5" r="5.5" />
-              </svg>
-              Sign Up</a>
-          </li>
-        </ul>
-      </aside>
-      <main>
-        <div style="
+    <%- include("partials/header", {appVersion}) %>
+      <div class="container">
+        <%- include("partials/sidebar", { navigation: 'home' }) %>
+          <main>
+            <div style="
               display: flex;
               justify-content: space-between;
               align-items: center;
               width: 100%;
             ">
-          <h1 id="greeting" style="
+              <h1 id="greeting" style="
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
                   sans-serif;
                 margin-top: 5px;
               "></h1>
-          <br />
-          <span id="wifi-speed" title="Wifi Speed" style="
+              <br />
+              <span id="wifi-speed" title="Wifi Speed" style="
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 font-weight: 500;
               ">Checking speed...</span>
-        </div>
+            </div>
 
-        <% if (folders.length !==0) { %>
-          <div class="title1" style="margin-block:10px">Recent Folders</div>
-          <% } %>
-            <div class="folders">
-              <% folders.forEach((e)=>{%>
-                <div class="folder" draggable="true" ondblclick="window.open('/folder/<%= e._id %>', '_blank')"
-                  data-id="<%= e._id %>" data-menus="delete, pin, rename, move, share" data-userId="<%= userId %>"
-                  data-mtype="folder" data-contextMenu="true" data-cardname="<%= e.folderName %>">
-                  <div style="
+            <% if (folders.length !==0) { %>
+              <div class="title1" style="margin-block:10px"> Recently Created Folders</div>
+              <% } %>
+                <div class="folders">
+                  <% folders.forEach((e)=>{%>
+                    <div class="folder" draggable="true" ondblclick="window.open('/folder/<%= e._id %>', '_blank')"
+                      data-id="<%= e._id %>" data-menus="delete, pin, rename, move, share" data-userId="<%= userId %>"
+                      data-mtype="folder" data-contextMenu="true" data-cardname="<%= e.folderName %>">
+                      <div style="
                   display: flex;
                   justify-content: center;
                   align-items: center;
                   gap: 10px;
                 ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                      class="lucide lucide-folder-icon lucide-folder">
-                      <path
-                        d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
-                    </svg>
-                    <span class="name" style="line-height: 14px">
-                      <div style="
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-folder-icon lucide-folder">
+                          <path
+                            d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                        </svg>
+                        <span class="name" style="line-height: 14px">
+                          <div style="
                       display: flex;
                       justify-content: center;
                       align-items: center;
@@ -404,58 +134,58 @@
                       overflow: hidden;
                       text-overflow: ellipsis;
                     " title="<%= e.folderName %>">
-                        <%= e.folderName %>
+                            <%= e.folderName %>
+                          </div>
+                        </span>
                       </div>
-                    </span>
-                  </div>
-                  <div class="menu" onclick="sharebtn('<%=userId %>', '<%=e._id%>')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                      class="lucide lucide-share2-icon lucide-share-2">
-                      <circle cx="18" cy="5" r="3" />
-                      <circle cx="6" cy="12" r="3" />
-                      <circle cx="18" cy="19" r="3" />
-                      <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
-                      <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
-                    </svg>
-                  </div>
+                      <div class="menu" onclick="sharebtn('<%=userId %>', '<%=e._id%>')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-share2-icon lucide-share-2">
+                          <circle cx="18" cy="5" r="3" />
+                          <circle cx="6" cy="12" r="3" />
+                          <circle cx="18" cy="19" r="3" />
+                          <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
+                          <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
+                        </svg>
+                      </div>
+                    </div>
+                    <%})%>
                 </div>
-                <%})%>
-            </div>
-            <div class="recentSnippets">
-              <% if (cards.length !==0) { %>
-                <div class="title1">
-                  <span>Recent Snippets</span>
-                  <div class="grid-list">
-                    <input type="radio" name="grid" id="grid" checked="checked" value="grid" />
-                    <label for="grid">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-grid-icon lucide-grid">
-                        <rect x="3" y="3" width="7" height="7" rx="1" ry="1" />
-                        <rect x="14" y="3" width="7" height="7" rx="1" ry="1" />
-                        <rect x="14" y="14" width="7" height="7" rx="1" ry="1" />
-                        <rect x="3" y="14" width="7" height="7" rx="1" ry="1" />
-                      </svg>
-                    </label>
-                    <input type="radio" name="grid" id="list" value="list" />
-                    <label for="list">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-list-icon lucide-list">
-                        <path d="M3 5h.01" />
-                        <path d="M3 12h.01" />
-                        <path d="M3 19h.01" />
-                        <path d="M8 5h13" />
-                        <path d="M8 12h13" />
-                        <path d="M8 19h13" />
-                      </svg>
-                    </label>
-                  </div>
-                </div>
-                <% } %>
-                  <% if (cards.length===0) { %>
-                    <div id="no-data" style="
+                <div class="recentSnippets">
+                  <% if (cards.length !==0) { %>
+                    <div class="title1">
+                      <span>Recently Created Snippets</span>
+                      <div class="grid-list">
+                        <input type="radio" name="grid" id="grid" checked="checked" value="grid" />
+                        <label for="grid">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-grid-icon lucide-grid">
+                            <rect x="3" y="3" width="7" height="7" rx="1" ry="1" />
+                            <rect x="14" y="3" width="7" height="7" rx="1" ry="1" />
+                            <rect x="14" y="14" width="7" height="7" rx="1" ry="1" />
+                            <rect x="3" y="14" width="7" height="7" rx="1" ry="1" />
+                          </svg>
+                        </label>
+                        <input type="radio" name="grid" id="list" value="list" />
+                        <label for="list">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-list-icon lucide-list">
+                            <path d="M3 5h.01" />
+                            <path d="M3 12h.01" />
+                            <path d="M3 19h.01" />
+                            <path d="M8 5h13" />
+                            <path d="M8 12h13" />
+                            <path d="M8 19h13" />
+                          </svg>
+                        </label>
+                      </div>
+                    </div>
+                    <% } %>
+                      <% if (cards.length===0) { %>
+                        <div id="no-data" style="
                 text-align: center;
                 width: 100%;
                 font-size: 20px;
@@ -466,258 +196,247 @@
                 flex-direction: column;
                 gap: 20px;
               ">
-                      <img src="/assets/Stickers/nothing.png" alt="" />
-                      <a href="/card/create" style="
+                          <img src="/assets/Stickers/nothing.png" alt="" />
+                          <a href="/card/create" style="
                   border: 1px solid var(--accent);
                   padding: 5px 10px;
                   border-radius: 5px;
                 ">+ Create Snippet</a>
-                      No Snippets found. Create a new Snippet to get started!
-                    </div>
-                    <% } %>
+                          No Snippets found. Create a new Snippet to get started!
+                        </div>
+                        <% } %>
 
-                      <div id="cards">
-                        <% cards.forEach(e=> { %>
-                          <div class="card" id="card-<%= e._id%>" draggable="true"
-                            ondblclick="window.open('/card/<%= e._id %>', '_blank')" data-id="<%= e._id %>"
-                            data-menus="delete, pin, edit, move, share" data-userId="<%= userId %>"
-                            data-contextMenu="true" data-cardName="<%= e.title %>" data-mtype="card">
-                            <div class="header-info">
-                              <div style="display: flex; align-items: center; gap: 10px">
-                                <img src="<%= image %>" alt="" width="40" height="40" style="border-radius: 50%" />
-                                <div class="title">
-                                  <h3>
-                                    <span style="display: block;" class="sd">
-                                      <%= e.title %>
-                                    </span>
-                                    <span style="font-size: 13px !important; display: block;">
-                                      <%= e.description %>
-                                    </span>
-                                  </h3>
-                                  <div>
-                                    <span class="author"><strong>
-                                        <%= author%>
-                                      </strong></span>, <span class="lan">
-                                      <%= e.category%>
-                                    </span>,
-                                    <span class="time">
-                                      <%= new Date(e.metadata.createdAt).toLocaleString() %>
-                                    </span>
+                          <div id="cards">
+                            <% cards.forEach(e=> { %>
+                              <div class="card" id="card-<%= e._id%>" draggable="true"
+                                ondblclick="window.open('/card/<%= e._id %>', '_blank')" data-id="<%= e._id %>"
+                                data-menus="delete, pin, edit, move, share" data-userId="<%= userId %>"
+                                data-contextMenu="true" data-cardName="<%= e.title %>" data-mtype="card">
+                                <div class="header-info">
+                                  <div style="display: flex; align-items: center; gap: 10px">
+                                    <img src="<%= image %>" alt="" width="40" height="40" style="border-radius: 50%" />
+                                    <div class="title">
+                                      <h3>
+                                        <span style="display: block;" class="sd">
+                                          <%= e.title %>
+                                        </span>
+                                        <span style="font-size: 13px !important; display: block;">
+                                          <%= e.description %>
+                                        </span>
+                                      </h3>
+                                      <div>
+                                        <span class="author"><strong>
+                                            <%= author%>
+                                          </strong></span>, <span class="lan">
+                                          <%= e.category%>
+                                        </span>,
+                                        <span class="time">
+                                          <%= new Date(e.metadata.createdAt).toLocaleString() %>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="menu_top" data-tooltip="More options" data-menu-id="<%= e._id %>"
+                                    data-id="<%= e._id %>" data-menus="delete, pin, edit, move, share"
+                                    data-userId="<%= userId %>" data-cardName="<%= e.title %>" data-mtype="card">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
+                                      <circle cx="12" cy="12" r="1" />
+                                      <circle cx="12" cy="5" r="1" />
+                                      <circle cx="12" cy="19" r="1" />
+                                    </svg>
                                   </div>
                                 </div>
-                              </div>
-                              <div class="menu_top" data-menu-id="<%= e._id %>" data-id="<%= e._id %>"
-                                data-menus="delete, pin, edit, move, share" data-userId="<%= userId %>"
-                                data-cardName="<%= e.title %>" data-mtype="card">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
-                                  <circle cx="12" cy="12" r="1" />
-                                  <circle cx="12" cy="5" r="1" />
-                                  <circle cx="12" cy="19" r="1" />
-                                </svg>
-                              </div>
-                            </div>
-                            <div class="code" title="<%= e.content%>">
-                              <code> <%= e.content %> </code>
-                            </div>
-                            <div class="tags">
-                              <% e.tags.forEach(tag=> { %>
-                                <span>
-                                  <%= tag %>
-                                </span>
-                                <% }) %>
-                            </div>
+                                <div class="code" title="<%= e.content%>">
+                                  <code> <%= e.content %> </code>
+                                </div>
+                                <div class="tags">
+                                  <% e.tags.forEach(tag=> { %>
+                                    <span>
+                                      <%= tag %>
+                                    </span>
+                                    <% }) %>
+                                </div>
 
-                            <div class="options">
-                              <div class="open">
-                                <a href="/card/<%= e.id%>" style="
+                                <div class="options">
+                                  <div class="open">
+                                    <a href="/card/<%= e.id%>" style="
                         display: flex;
                         justify-content: center;
                         align-items: center;
                         gap: 10px;
                         background: var(--accent);
                       ">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="lucide lucide-badge-info-icon lucide-badge-info">
-                                    <path
-                                      d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                                    <line x1="12" x2="12" y1="16" y2="12" />
-                                    <line x1="12" x2="12.01" y1="8" y2="8" />
-                                  </svg>
-                                  View Details
-                                </a>
-                              </div>
-                              <div class="sub_menu">
-                                <div class="pin" onclick="pinIt('<%= e._id %>')" data-id="<%= e._id%>">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="<%= e.isPinned ? 'black' : 'none' %>" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-pin-icon lucide-pin">
-                                    <path d="M12 17v5" />
-                                    <path
-                                      d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
-                                  </svg>
-                                </div>
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-badge-info-icon lucide-badge-info">
+                                        <path
+                                          d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                                        <line x1="12" x2="12" y1="16" y2="12" />
+                                        <line x1="12" x2="12.01" y1="8" y2="8" />
+                                      </svg>
+                                      View Details
+                                    </a>
+                                  </div>
+                                  <div class="sub_menu">
+                                    <div class="pin" onclick="pinIt('<%= e._id %>')" data-id="<%= e._id%>">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="<%= e.isPinned ? 'black' : 'none' %>" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-pin-icon lucide-pin">
+                                        <path d="M12 17v5" />
+                                        <path
+                                          d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
+                                      </svg>
+                                    </div>
 
-                                <div class="fav" onclick="favIt('<%= e._id %>')" data-id="<%= e._id%>">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="<%= e.isFavorite? 'black' : 'none' %>" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-star-icon lucide-star">
-                                    <path
-                                      d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
-                                  </svg>
+                                    <div class="fav" onclick="favIt('<%= e._id %>')" data-id="<%= e._id%>">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="<%= e.isFavorite? 'black' : 'none' %>" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-star-icon lucide-star">
+                                        <path
+                                          d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+                                      </svg>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <!-- <div class="menu active" id="menu-<%= e._id %>" data-id="<%= e._id %>">
+                                <!-- <div class="menu active" id="menu-<%= e._id %>" data-id="<%= e._id %>">
                               <li onclick="editCard('<%= e._id %>')">Edit</li>
                               <li onclick="deleteCard('<%= e._id %>')">Delete</li>
                               <li onclick="pinIt('<%= e._id %>')">Pin</li>
                             </div> -->
+                              </div>
+                              <% }) %>
                           </div>
-                          <% }) %>
-                      </div>
-                      <div id="showMore"
-                        style="font-size: large; font-weight: bolder; text-align: center; width: 100%; margin: 10px; display: flex;justify-content: center;">
-                        <a href="/card"
-                          style="text-decoration: none; text-align: center; display: flex; justify-content: center;align-items: center;width: 100%; ">Show
-                          more cards...</a>
-                      </div>
-                      <br>
-                      <table id="tableView" style="display: none">
-                        <thead>
-                          <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Language</th>
-                            <th>Author</th>
-                            <th>Created At</th>
-                          </tr>
-                          <% cards.forEach((card, i)=> { %>
-                            <tr ondblclick="window.open('/card/<%= card._id %>', '_blank')" data-id="<%= card._id %>"
-                              data-menus="delete, pin, edit, move, share" data-userId="<%= userId %>"
-                              data-contextMenu="true" data-cardName="<%= card.title %>" data-mtype="card">
-                              <td><a href="card/<%=card._id%>">
-                                  <%= card.title %>
-                                </a></td>
-                              <td>
-                                <%= card.description %>
-                              </td>
-                              <td>
-                                <%= card.category %>
-                              </td>
-                              <td>
-                                <%= author %>
-                              </td>
-                              <td><%- new Date(card.createdAt).toDateString() %></td>
-                            </tr>
-                            <% }) %>
-                        </thead>
-                      </table>
-            </div>
-            <div class="fab">
-              <div class="fab-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-image-plus-icon lucide-image-plus">
-                  <path d="M16 5h6" />
-                  <path d="M19 2v6" />
-                  <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5" />
-                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                  <circle cx="9" cy="9" r="2" />
-                </svg>
-              </div>
-            </div>
+                          <div id="showMore"
+                            style="font-size: large; font-weight: bolder; text-align: center; width: 100%; margin: 10px; display: flex;justify-content: center;">
+                            <a href="/card"
+                              style="text-decoration: none; text-align: center; display: flex; justify-content: center;align-items: center;width: 100%; ">Show
+                              more cards...</a>
+                          </div>
+                          <br>
+                          <table id="tableView" style="display: none">
+                            <thead>
+                              <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Language</th>
+                                <th>Author</th>
+                                <th>Created At</th>
+                              </tr>
+                              <% cards.forEach((card, i)=> { %>
+                                <tr ondblclick="window.open('/card/<%= card._id %>', '_blank')"
+                                  data-id="<%= card._id %>" data-menus="delete, pin, edit, move, share"
+                                  data-userId="<%= userId %>" data-contextMenu="true" data-cardName="<%= card.title %>"
+                                  data-mtype="card">
+                                  <td><a href="card/<%=card._id%>">
+                                      <%= card.title %>
+                                    </a></td>
+                                  <td>
+                                    <%= card.description %>
+                                  </td>
+                                  <td>
+                                    <%= card.category %>
+                                  </td>
+                                  <td>
+                                    <%= author %>
+                                  </td>
+                                  <td><%- new Date(card.createdAt).toDateString() %></td>
+                                </tr>
+                                <% }) %>
+                            </thead>
+                          </table>
+                </div>
+                <%- include("partials/fab")%>
 
-            <div class="images">
-              <div
-                style="display: flex;justify-content: space-between;align-items: center; margin-block: 20px; margin-inline:10px;">
-                <h2>Pick an image</h2> <button onclick="removeImage()">Remove Image</button>
-              </div>
-              <div style="display: flex; justify-content: center;align-items: center;">
-                <label for="search2" id="sa">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-search-icon lucide-search">
-                    <path d="m21 21-4.34-4.34" />
-                    <circle cx="11" cy="11" r="8" />
-                  </svg>
-                  <input type="search" id="search2" placeholder="Search images..." autocomplete="off">
-                </label>
-              </div>
-              <div id="Suggestions">
-                <span class="bg-topic">Abstract</span>
-                <span class="bg-topic">Nature</span>
-                <span class="bg-topic">Animals</span>
-                <span class="bg-topic">People</span>
-                <span class="bg-topic">Technology</span>
-                <span class="bg-topic">Places</span>
-                <span class="bg-topic">Objects</span>
-                <span class="bg-topic">Architecture</span>
-                <span class="bg-topic">Food</span>
-                <span class="bg-topic">Music</span>
-                <span class="bg-topic">Art</span>
-                <span class="bg-topic">Travel</span>
-                <span class="bg-topic">Science</span>
-                <span class="bg-topic">Business</span>
-                <span class="bg-topic">Health</span>
-                <span class="bg-topic">Education</span>
-                <span class="bg-topic">Entertainment</span>
-                <span class="bg-topic">News</span>
-                <span class="bg-topic">Sports</span>
-                <span class="bg-topic">Politics</span>
-                <span class="bg-topic">Religion</span>
-                <span class="bg-topic">Coding</span>
-                <span class="bg-topic">Design</span>
-                <span class="bg-topic">Development</span>
-                <span class="bg-topic">Programming</span>
-                <span class="bg-topic">Web Development</span>
-                <span class="bg-topic">Mobile Development</span>
-                <span class="bg-topic">Game Development</span>
-                <span class="bg-topic">Software Development</span>
-                <span class="bg-topic">Data Science</span>
-                <span class="bg-topic">Machine Learning</span>
-                <span class="bg-topic">Artificial Intelligence</span>
-                <span class="bg-topic">India</span>
-                <span class="bg-topic">USA</span>
-                <span class="bg-topic">UK</span>
-                <span class="bg-topic">Australia</span>
-                <span class="bg-topic">Canada</span>
-                <span class="bg-topic">France</span>
-                <span class="bg-topic">Germany</span>
-                <span class="bg-topic">Italy</span>
-                <span class="bg-topic">Spain</span>
-                <span class="bg-topic">Japan</span>
-                <span class="bg-topic">Korea</span>
-                <span class="bg-topic">China</span>
-                <span class="bg-topic">Taiwan</span>
-                <span class="bg-topic">Hindu</span>
-                <span class="bg-topic">Muslim</span>
-                <span class="bg-topic">Christian</span>
-                <span class="bg-topic">Islam</span>
-                <span class="bg-topic">Sikh</span>
-                <span class="bg-topic">Black</span>
-                <span class="bg-topic">White</span>
-                <span class="bg-topic">Asian</span>
-                <span class="bg-topic">Latin</span>
-                <span class="bg-topic">Indian</span>
-                <span class="bg-topic">Others</span>
+                  <div class="images">
+                    <div
+                      style="display: flex;justify-content: space-between;align-items: center; margin-block: 20px; margin-inline:10px;">
+                      <h2>Pick an image</h2> <button onclick="removeImage()">Remove Image</button>
+                    </div>
+                    <div style="display: flex; justify-content: center;align-items: center;">
+                      <label for="search2" id="sa">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-search-icon lucide-search">
+                          <path d="m21 21-4.34-4.34" />
+                          <circle cx="11" cy="11" r="8" />
+                        </svg>
+                        <input type="search" id="search2" placeholder="Search images..." autocomplete="off">
+                      </label>
+                    </div>
+                    <div id="Suggestions">
+                      <span class="bg-topic">Abstract</span>
+                      <span class="bg-topic">Nature</span>
+                      <span class="bg-topic">Animals</span>
+                      <span class="bg-topic">People</span>
+                      <span class="bg-topic">Technology</span>
+                      <span class="bg-topic">Places</span>
+                      <span class="bg-topic">Objects</span>
+                      <span class="bg-topic">Architecture</span>
+                      <span class="bg-topic">Food</span>
+                      <span class="bg-topic">Music</span>
+                      <span class="bg-topic">Art</span>
+                      <span class="bg-topic">Travel</span>
+                      <span class="bg-topic">Science</span>
+                      <span class="bg-topic">Business</span>
+                      <span class="bg-topic">Health</span>
+                      <span class="bg-topic">Education</span>
+                      <span class="bg-topic">Entertainment</span>
+                      <span class="bg-topic">News</span>
+                      <span class="bg-topic">Sports</span>
+                      <span class="bg-topic">Politics</span>
+                      <span class="bg-topic">Religion</span>
+                      <span class="bg-topic">Coding</span>
+                      <span class="bg-topic">Design</span>
+                      <span class="bg-topic">Development</span>
+                      <span class="bg-topic">Programming</span>
+                      <span class="bg-topic">Web Development</span>
+                      <span class="bg-topic">Mobile Development</span>
+                      <span class="bg-topic">Game Development</span>
+                      <span class="bg-topic">Software Development</span>
+                      <span class="bg-topic">Data Science</span>
+                      <span class="bg-topic">Machine Learning</span>
+                      <span class="bg-topic">Artificial Intelligence</span>
+                      <span class="bg-topic">India</span>
+                      <span class="bg-topic">USA</span>
+                      <span class="bg-topic">UK</span>
+                      <span class="bg-topic">Australia</span>
+                      <span class="bg-topic">Canada</span>
+                      <span class="bg-topic">France</span>
+                      <span class="bg-topic">Germany</span>
+                      <span class="bg-topic">Italy</span>
+                      <span class="bg-topic">Spain</span>
+                      <span class="bg-topic">Japan</span>
+                      <span class="bg-topic">Korea</span>
+                      <span class="bg-topic">China</span>
+                      <span class="bg-topic">Taiwan</span>
+                      <span class="bg-topic">Hindu</span>
+                      <span class="bg-topic">Muslim</span>
+                      <span class="bg-topic">Christian</span>
+                      <span class="bg-topic">Islam</span>
+                      <span class="bg-topic">Sikh</span>
+                      <span class="bg-topic">Black</span>
+                      <span class="bg-topic">White</span>
+                      <span class="bg-topic">Asian</span>
+                      <span class="bg-topic">Latin</span>
+                      <span class="bg-topic">Indian</span>
+                      <span class="bg-topic">Others</span>
 
-              </div>
-              <ul id="images_data">
-              </ul>
-              <div class="sentinel" style="margin:10px; text-align: center;">
-                <span>
-                  Loading images...
-                </span>
-              </div>
-            </div>
-      </main>
-    </div>
+                    </div>
+                    <ul id="images_data">
+                    </ul>
+                    <div class="sentinel" style="margin:10px; text-align: center;">
+                      <span>
+                        Loading images...
+                      </span>
+                    </div>
+                  </div>
+          </main>
+      </div>
   </div>
 
   <div id="context_menu" style="
@@ -864,6 +583,18 @@
     </div>
     <button id="searchBtn" onclick="advance_search()">Search</button>
 
+  </div>
+
+  <div class="networkInfo" style="display: none;">
+    <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-info-icon lucide-info">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 16v-4" />
+        <path d="M12 8h.01" />
+      </svg></span>
+
+    <span id="networkInfo"></span>
   </div>
 
 
@@ -1083,14 +814,12 @@
         });
       }, 500)
     );
-
     function applytext(e, t) {
       e.preventDefault();
       e.stopPropagation();
       search1.value = t;
 
     }
-
     document.addEventListener("click", (e) => {
       if (searchInput.contains(e.target) && search1.value !== "") {
         results.classList.add("active");
@@ -1098,6 +827,9 @@
         results.classList.remove("active");
       }
     });
+
+
+
     async function testInternetSpeed() {
       const speedDiv = document.getElementById("wifi-speed");
       // Tiny file (about 43 bytes)
@@ -1602,6 +1334,8 @@
 
     }
   </script>
+
+
   <script src="/scripts/home.js"></script>
   <script src="\scripts\shortcut.js"></script>
   <script src="\scripts\index.js"></script>
@@ -1609,6 +1343,8 @@
   <script src="\scripts\search.js"></script>
   <script src="\scripts\notificationbar.js"></script>
   <script src="\scripts\ad_search.js"></script>
+  <script src="\scripts\isonline.js"></script>
+
 </body>
 
 </html>

@@ -20,6 +20,7 @@ const RedisStore = require("connect-redis").RedisStore;
 const client = require("./config/redis.config.js");
 const path = require("path");
 const cors = require("cors");
+
 const Folder = require("./models/folder");
 app.use(express.json({ limit: "50mb" }));
 app.use(
@@ -52,9 +53,9 @@ const deleteRouter = require("./routes/delete");
 const imageRouter = require("./routes/getimage");
 const http = require("http");
 const server = http.createServer(app);
-const socket = require('./routes/socket');
+const socket = require("./routes/socket");
 const notificationRouter = require("./routes/notification");
-const sendNotification = require('./utils/sendNotification.module');
+const sendNotification = require("./utils/sendNotification.module");
 const io = socket.init(server);
 
 io.on("connection", (socket) => {
@@ -66,7 +67,6 @@ io.on("connection", (socket) => {
     console.log("user disconnected");
   });
 });
-
 
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 app.use(express.json());
@@ -103,9 +103,9 @@ app.get("/", authMiddleware, async (req, res, next) => {
       author: decode.checkUser.userName,
       userId: decode.checkUser._id,
       folders,
-      app_url:process.env.APP_URL
+      app_url: process.env.APP_URL,
+      appVersion,
     });
-  
   } catch (err) {
     next(err);
   }
@@ -206,6 +206,18 @@ app.get("/democards", async (req, res) => {
 app.use((req, res, next) => {
   res.status(404).render("pageNotFound");
 });
-server.listen(process.env.PORT, () => {
-  console.log("Server running on http://localhost:5000");
+server.listen(process.env.PORT, async () => {
+  console.log("Server running on http://localhost:3000");
 });
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+  process.exit(1);
+});
+
+const fs = require("fs");
+let rs = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "package.json"), "utf-8")
+);
+
+global.appVersion = rs.version;

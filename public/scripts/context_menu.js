@@ -20,7 +20,7 @@ document.querySelectorAll("[data-contextMenu='true']").forEach((item) => {
       rename: () => renameFolder(card.dataset.id),
       move: () => moveCard(id, cardname, mtype),
       share: () => shareFolder(card.dataset.id, card.dataset.userid),
-      pin: () => pinFolder(card.dataset.id),
+      pin: () => pin(card.dataset.id, mtype),
     };
 
     let context_menu = document.getElementById("context_menu");
@@ -82,7 +82,7 @@ cards.addEventListener("contextmenu", (e) => {
     rename: () => renameFolder(card.dataset.id),
     move: () => moveCard(id, cardname, mtype),
     share: () => shareFolder(card.dataset.id, card.dataset.userid),
-    pin: () => pinFolder(card.dataset.id),
+    pin: () => pin(card.dataset.id, mtype),
   };
 
   let context_menu = document.getElementById("context_menu");
@@ -171,8 +171,8 @@ function renameFolder(e) {
       });
   }
 }
-function pinFolder(e) {
-  fetch(`/folder/pin/${e}`, {
+function pin(e, mtype) {
+  fetch(`/${mtype}/pin/${e}`, {
     method: "PUT",
     credentials: "include",
   })

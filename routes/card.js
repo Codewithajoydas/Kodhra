@@ -41,33 +41,64 @@ cardRouter.get("/create", async (req, res) => {
 });
 
 cardRouter.get("/json", async (req, res) => {
-  const token = req.cookies.token;
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 30;
-  const skip = (page - 1) * limit;
-  const decode = jwt.verify(token, process.env.SECRET);
-  const { _id, userName, email, userImage } = decode.checkUser;
+  try {
+    const token = req.cookies.token;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 30;
+    const skip = (page - 1) * limit;
+    const decode = jwt.verify(token, process.env.SECRET);
+    const { _id, userName, userImage } = decode.checkUser;
 
-  const card = await cardSchema.find({ author: _id }).skip(skip).limit(limit);
-  res.render("partials/cards", {
-    card,
-    image: userImage,
-    author: userName,
-    userId: _id,
-  });
+    const {search } = req.query;
+
+     let query = { author: _id };
+
+    if (search) {
+      query = {
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { description: { $regex: search, $options: "i" } },
+          { content: { $regex: search, $options: "i" } },
+          { tags: { $regex: search, $options: "i" } },
+          { category: { $regex: search, $options: "i" } },
+        ],
+        author: _id,
+      };
+    }
+
+    const card = await cardSchema.find(query).skip(skip).limit(limit);
+
+    // Only render cards that match, or empty if none
+    res.render("partials/cards", {
+      card,
+      image: userImage,
+      author: userName,
+      userId: _id,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
 });
+
+
 
 cardRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
-
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Invalid Card ID" });
     }
-    const dlecard = await cardSchema.findByIdAndDelete(id);
-    res.json({ 200: "Card Deleted Successfully" });
+
+    const deletedCard = await cardSchema.findByIdAndDelete(id);
+
+    if (!deletedCard) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+
+    res.status(200).json({ message: "Card Deleted Successfully" });
   } catch (error) {
-    res.json(error);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 

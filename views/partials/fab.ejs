@@ -1,0 +1,97 @@
+<div class="fab">
+    <div class="fab-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-image-plus-icon lucide-image-plus">
+            <path d="M16 5h6" />
+            <path d="M19 2v6" />
+            <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5" />
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+            <circle cx="9" cy="9" r="2" />
+        </svg>
+    </div>
+</div>
+
+<div class="images">
+    <div
+        style="display: flex;justify-content: space-between;align-items: center; margin-block: 20px; margin-inline:10px;">
+        <h2>Pick an image</h2> <button onclick="removeImage()">Remove Image</button>
+    </div>
+    <div style="display: flex; justify-content: center;align-items: center;">
+        <label for="search2" id="sa">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-search-icon lucide-search">
+                <path d="m21 21-4.34-4.34" />
+                <circle cx="11" cy="11" r="8" />
+            </svg>
+            <input type="search" id="search2" placeholder="Search images..." autocomplete="off">
+        </label>
+    </div>
+    <div id="Suggestions">
+        <span class="bg-topic">Abstract</span>
+        <span class="bg-topic">Nature</span>
+        <span class="bg-topic">Animals</span>
+        <span class="bg-topic">People</span>
+        <span class="bg-topic">Technology</span>
+        <span class="bg-topic">Places</span>
+        <span class="bg-topic">Objects</span>
+        <span class="bg-topic">Architecture</span>
+        <span class="bg-topic">Food</span>
+        <span class="bg-topic">Music</span>
+        <span class="bg-topic">Art</span>
+        <span class="bg-topic">Travel</span>
+        <span class="bg-topic">Science</span>
+        <span class="bg-topic">Business</span>
+        <span class="bg-topic">Health</span>
+        <span class="bg-topic">Education</span>
+        <span class="bg-topic">Entertainment</span>
+        <span class="bg-topic">News</span>
+        <span class="bg-topic">Sports</span>
+        <span class="bg-topic">Politics</span>
+        <span class="bg-topic">Religion</span>
+        <span class="bg-topic">Coding</span>
+        <span class="bg-topic">Design</span>
+        <span class="bg-topic">Development</span>
+        <span class="bg-topic">Programming</span>
+        <span class="bg-topic">Web Development</span>
+        <span class="bg-topic">Mobile Development</span>
+        <span class="bg-topic">Game Development</span>
+        <span class="bg-topic">Software Development</span>
+        <span class="bg-topic">Data Science</span>
+        <span class="bg-topic">Machine Learning</span>
+        <span class="bg-topic">Artificial Intelligence</span>
+        <span class="bg-topic">India</span>
+        <span class="bg-topic">USA</span>
+        <span class="bg-topic">UK</span>
+        <span class="bg-topic">Australia</span>
+        <span class="bg-topic">Canada</span>
+        <span class="bg-topic">France</span>
+        <span class="bg-topic">Germany</span>
+        <span class="bg-topic">Italy</span>
+        <span class="bg-topic">Spain</span>
+        <span class="bg-topic">Japan</span>
+        <span class="bg-topic">Korea</span>
+        <span class="bg-topic">China</span>
+        <span class="bg-topic">Taiwan</span>
+        <span class="bg-topic">Hindu</span>
+        <span class="bg-topic">Muslim</span>
+        <span class="bg-topic">Christian</span>
+        <span class="bg-topic">Islam</span>
+        <span class="bg-topic">Sikh</span>
+        <span class="bg-topic">Black</span>
+        <span class="bg-topic">White</span>
+        <span class="bg-topic">Asian</span>
+        <span class="bg-topic">Latin</span>
+        <span class="bg-topic">Indian</span>
+        <span class="bg-topic">Others</span>
+
+    </div>
+    <ul id="images_data">
+    </ul>
+    <div class="sentinel" style="margin:10px; text-align: center;">
+        <span>
+            Loading images...
+        </span>
+    </div>
+</div>

@@ -62,32 +62,27 @@ moveRouter.put("/folder/:parentId/:childId", async (req, res) => {
   }
 });
 
-moveRouter.put("/card/:parentId/:childId", async (req, res) => {
-  const { childId, parentId } = req.params;
+moveRouter.put("/card/", async (req, res) => {
+  const { parentId, cards } = req.body;
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
   const userId = decode.checkUser._id;
-  const findFolder = await Folder.findOne({ author: userId, _id: parentId });
-  if (!findFolder) {
-    return res.status(404).json({ error: "Folder not found" });
+  try {
+    const findFolder = await Folder.findOne({ author: userId, _id: parentId });
+    if (!findFolder) {
+      return res.status(404).json({ error: "Folder not found" });
+    }
+    const foundCards = await Card.find({ id: { $in: cards } })
+    if(foundCards.length !== cards.length){
+      return res.status(404).json({ error: "One or more cards not found..." });
+    }
+    await findFolder.save();
+    res.json({ message: "Card moved to folder successfully" });
+  } catch (error) {
+    res.json({
+      error: error.message,
+    })
   }
-  const findCard = await Card.findOne({ _id: childId });
-  if (!findCard) {
-    return res.status(404).json({ error: "Card not found" });
-  }
-  const ispresent = findFolder.cards.includes(childId);
-  if (ispresent) {
-    return res.status(400).json({ error: "Card already present in folder" });
-  }
-  findFolder.cards.push(childId);
-  await findFolder.save();
-  sendNotification(
-    "Card Moved",
-    `Card moved to folder ${findFolder.folderName}`,
-    `/folder/${findFolder._id}`,
-    userId
-  );
-  res.json({ message: "Card moved to folder successfully" });
 });
 
 module.exports = moveRouter;
