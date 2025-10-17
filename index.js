@@ -9,7 +9,11 @@ const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
 const router = require("./routes/authentication");
+const profileRouter = require("./routes/profile");
+
 const signup = require("./routes/authoraization");
+const googleAuthrouter = require("./routes/googleAuth");
+
 const gitroute = require("./routes/githubOauth");
 const cardRouter = require("./routes/card");
 const session = require("express-session");
@@ -62,10 +66,7 @@ io.on("connection", (socket) => {
   socket.on("register", (userId) => {
     socket.join(userId);
   });
-
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
-  });
+  socket.on("disconnect", () => {});
 });
 
 app.get("/favicon.ico", (req, res) => res.status(204).end());
@@ -88,7 +89,6 @@ app.get("/", authMiddleware, async (req, res, next) => {
   try {
     const token = req.cookies.token;
     const decode = jwt.verify(token, process.env.SECRET);
-
     const folders = await Folder.find({
       author: decode.checkUser._id,
       parent: null,
@@ -119,6 +119,7 @@ app.post("/card", async (req, res) => {
     const decode = jwt.verify(token, process.env.SECRET);
     const { _id } = decode.checkUser;
     if (!_id) return res.status(401).json({ error: "Unauthorized" });
+    tags.for;
     const createCard = await Card.create({
       title,
       description,
@@ -146,16 +147,11 @@ app.post("/card", async (req, res) => {
     } catch (error) {
       res.json({ error });
     }
-    sendNotification(
-      "Card Created Succesfully",
-      `${title} has been added to your card snippets snippets`,
-      `/card/${createCard._id}`,
-      _id
-    );
+
     res.json({ createCard });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: `Server error ${err.message}` });
   }
 });
 
@@ -178,6 +174,8 @@ app.use("/moveit", authMiddleware, moveRouter);
 app.use("/delete", authMiddleware, deleteRouter);
 app.use("/images", authMiddleware, imageRouter);
 app.use("/notifications", authMiddleware, notificationRouter);
+app.use("/profile", authMiddleware, profileRouter);
+app.use("/auth/google", googleAuthrouter);
 /*
 Demo routes remove it before deployment
 */
@@ -203,12 +201,15 @@ app.get("/democards", async (req, res) => {
   });
 });
 
+app.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.redirect("/");
+});
+
 app.use((req, res, next) => {
   res.status(404).render("pageNotFound");
 });
-server.listen(process.env.PORT, async () => {
-  console.log("Server running on http://localhost:3000");
-});
+server.listen(process.env.PORT, async () => {});
 
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);

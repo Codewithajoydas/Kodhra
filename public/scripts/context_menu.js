@@ -6,197 +6,281 @@ const icons = {
   share: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`,
   pin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pin-icon lucide-pin"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>`,
 };
-document.querySelectorAll("[data-contextMenu='true']").forEach((item) => {
-  item.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    let { id, menus, userid, cardname, mtype } = e.currentTarget.dataset;
-    console.log(mtype);
+const actions = {
+  delete: (card) => deleteFolder(card.dataset.mtype, card.dataset.id),
+  rename: (card) => renameFolder(card.dataset.id),
+  move: (card) =>
+    moveCard(card.dataset.id, card.dataset.cardname, card.dataset.mtype),
+  share: (card) => shareFolder(card.dataset.id, card.dataset.userid),
+  pin: (card) => pin(card.dataset.id, card.dataset.mtype),
+  edit: (card) => editCard(card.dataset.id, card.dataset.mtype),
+};
 
-    const card = e.target.closest("[data-contextMenu='true']");
-    if (!card) return;
+// Context menu DOM
+const contextMenu = document.getElementById("context_menu");
+const contextMenuList = document.getElementById("context_menu_list");
 
-    const actions = {
-      delete: () => deleteFolder(mtype, card.dataset.id),
-      rename: () => renameFolder(card.dataset.id),
-      move: () => moveCard(id, cardname, mtype),
-      share: () => shareFolder(card.dataset.id, card.dataset.userid),
-      pin: () => pin(card.dataset.id, mtype),
-    };
+// Prevent default browser menu on custom menu
+contextMenu.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    let context_menu = document.getElementById("context_menu");
-    context_menu.addEventListener("contextmenu", (e) => { 
-      e.preventDefault()
-    })
-    let context_menu_list = document.getElementById("context_menu_list");
-    context_menu_list.innerHTML = "";
-
-    if (menus) {
-      let list = menus.split(",").map((i) => i.trim());
-      list.forEach((item) => {
-        let li = document.createElement("li");
-        li.innerHTML = `${icons[item]}  ${item}`;
-        context_menu_list.appendChild(li);
-
-        if (actions[item]) {
-          li.addEventListener("click", (ev) => {
-            ev.stopPropagation();
-            actions[item]();
-            context_menu.style.display = "none";
-          });
-        }
-      });
-    }
-    document.querySelector("body").classList.add("active");
-    context_menu.style.display = "block";
-    context_menu.style.visibility = "hidden";
-    context_menu.style.left = "0px";
-    context_menu.style.top = "0px";
-
-    let menuWidth = context_menu.offsetWidth;
-    let menuHeight = context_menu.offsetHeight;
-    let x = e.clientX;
-    let y = e.clientY;
-
-    if (x + menuWidth > window.innerWidth)
-      x = window.innerWidth - menuWidth - 5;
-    if (y + menuHeight > window.innerHeight)
-      y = window.innerHeight - menuHeight - 5;
-    context_menu.style.left = x + "px";
-    context_menu.style.top = y + "px";
-    context_menu.style.visibility = "visible";
-    context_menu.style.display = "block";
-  });
+// Global click listener to hide menu
+window.addEventListener("click", () => {
+  contextMenu.style.display = "none";
+  document.body.classList.remove("active");
 });
 
-let cards = document.getElementById("cards");
-cards.addEventListener("contextmenu", (e) => {
-  const card = e.target.closest("[data-contextMenu='true']");
-  if (!card) return;
+// Open menu function (reusable)
+function openMenu(card, x, y) {
+  const menus = card.dataset.menus?.split(",").map((i) => i.trim()) || [];
 
-  e.preventDefault();
-
-  let { id, menus, userid, cardname, mtype } = card.dataset;
-
-  const actions = {
-    delete: () => deleteFolder(mtype, card.dataset.id),
-    rename: () => renameFolder(card.dataset.id),
-    move: () => moveCard(id, cardname, mtype),
-    share: () => shareFolder(card.dataset.id, card.dataset.userid),
-    pin: () => pin(card.dataset.id, mtype),
-  };
-
-  let context_menu = document.getElementById("context_menu");
-  let context_menu_list = document.getElementById("context_menu_list");
-  context_menu_list.innerHTML = "";
-
-  if (menus) {
-    let list = menus.split(",").map((i) => i.trim());
-    list.forEach((item) => {
-      let li = document.createElement("li");
-      li.innerHTML = `${icons[item]}  ${item}`;
-      context_menu_list.appendChild(li);
-
-      if (actions[item]) {
-        li.addEventListener("click", (ev) => {
-          ev.stopPropagation();
-          actions[item]();
-          context_menu.style.display = "none";
-        });
+  contextMenuList.innerHTML = "";
+  const cardAuthor = card.dataset.cardauthor;
+  const userId = card.dataset.userid;
+  menus.forEach((name) => {
+    if (cardAuthor !== userId) {
+      if (name === "delete" || name === "edit" || name === "move") {
+        return;
       }
-    });
-  }
-  context_menu.style.display = "block";
-  context_menu.style.visibility = "hidden";
-  context_menu.style.left = "0px";
-  context_menu.style.top = "0px";
+    }
+    const li = document.createElement("li");
+    li.innerHTML = `${icons[name] || ""} ${name}`;
+    contextMenuList.appendChild(li);
 
-  let menuWidth = context_menu.offsetWidth;
-  let menuHeight = context_menu.offsetHeight;
-  let x = e.clientX;
-  let y = e.clientY;
+    if (actions[name]) {
+      li.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        actions[name](card);
+        contextMenu.style.display = "none";
+      });
+    }
+  });
+
+  // Position menu with edge detection
+  contextMenu.style.visibility = "hidden";
+  contextMenu.style.display = "block";
+  let menuWidth = contextMenu.offsetWidth;
+  let menuHeight = contextMenu.offsetHeight;
 
   if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 5;
   if (y + menuHeight > window.innerHeight)
     y = window.innerHeight - menuHeight - 5;
-  context_menu.style.left = x + "px";
-  context_menu.style.top = y + "px";
-  context_menu.style.visibility = "visible";
-  context_menu.style.display = "block";
+
+  contextMenu.style.left = `${x}px`;
+  contextMenu.style.top = `${y}px`;
+  contextMenu.style.visibility = "visible";
+}
+
+// Right-click listener for all cards
+document.addEventListener("contextmenu", (e) => {
+  const card = e.target.closest("[data-contextMenu='true']");
+  if (!card) return;
+
+  e.preventDefault();
+  openMenu(card, e.clientX, e.clientY);
 });
 
-window.addEventListener("click", () => {
-  document.getElementById("context_menu").style.display = "none";
-  document.querySelector("body").classList.remove("active");
-});
+// Example usage:
+// <button onclick="openContextMenu(event)">Menu</button> inside each card
 
-
-function deleteFolder(type, e) {
-  let answer = confirm(`Are you sure you want to delete this ${type}?`);
-  if (answer) {
-    fetch(`/delete/${type}/${e}`, {
-      method: "DELETE",
-      credentials: "include",
-    })
-      .then((res) => {
-        if (res.ok) {
-          window.location.reload();
-        } else {
-          console.error("Failed to delete folder:", res);
-        }
-      })
-      .catch((err) => {
-        console.error("Delete error:", err);
-      });
+// --- Folder Actions ---
+function deleteFolder(type, id) {
+  if (confirm(`Are you sure you want to delete this ${type}?`)) {
+    fetch(`/delete/${type}/${id}`, { method: "DELETE", credentials: "include" })
+      .then((res) => res.ok && window.location.reload())
+      .catch(console.error);
   }
 }
 
-function renameFolder(e) {
-  let folderName = prompt("Enter the new folder name:");
-  if (folderName) {
-    fetch(`/folder/${e}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ folderName }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          window.location.reload();
-        } else {
-          console.error("Failed to rename folder:", res);
-        }
-      })
-      .catch((err) => {
-        console.error("Rename error:", err);
-      });
-  }
-}
-function pin(e, mtype) {
-  fetch(`/${mtype}/pin/${e}`, {
+function renameFolder(id) {
+  const folderName = prompt("Enter the new folder name:");
+  if (!folderName) return;
+  fetch(`/folder/${id}`, {
     method: "PUT",
+    headers: { "Content-Type": "application/json" },
     credentials: "include",
+    body: JSON.stringify({ folderName }),
   })
-    .then((res) => {
-      if (res.ok) {
-        window.location.reload();
-      } else {
-        console.error("Failed to pin folder:", res);
-      }
-    })
-    .catch((err) => {
-      console.error("Pin error:", err);
-    });
+    .then((res) => res.ok && window.location.reload())
+    .catch(console.error);
 }
-function shareFolder(e, userId) {
-  const generateLink = () => {
-    const hostName = window.location.origin;
-    const link = `${hostName}/folder/${userId}/${e}`;
-    return link;
-  };
 
-  const link = generateLink();
+function pin(id, type) {
+  fetch(`/${type}/pin/${id}`, { method: "PUT", credentials: "include" })
+    .then((res) => res.ok && window.location.reload())
+    .catch(console.error);
+}
+
+function shareFolder(id, userId) {
+  const link = `${window.location.origin}/folder/${userId}/${id}`;
   navigator.clipboard
     .writeText(link)
     .then(() => alert("Copied to clipboard: " + link))
-    .catch((err) => console.error("Failed to copy:", err));
+    .catch(console.error);
 }
+
+function openContextMenu(event, clientX = null, clientY = null) {
+  event.stopPropagation();
+  const card = event.target.closest("[data-contextMenu='true']");
+  const cardAuthor = card.dataset.cardauthor;
+  const userId = card.dataset.userid;
+  if (!card) return;
+  const menus = card.dataset.menus?.split(",").map((i) => i.trim()) || [];
+  contextMenuList.innerHTML = "";
+  menus.forEach((name) => {
+    if (cardAuthor !== userId) {
+      if (name === "delete" || name === "edit" || name === "move") {
+        return;
+      }
+    }
+    const li = document.createElement("li");
+    li.innerHTML = `${icons[name] || ""} ${name}`;
+    contextMenuList.appendChild(li);
+    if (actions[name]) {
+      li.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        actions[name](card);
+        contextMenu.style.display = "none";
+      });
+    }
+  });
+  contextMenu.style.display = "block";
+  let x = clientX ?? event.clientX;
+  let y = clientY ?? event.clientY;
+  let menuWidth = contextMenu.offsetWidth;
+  let menuHeight = contextMenu.offsetHeight;
+  if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 5;
+  if (y + menuHeight > window.innerHeight)
+    y = window.innerHeight - menuHeight - 5;
+  contextMenu.style.left = `${x}px`;
+  contextMenu.style.top = `${y}px`;
+}
+
+window.addEventListener("click", () => {
+  contextMenu.style.display = "none";
+});
+
+async function favIt(ele, id) {
+  let res = await fetch(`/card/fav/${id}`, {
+    method: "put",
+  });
+  if (res.ok) {
+    let svg = ele.querySelector("svg");
+    svg.classList.toggle("active");
+  }
+  res.json().then((data) => {});
+}
+async function pinIt(ele, id) {
+  let res = await fetch(`/card/pin/${id}`, {
+    method: "put",
+  });
+  if (res.ok) {
+    let svg = ele.querySelector("svg");
+    svg.classList.toggle("active");
+  }
+  res.json().then((data) => {});
+}
+
+function editCard(id) {
+  window.location.href = `/card/${id}`;
+}
+
+let move_folder = document.querySelector(".move_folder");
+let getFoldername = document.querySelector(".header_title .span");
+const toast = document.querySelector(".toast");
+const toastCloseBtn = document.querySelector(".toast .close");
+const toastMessage = document.querySelector(".toast-message");
+let toastTimeoutId = null;
+
+function showToast(message, type = "success", duration = 5000) {
+  if (toastTimeoutId) clearTimeout(toastTimeoutId);
+  toastMessage.textContent = message;
+  toast.dataset.type = type;
+  toast.style.display = "block";
+  toastTimeoutId = setTimeout(() => {
+    toast.style.display = "none";
+    toastTimeoutId = null;
+  }, duration);
+}
+toastCloseBtn.addEventListener("click", () => {
+  toast.style.display = "none";
+  if (toastTimeoutId) {
+    clearTimeout(toastTimeoutId);
+    toastTimeoutId = null;
+  }
+});
+
+async function moveCard(id, cardName, mtype) {
+  cardId = id;
+  movetype = mtype;
+  getFoldername.textContent = `Move \"${cardName}\" :`;
+  move_folder.style.display = "block";
+  move_folder.style.visibility = "visible";
+}
+
+async function moveIt() {
+  const selected = document.querySelector("input[name='moveFolder']:checked");
+  if (!selected) {
+    showToast("⚠️ Please select a folder before moving.", "error");
+    return;
+  }
+
+  const folderId = selected.value;
+
+  try {
+    const res = await fetch(`moveit/${movetype}/${folderId}/${cardId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      let errorMsg = "Move failed. Please try again.";
+      try {
+        const data = await res.json();
+        if (data?.error) errorMsg = data.error;
+      } catch {}
+      showToast(`🚨 ${errorMsg}`, "error");
+    } else {
+      showToast(`🎉 Successfully moved ${movetype}!`, "success");
+    }
+  } catch (err) {
+    console.error("Error in moveIt:", err);
+    showToast("🚨 Unexpected error. Please check your connection.", "error");
+  }
+}
+const mf = document.querySelector(".move_folder");
+let isDragging = false;
+let offsetX, offsetY;
+mf.addEventListener("mousedown", (e) => {
+  e.preventDefault();
+  isDragging = true;
+  offsetX = e.clientX - mf.offsetLeft;
+  offsetY = e.clientY - mf.offsetTop;
+  mf.style.position = "absolute";
+  mf.style.zIndex = 1000;
+});
+document.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+  mf.style.left = e.clientX - offsetX + "px";
+  mf.style.top = e.clientY - offsetY + "px";
+});
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
+document.addEventListener("click", () => {
+  document.querySelector("body").classList.remove("active");
+  move_folder.style.display = "none";
+  context_menu.style.display = "none";
+  move_folder.querySelectorAll("input").forEach((inp) => {
+    if (inp.type === "radio" || inp.type === "checkbox") {
+      inp.checked = false;
+      folderId = null;
+    } else {
+      inp.value = "";
+    }
+  });
+});
+move_folder.addEventListener("click", (e) => {
+  e.stopPropagation();
+});

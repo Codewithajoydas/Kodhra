@@ -25,7 +25,7 @@ vRouter.post("/verifyOtp", async (req, res) => {
   const { otp } = req.body;
   if (!otp) return res.json({ error: "Please Enter OTP..." });
   const email = req.session.email;
-  console.log(email);
+
   try {
     if (!email) {
       return res.json({

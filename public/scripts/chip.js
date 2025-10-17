@@ -22,6 +22,7 @@ chips.forEach((ele) => {
 });
 
 async function filteredData(search = "") {
+
   let res = await fetch(`/card/json?search=${search}`);
   if (!res.ok) {
     return `<span> No Snippets Found</span>`;

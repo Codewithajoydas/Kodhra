@@ -49,6 +49,8 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    pinnedCards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
+    favoriteCards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
   },
   { timestamps: true }
 );

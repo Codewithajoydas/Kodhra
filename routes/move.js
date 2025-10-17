@@ -58,7 +58,35 @@ moveRouter.put("/folder/:parentId/:childId", async (req, res) => {
     res.json({ message: "Folder moved successfully" });
   } catch (err) {
     console.error("Error moving folder:", err);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: err });
+  }
+});
+moveRouter.put("/card/:folderId/:cardId", async (req, res) => {
+  const { folderId, cardId } = req.params;
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+  try {
+    const findFolder = await Folder.findOne({ author: userId, _id: folderId });
+    if (!findFolder) {
+      return res.status(404).json({ error: "Folder not found" });
+    }
+
+    if (findFolder.cards.includes(cardId)) {
+      return res.status(400).json({ error: "Card already in folder" });
+    }
+
+    const findCard = await Card.findOne({ _id: cardId });
+    if (!findCard) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+    findFolder.cards.push(findCard);
+    await findFolder.save();
+    res.json({ message: "Card moved to folder successfully" });
+  } catch (error) {
+    res.json({
+      error: error.message,
+    });
   }
 });
 
@@ -72,8 +100,8 @@ moveRouter.put("/card/", async (req, res) => {
     if (!findFolder) {
       return res.status(404).json({ error: "Folder not found" });
     }
-    const foundCards = await Card.find({ id: { $in: cards } })
-    if(foundCards.length !== cards.length){
+    const foundCards = await Card.find({ id: { $in: cards } });
+    if (foundCards.length !== cards.length) {
       return res.status(404).json({ error: "One or more cards not found..." });
     }
     await findFolder.save();
@@ -81,7 +109,7 @@ moveRouter.put("/card/", async (req, res) => {
   } catch (error) {
     res.json({
       error: error.message,
-    })
+    });
   }
 });
 

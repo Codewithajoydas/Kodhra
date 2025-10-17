@@ -1,12 +1,28 @@
 .container main {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 40px;
+  flex-wrap: wrap;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: #111;
 }
 .container main .div1,
 .container main .div2 {
-  width: 50%;
-  height: 90vh;
-  margin-inline: 10px;
+  flex: 1;
+  min-width: 400px;
+  max-width: 600px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.container main .div1:hover,
+.container main .div2:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
 }
 .container main .div1 .title,
 .container main .div1 .des,
@@ -14,106 +30,142 @@
 .container main .div1 .tags {
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  gap: 8px;
+  margin-top: 16px;
 }
-.container main .div1 .title {
-  background: transparent;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(83, 83, 83, 0.493);
-  padding: 10px;
-  border-radius: 10px;
+.container main .div1 .title label,
+.container main .div1 .des label,
+.container main .div1 .lan label,
+.container main .div1 .tags label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
 }
-.container main .div1 .title input {
-  margin: 10px 0px;
-  padding: 10px 0;
-  background: none;
-  border: none;
-  outline: none;
-  border-bottom: 1px solid rgba(83, 83, 83, 0.493);
-}
-.container main .div1 .des {
-  background: transparent;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  padding: 10px;
-  border-radius: 10px;
-}
-.container main .div1 .des textarea {
-  margin: 10px 0px;
-  padding: 10px 0;
-  background: none;
-  border: none;
-  padding: 10px;
-  outline: none;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  resize: vertical;
-  border-radius: 10px;
-}
+.container main .div1 .title,
+.container main .div1 .des,
 .container main .div1 .lan {
-  background: transparent;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  padding: 10px;
-  border-radius: 10px;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
 }
+.container main .div1 .title input,
+.container main .div1 .title textarea,
+.container main .div1 .title select,
+.container main .div1 .des input,
+.container main .div1 .des textarea,
+.container main .div1 .des select,
+.container main .div1 .lan input,
+.container main .div1 .lan textarea,
 .container main .div1 .lan select {
-  margin: 10px 0px;
-  border-radius: 10px;
-  padding: 10px 0;
-  background: none;
-  border: none;
-  accent-color: rgba(0, 0, 0, 0.4);
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background-color: #f9fafb;
+  font-size: 15px;
+  color: #111;
   outline: none;
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+}
+.container main .div1 .title input:focus,
+.container main .div1 .title textarea:focus,
+.container main .div1 .title select:focus,
+.container main .div1 .des input:focus,
+.container main .div1 .des textarea:focus,
+.container main .div1 .des select:focus,
+.container main .div1 .lan input:focus,
+.container main .div1 .lan textarea:focus,
+.container main .div1 .lan select:focus {
+  border-color: #2563eb;
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+.container main .div1 .title textarea,
+.container main .div1 .des textarea,
+.container main .div1 .lan textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.container main .div1 .title select,
+.container main .div1 .des select,
+.container main .div1 .lan select {
+  cursor: pointer;
 }
 .container main .div2 .code,
 .container main .div2 .tags {
   display: flex;
   flex-direction: column;
-  background: transparent;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  padding: 10px;
-  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.container main .div2 .code:hover,
+.container main .div2 .tags:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 .container main .div2 .code textarea,
 .container main .div2 .code input,
 .container main .div2 .tags textarea,
 .container main .div2 .tags input {
-  margin: 10px 0px;
-  margin-top: 10px;
-  padding: 10px 0;
-  border-radius: 10px;
-  background: none;
-  padding: 10px;
-  border: none;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  color: #111;
   outline: none;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  resize: vertical;
+  transition: all 0.2s ease;
+}
+.container main .div2 .code textarea:focus,
+.container main .div2 .code input:focus,
+.container main .div2 .tags textarea:focus,
+.container main .div2 .tags input:focus {
+  border-color: #2563eb;
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
 }
 .container main .div2 button {
-  padding: 20px 50px;
-  margin: 10px;
-  background: #000;
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  background-color: #111;
   color: white;
-  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.container main .div2 button:hover {
+  background-color: #222;
+}
+.container main .div2 button:active {
+  transform: scale(0.98);
 }
 .container main .loading {
   position: fixed;
   bottom: 2%;
   right: 2%;
-  padding: 20px 40px;
-  border-radius: 10px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: #111827;
+  color: white;
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 .container main .loading svg {
-  animation: loader 0.7s infinite linear;
+  animation: loader 0.8s infinite linear;
 }
 @keyframes loader {
   0% {
@@ -122,10 +174,6 @@
   100% {
     transform: rotate(360deg);
   }
-}
-.container main .loading span {
-  font-weight: bolder;
-  color: white;
 }
 
 /*# sourceMappingURL=createSnippet.css.map */

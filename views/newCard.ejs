@@ -5,12 +5,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Card | Code Snippet Manager</title>
-  <script src="/socket.io/socket.io.js"></script>
-
-  <link rel="stylesheet" href="/style/css/index.css" />
-  <link rel="stylesheet" href="/style/css/createSnippet.css" />
-  <link rel="stylesheet" href="/style/css/notificationBar.css">
+  <link rel="stylesheet" href="/style/css/partials/Header.css">
   <link rel="stylesheet" href="/style/css/ad_search.css">
+  <link rel="stylesheet" href="/style/css/Notification.css">
+  <link rel="stylesheet" href="/style/css/index.css">
+  <link rel="stylesheet" href="/style/css/chip.css">
+  <link rel="stylesheet" href="/style/css/card.css">
+  <link rel="stylesheet" href="/style/css/folder.css">
+  <link rel="stylesheet" href="/style/css/createSnippet.css">
+  <script src="/socket.io/socket.io.js"></script>
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" />
@@ -131,351 +134,80 @@
     </div>
   </div>
   <div class="content">
-    <header style="z-index: 1">
-      <span class="logo">
-        <img src="/assets/logo.png" alt="code snippet manager" />
-        <span>Code Snippet Manager
-          <sub style="
-                    font-family: 'Segoe UI', Tahoma, sans-serif;
-                    font-size: 10px;
-                  ">V.1.0.1</sub></span>
-      </span>
-      <nav>
-        <div class="searchResult">
-          <label class="search" for="search" style="cursor: text">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-search-icon lucide-search">
-              <path d="m21 21-4.34-4.34" />
-              <circle cx="11" cy="11" r="8" />
-            </svg>
+    <%- include("partials/header")%>
+      <div class="container">
+        <%- include("partials/sidebar", {navigation: 'card-create' })%>
+          <main style="width: 100%;">
+            <div class="div1">
+              <div class="title">
+                <label for="title">What is the title?</label>
+                <input type="text" id="title1" name="title" placeholder="Enter your title" />
+              </div>
+              <div class="title">
+                <label for="folderName">What is the folder name?</label>
+                <input type="text" id="folderName1" name="folderName" placeholder="Enter your folder name" />
+              </div>
+              <div class="des">
+                <label for="des"> And what is the Description? </label>
+                <textarea type="text" id="des" name="description" rows="15"
+                  placeholder="Enter your Description.."></textarea>
+              </div>
+              <div class="lan">
+                <label for="lan"> Last what is language you prefer? </label>
+                <select name="language" id="category">
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="CSS">CSS</option>
+                  <option value="HTML">HTML</option>
+                  <option value="C">C</option>
+                  <option value="C++">C++</option>
+                  <option value="C#">C#</option>
+                  <option value="Java">Java</option>
+                  <option value="TypeScript">TypeScript</option>
+                  <option value="Python">Python</option>
+                  <option value="Ruby">Ruby</option>
+                  <option value="PHP">PHP</option>
+                  <option value="Go">Go</option>
+                  <option value="Rust">Rust</option>
+                  <option value="Swift">Swift</option>
+                  <option value="Kotlin">Kotlin</option>
+                  <option value="Objective-C">Objective-C</option>
+                  <option value="Scala">Scala</option>
+                  <option value="Perl">Perl</option>
+                  <option value="R">R</option>
+                  <option value="Dart">Dart</option>
+                  <option value="Haskell">Haskell</option>
+                  <option value="Lua">Lua</option>
+                  <option value="Elixir">Elixir</option>
+                  <option value="Clojure">Clojure</option>
+                  <option value="Shell">Shell (Bash)</option>
+                  <option value="PowerShell">PowerShell</option>
+                  <option value="SQL">SQL</option>
+                  <option value="GraphQL">GraphQL</option>
+                  <option value="MATLAB">MATLAB</option>
+                  <option value="Assembly">Assembly</option>
+                  <option value="Fortran">Fortran</option>
+                  <option value="COBOL">COBOL</option>
+                  <option value="Erlang">Erlang</option>
+                  <option value="VB.NET">VB.NET</option>
+                </select>
+              </div>
+            </div>
+            <div class="div2">
+              <div class="code">
+                <label for="code">Finally Write Your Code Below</label>
+                <textarea  name="code" id="code" placeholder="Code"></textarea>
 
-            <input type="search" placeholder="Search Snippets..." id="search" autocomplete="off" />
-            <kbd style="
-                      background: rgba(128, 128, 128, 0.21);
-                      color: rgb(122, 122, 122);
-                      padding: 5px;
-                      border-radius: 5px;
-                      box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
-                    ">ctrl+k</kbd>
-          </label>
-          <div class="results" id="results" style="z-index: 99999999999999999999">
-            <ul id="results-list" style="z-index: 99999999999999999999"></ul>
-          </div>
-        </div>
-        <div class="filter" id="filter">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-sliders-horizontal-icon lucide-sliders-horizontal">
-            <path d="M10 5H3" />
-            <path d="M12 19H3" />
-            <path d="M14 3v4" />
-            <path d="M16 17v4" />
-            <path d="M21 12h-9" />
-            <path d="M21 19h-5" />
-            <path d="M21 5h-7" />
-            <path d="M8 10v4" />
-            <path d="M8 12H3" />
-          </svg>
-        </div>
-        <div class="notification">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-bell-icon lucide-bell">
-            <path d="M10.268 21a2 2 0 0 0 3.464 0" />
-            <path
-              d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
-          </svg>
-          <span class="number">0</span>
-        </div>
-        <div class="help">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-info-icon lucide-info">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 16v-4" />
-            <path d="M12 8h.01" />
-          </svg>
-        </div>
-        <div class="profile">
-          <img src="<%= image %>" alt="" />
-        </div>
-      </nav>
-      <div class="openList" style="display: none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-          class="lucide lucide-list-filter-icon lucide-list-filter">
-          <path d="M3 6h18" />
-          <path d="M7 12h10" />
-          <path d="M10 18h4" />
-        </svg>
-      </div>
-    </header>
-    <div class="container">
-      <aside>
-        <ul>
-          <!-- Main Pages -->
-          <span>Main Pages</span>
-          <li>
-            <a href="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard">
-                <rect width="7" height="9" x="3" y="3" rx="1" />
-                <rect width="7" height="5" x="14" y="3" rx="1" />
-                <rect width="7" height="9" x="14" y="12" rx="1" />
-                <rect width="7" height="5" x="3" y="16" rx="1" />
-              </svg>
-              Dashboard</a>
-          </li>
-          <li>
-            <a href="/card"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-earth-icon lucide-earth">
-                <path d="M21.54 15H17a2 2 0 0 0-2 2v4.54" />
-                <path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17" />
-                <path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05" />
-                <circle cx="12" cy="12" r="10" />
-              </svg>
-              All Code Snippets</a>
-          </li>
-          <li>
-            <a href="/folder"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-folder-icon lucide-folder">
-                <path
-                  d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
-              </svg>
-              Folders</a>
-          </li>
-          <li>
-            <a href="/tags"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-tags-icon lucide-tags">
-                <path
-                  d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z" />
-                <path d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193" />
-                <circle cx="10.5" cy="6.5" r=".5" fill="currentColor" />
-              </svg>
-              Tags</a>
-          </li>
-          <li>
-            <a href="/pin"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-pin-icon lucide-pin">
-                <path d="M12 17v5" />
-                <path
-                  d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
-              </svg>
-              Pinned</a>
-          </li>
-          <li>
-            <a href="/fav"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-star-icon lucide-star">
-                <path
-                  d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
-              </svg>
-              Favorites</a>
-          </li>
-
-          <!-- Creation Shortcuts -->
-          <span>Creation Shortcuts</span>
-          <li class="active">
-            <a href="/card/create"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-square-dashed-bottom-code-icon lucide-square-dashed-bottom-code">
-                <path d="M10 9.5 8 12l2 2.5" />
-                <path d="M14 21h1" />
-                <path d="m14 9.5 2 2.5-2 2.5" />
-                <path d="M5 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2" />
-                <path d="M9 21h1" />
-              </svg>
-              New Snippet</a>
-          </li>
-          <li>
-            <a href="/create-folder"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-folder-pen-icon lucide-folder-pen">
-                <path
-                  d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5" />
-                <path
-                  d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
-              </svg>
-              New Folder</a>
-          </li>
-
-          <!-- Search & Explore -->
-          <span>Search & Explore</span>
-          <li>
-            <a href="/search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-search-icon lucide-search">
-                <path d="m21 21-4.34-4.34" />
-                <circle cx="11" cy="11" r="8" />
-              </svg>
-              Search</a>
-          </li>
-          <li>
-            <a href="/explore"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-telescope-icon lucide-telescope">
-                <path
-                  d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44" />
-                <path d="m13.56 11.747 4.332-.924" />
-                <path d="m16 21-3.105-6.21" />
-                <path
-                  d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z" />
-                <path d="m6.158 8.633 1.114 4.456" />
-                <path d="m8 21 3.105-6.21" />
-                <circle cx="12" cy="13" r="2" />
-              </svg>
-              Explore Public Snippets</a>
-          </li>
-
-          <!-- Settings & Tools -->
-          <span>Settings & Tools</span>
-          <li>
-            <a href="/import-export">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-cloud-download-icon lucide-cloud-download">
-                <path d="M12 13v8l-4-4" />
-                <path d="m12 21 4-4" />
-                <path d="M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284" />
-              </svg>
-              Import / Export</a>
-          </li>
-          <li>
-            <a href="/settings"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-cog-icon lucide-cog">
-                <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" />
-                <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
-                <path d="M12 2v2" />
-                <path d="M12 22v-2" />
-                <path d="m17 20.66-1-1.73" />
-                <path d="M11 10.27 7 3.34" />
-                <path d="m20.66 17-1.73-1" />
-                <path d="m3.34 7 1.73 1" />
-                <path d="M14 12h8" />
-                <path d="M2 12h2" />
-                <path d="m20.66 7-1.73 1" />
-                <path d="m3.34 17 1.73-1" />
-                <path d="m17 3.34-1 1.73" />
-                <path d="m11 13.73-4 6.93" />
-              </svg>
-              Settings</a>
-          </li>
-          <li>
-            <a href="/account"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-user-lock-icon lucide-user-lock">
-                <circle cx="10" cy="7" r="4" />
-                <path d="M10.3 15H7a4 4 0 0 0-4 4v2" />
-                <path d="M15 15.5V14a2 2 0 0 1 4 0v1.5" />
-                <rect width="8" height="5" x="13" y="16" rx=".899" />
-              </svg>
-              Account</a>
-          </li>
-
-          <!-- Auth -->
-          <span>Auth</span>
-          <li>
-            <a href="/login"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-scan-face-icon lucide-scan-face">
-                <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-                <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-                <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-                <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-                <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                <path d="M9 9h.01" />
-                <path d="M15 9h.01" />
-              </svg>
-              Login</a>
-          </li>
-          <li>
-            <a href="/signup"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-key-icon lucide-key">
-                <path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4" />
-                <path d="m21 2-9.6 9.6" />
-                <circle cx="7.5" cy="15.5" r="5.5" />
-              </svg>
-              Sign Up</a>
-          </li>
-        </ul>
-      </aside>
-      <main data-barba="container" data-barba-namespace="newcard">
-        <div class="div1">
-          <div class="title">
-            <label for="title">What is the title?</label>
-            <input type="text" id="title" name="title" placeholder="Enter your title" />
-          </div>
-          <div class="title">
-            <label for="folderName">What is the folder name?</label>
-            <input type="text" id="folderName" name="folderName" placeholder="Enter your folder name" />
-          </div>
-          <div class="des">
-            <label for="des"> And what is the Description? </label>
-            <textarea type="text" id="des" name="description" rows="15"
-              placeholder="Enter your Description.."></textarea>
-          </div>
-          <div class="lan">
-            <label for="lan"> Last what is language you prefer? </label>
-            <select name="language" id="category">
-              <option value="JavaScript">JavaScript</option>
-              <option value="CSS">CSS</option>
-              <option value="HTML">HTML</option>
-              <option value="C">C</option>
-              <option value="C++">C++</option>
-              <option value="C#">C#</option>
-              <option value="Java">Java</option>
-              <option value="TypeScript">TypeScript</option>
-              <option value="Python">Python</option>
-              <option value="Ruby">Ruby</option>
-              <option value="PHP">PHP</option>
-              <option value="Go">Go</option>
-              <option value="Rust">Rust</option>
-              <option value="Swift">Swift</option>
-              <option value="Kotlin">Kotlin</option>
-              <option value="Objective-C">Objective-C</option>
-              <option value="Scala">Scala</option>
-              <option value="Perl">Perl</option>
-              <option value="R">R</option>
-              <option value="Dart">Dart</option>
-              <option value="Haskell">Haskell</option>
-              <option value="Lua">Lua</option>
-              <option value="Elixir">Elixir</option>
-              <option value="Clojure">Clojure</option>
-              <option value="Shell">Shell (Bash)</option>
-              <option value="PowerShell">PowerShell</option>
-              <option value="SQL">SQL</option>
-              <option value="GraphQL">GraphQL</option>
-              <option value="MATLAB">MATLAB</option>
-              <option value="Assembly">Assembly</option>
-              <option value="Fortran">Fortran</option>
-              <option value="COBOL">COBOL</option>
-              <option value="Erlang">Erlang</option>
-              <option value="VB.NET">VB.NET</option>
-            </select>
-          </div>
-        </div>
-        <div class="div2">
-          <div class="code">
-            <label for="code">Finally Write Your Code Below</label>
-            <textarea type="text" name="content" id="code" rows="25" placeholder="Write code..."></textarea>
-          </div>
-          <div class="tags" style="margin-top: 10px">
-            <label for="tags">Tags (Comma Separated)</label>
-            <input type="text" name="tags" placeholder="Enter Tags..." id="tags" />
-          </div>
-          <button type="submit" onclick="submitData()">
-            Submit the snippet
-          </button>
-        </div>
-        <div class="loading" style="display: none">
-          <span style="
+              </div>
+              <div class="tags" style="margin-top: 10px">
+                <label for="tags">Tags (Comma Separated)</label>
+                <input type="text" name="tags" placeholder="Enter Tags..." id="tags" />
+              </div>
+              <button type="submit" onclick="submitData()">
+                Submit the snippet
+              </button>
+            </div>
+            <div class="loading" style="display: none">
+              <span style="
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -483,87 +215,24 @@
                 color: black;
                 background: none;
               ">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-loader-circle-icon lucide-loader-circle">
-              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-            </svg>
-            Sending Data...</span>
-        </div>
-      </main>
-        <div class="notification-bar">
-          <h3>Notifications</h3>
-          <ul class="notification-lists">
-          </ul>
-        </div>
-        <div class="advanced-search">
-          <h3>Advanced Search</h3>
-          <div class="feildList">
-            <label for="title">
-              <span>Title:</span>
-              <input type="text" name="title" id="title" placeholder="Title" />
-            </label>
-            <label for="code"><span>Code:</span> <input type="text" name="code" id="code" placeholder="Code"></label>
-            <label for="description">
-              <span>Description:</span>
-              <textarea type="text" name="description" id="description" placeholder="Description" rows="5"></textarea>
-            </label>
-            <label for="language">
-              <span>Language:</span>
-              <input type="text" name="language" id="language" placeholder="Language" list="languages" />
-              <datalist id="languages">
-                <option value="JavaScript">JavaScript</option>
-                <option value="CSS">CSS</option>
-                <option value="HTML">HTML</option>
-                <option value="C">C</option>
-                <option value="C++">C++</option>
-                <option value="C#">C#</option>
-                <option value="Java">Java</option>
-                <option value="TypeScript">TypeScript</option>
-                <option value="Python">Python</option>
-                <option value="Ruby">Ruby</option>
-                <option value="PHP">PHP</option>
-                <option value="Go">Go</option>
-                <option value="Rust">Rust</option>
-                <option value="Swift">Swift</option>
-                <option value="Kotlin">Kotlin</option>
-                <option value="Objective-C">Objective-C</option>
-                <option value="Scala">Scala</option>
-                <option value="Perl">Perl</option>
-                <option value="R">R</option>
-                <option value="Dart">Dart</option>
-                <option value="Haskell">Haskell</option>
-                <option value="Lua">Lua</option>
-                <option value="Elixir">Elixir</option>
-                <option value="Clojure">Clojure</option>
-                <option value="Shell">Shell (Bash)</option>
-                <option value="PowerShell">PowerShell</option>
-                <option value="SQL">SQL</option>
-                <option value="GraphQL">GraphQL</option>
-                <option value="MATLAB">MATLAB</option>
-                <option value="Assembly">Assembly</option>
-                <option value="Fortran">Fortran</option>
-                <option value="COBOL">COBOL</option>
-                <option value="Erlang">Erlang</option>
-                <option value="VB.NET">VB.NET</option>
-              </datalist>
-            </label>
-            <label for="folder">
-              <span>Folder:</span>
-              <input type="text" name="folder" id="folder" placeholder="Folder" />
-            </label>
-            <label for="date">
-              <span>Date:</span>
-              <input type="date" name="date" id="date" placeholder="Date" />
-            </label>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-loader-circle-icon lucide-loader-circle">
+                  <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                </svg>
+                Sending Data...</span>
+            </div>
+          </main>
+          <div class="notification-bar">
+            <h3>Notifications</h3>
+            <ul class="notification-lists">
+            </ul>
           </div>
-          <button id="searchBtn" onclick="advance_search()">Search</button>
-        
-        </div>
-    </div>
+          
+      </div>
   </div>
 
- 
+
 
   <script>
     let lan = document.getElementById("category");
@@ -616,12 +285,13 @@
   </script>
   <script>
     async function submitData() {
-      let title = document.getElementById("title").value;
+      let title = document.getElementById("title1").value;
       let description = document.getElementById("des").value;
       let category = document.getElementById("category").value;
       let content = (document.getElementById("code").value =
         editor.getValue());
-      let folderName = document.getElementById("folderName").value;
+      let folderName = document.getElementById("folderName1").value;
+      console.log(title, description, category, content, folderName)
       let tags = document
         .getElementById("tags")
         .value.split(",")
@@ -648,6 +318,7 @@
         });
 
         let data = await res.json();
+        console.log(data)
         const endTime = performance.now();
         const duration = ((endTime - startTime) / 1000).toFixed(2);
         if (res.ok) {
@@ -679,40 +350,40 @@
   </script>
 
 
-<script>
-  let socket = io();
-  socket.emit("register", "<%= userId %>");
+  <script>
+    let socket = io();
+    socket.emit("register", "<%= userId %>");
 
-  socket.on("notification", (data) => {
-    createNotification([data]);
-    updateUnreadCount(data.unreadCount);
-  });
+    socket.on("notification", (data) => {
+      createNotification([data]);
+      updateUnreadCount(data.unreadCount);
+    });
 
-  async function getNotifications() {
-    const res = await fetch("/notifications");
-    const data = await res.json();
-    createNotification(data);
-  }
-  getNotifications();
+    async function getNotifications() {
+      const res = await fetch("/notifications");
+      const data = await res.json();
+      createNotification(data);
+    }
+    getNotifications();
 
-  async function getUnreadCount() {
-    const res = await fetch("/notifications/unread-count");
-    const data = await res.json();
-    updateUnreadCount(data.count);
-  }
-  getUnreadCount();
+    async function getUnreadCount() {
+      const res = await fetch("/notifications/unread-count");
+      const data = await res.json();
+      updateUnreadCount(data.count);
+    }
+    getUnreadCount();
 
-  function updateUnreadCount(count) {
-    const numberEl = document.querySelector(".number");
-    numberEl.textContent = count > 0 ? count : "0";
-  }
+    function updateUnreadCount(count) {
+      const numberEl = document.querySelector(".number");
+      numberEl.textContent = count > 0 ? count : "0";
+    }
 
-  function createNotification(data) {
-    const notificationDiv = document.querySelector(".notification-lists");
-    data.forEach((e) => {
-      const li = document.createElement("li");
-      li.className = "notification-list";
-      li.innerHTML = `
+    function createNotification(data) {
+      const notificationDiv = document.querySelector(".notification-lists");
+      data.forEach((e) => {
+        const li = document.createElement("li");
+        li.className = "notification-list";
+        li.innerHTML = `
       <div class="n-title">
        <span> ${e.title}</span>
         <span style="font-size: 10px">${new Date(e.createdAt).toLocaleString()}</span>
@@ -720,55 +391,55 @@
       <p class="n-description">${e.message}</p>
       <a href="${e.link || '#'}" class="action-button">Take action <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg></a>
     `;
-      notificationDiv.prepend(li);
-    });
-  }
+        notificationDiv.prepend(li);
+      });
+    }
 
-  let notification = document.querySelector(".notification");
-  notification.addEventListener("click", async () => {
-    let res = await fetch("/notifications/mark-read", {
-      method: "POST",
-    });
-    let data = await res.json();
-    updateUnreadCount(0);
+    let notification = document.querySelector(".notification");
+    notification.addEventListener("click", async () => {
+      let res = await fetch("/notifications/mark-read", {
+        method: "POST",
+      });
+      let data = await res.json();
+      updateUnreadCount(0);
 
-  })
+    })
 
-</script>
+  </script>
 
-<script>
-  let results = document.getElementById("results");
-  let list = document.getElementById("results-list");
-  let searchInput = document.querySelector(".searchResult");
-  let search1 = document.getElementById("search");
-  function debounce(fn, delay) {
-    let timer;
-    return function (...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => fn.apply(this, args), delay);
-    };
-  }
+  <script>
+    let results = document.getElementById("results");
+    let list = document.getElementById("results-list");
+    let searchInput = document.querySelector(".searchResult");
+    let search1 = document.getElementById("search");
+    function debounce(fn, delay) {
+      let timer;
+      return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
 
-  search1.addEventListener(
-    "input",
-    debounce(() => {
-      results.classList.add("active");
-      list.textContent = "Loading Suggestions...";
-      const query = search1.value.trim();
-      if (!query) {
-        results.classList.remove("active");
-        list.innerHTML = "";
-        return;
-      }
-      searchv1(query).then((data) => {
-        list.innerHTML = "";
-        if (!Array.isArray(data) || data.length === 0) {
-          list.innerHTML = "<span style='color:red'>No Cards Found</span>";
+    search1.addEventListener(
+      "input",
+      debounce(() => {
+        results.classList.add("active");
+        list.textContent = "Loading Suggestions...";
+        const query = search1.value.trim();
+        if (!query) {
+          results.classList.remove("active");
+          list.innerHTML = "";
           return;
-        } else {
-          data.forEach((card) => {
-            const li = document.createElement("li");
-            li.innerHTML = `
+        }
+        searchv1(query).then((data) => {
+          list.innerHTML = "";
+          if (!Array.isArray(data) || data.length === 0) {
+            list.innerHTML = "<span style='color:red'>No Cards Found</span>";
+            return;
+          } else {
+            data.forEach((card) => {
+              const li = document.createElement("li");
+              li.innerHTML = `
           <a href="/card/${card._id}">
            <div class="name">
              <svg xmlns="http://www.w3.org/2000/svg" 
@@ -784,156 +455,157 @@
             </div>
             <div class="arrow" onclick="applytext(event,'${card.title}')"><svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-left-icon lucide-arrow-up-left"><path d="M7 17V7h10"/><path d="M17 17 7 7"/></svg></div>
           </a>`;
-            list.appendChild(li);
-          });
-        }
-      });
-    }, 500)
-  );
+              list.appendChild(li);
+            });
+          }
+        });
+      }, 500)
+    );
 
-  function applytext(e, t) {
-    e.preventDefault();
-    e.stopPropagation();
-    search1.value = t;
-
-  }
-
-  document.addEventListener("click", (e) => {
-    if (searchInput.contains(e.target) && search1.value !== "") {
-      results.classList.add("active");
-    } else {
-      results.classList.remove("active");
-    }
-  });
-
-  let search = document.getElementById("search");
-  search.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      let query = search.value;
-      if (query.trim() !== "") {
-        window.location.href = `/search?query=${encodeURIComponent(query)}`;
-      }
-    }
-  });
-  document.addEventListener("keydown", function (e) {
-    if (e.ctrlKey && e.key === "k") {
+    function applytext(e, t) {
       e.preventDefault();
-      search.focus();
-    }
-  });
-</script>
-<script>
-  window.onload = () => {
-    let loader = document.querySelector(".loader");
-    let main = document.querySelector("main");
-    let imageurl = localStorage.getItem("image");
-    let bg_color = localStorage.getItem("bg_color");
-    let text_color = localStorage.getItem("text_color");
-    let accent = localStorage.getItem("accent");
-    console.log(accent)
-    if (bg_color) {
-      document.body.style.setProperty("--bg-color", bg_color);
-    }
-    if (text_color) {
-      document.body.style.setProperty("--color", text_color);
-    }
-    if (accent) {
-      document.body.style.setProperty("--accent", accent);
-    }
-    if (imageurl) {
-      main.style.backgroundImage = `url(${imageurl})`;
-    }
-    loader.style.display = "none";
-  };
-</script>
-<script>
-  let context_menu = document.getElementById("context_menu");
-  let menuListEl = document.getElementById("context_menu_list");
-
-  document.querySelectorAll(".menu_top").forEach((card) => {
-    card.addEventListener("click", (e) => {
       e.stopPropagation();
-      const icons = {
-        delete: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
-        edit: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-pen-icon lucide-folder-pen"><path d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5"/><path d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>`,
-        move: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-icon lucide-move"><path d="M12 2v20"/><path d="m15 19-3 3-3-3"/><path d="m19 9 3 3-3 3"/><path d="M2 12h20"/><path d="m5 9-3 3 3 3"/><path d="m9 5 3-3 3 3"/></svg>`,
-        share: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`,
-        pin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pin-icon lucide-pin"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>`,
-      };
+      search1.value = t;
 
-      let { id, menuId, menus, userid, cardname, mtype } =
-        e.currentTarget.dataset;
-      console.log(mtype);
-      const actions = {
-        edit: () => editCard(id),
-        share: () => shareCard(userid, id),
-        pin: () => pinIt(id),
-        move: () => moveCard(id, cardname, mtype),
-        fav: () => favIt(id),
-        delete: () => deleteCard(id),
-      };
-      let menuItems = menus.split(",").map((i) => i.trim());
-      context_menu.style.display = "block";
-      context_menu.style.visibility = "hidden";
-      context_menu.style.left = "0px";
-      context_menu.style.top = "0px";
+    }
 
-      let menuWidth = context_menu.offsetWidth;
-      let menuHeight = context_menu.offsetHeight;
+    document.addEventListener("click", (e) => {
+      if (searchInput.contains(e.target) && search1.value !== "") {
+        results.classList.add("active");
+      } else {
+        results.classList.remove("active");
+      }
+    });
 
-      let x = e.clientX;
-      let y = e.clientY;
-
-      if (x + menuWidth > window.innerWidth)
-        x = window.innerWidth - menuWidth - 10;
-      if (y + menuHeight > window.innerHeight)
-        y = window.innerHeight - menuHeight - 10;
-
-      document.querySelector("body").classList.add("active");
-      context_menu.style.left = x + "px";
-      context_menu.style.top = y + "px";
-      context_menu.style.visibility = "visible";
-      context_menu.style.display = "block";
-
-      menuListEl.innerHTML = "";
-
-      menuItems.forEach((item) => {
-        let li = document.createElement("li");
-        li.innerHTML = `${icons[item]} ${item}`;
-        menuListEl.appendChild(li);
-        if (actions[item]) {
-          li.addEventListener("click", (ev) => {
-            ev.stopPropagation();
-            actions[item]();
-            context_menu.style.display = "none";
-          });
+    let search = document.getElementById("search");
+    search.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        let query = search.value;
+        if (query.trim() !== "") {
+          window.location.href = `/search?query=${encodeURIComponent(query)}`;
         }
+      }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey && e.key === "k") {
+        e.preventDefault();
+        search.focus();
+      }
+    });
+  </script>
+  <script>
+    window.onload = () => {
+      let loader = document.querySelector(".loader");
+      let main = document.querySelector("main");
+      let imageurl = localStorage.getItem("image");
+      let bg_color = localStorage.getItem("bg_color");
+      let text_color = localStorage.getItem("text_color");
+      let accent = localStorage.getItem("accent");
+      console.log(accent)
+      if (bg_color) {
+        document.body.style.setProperty("--bg-color", bg_color);
+      }
+      if (text_color) {
+        document.body.style.setProperty("--color", text_color);
+      }
+      if (accent) {
+        document.body.style.setProperty("--accent", accent);
+      }
+      if (imageurl) {
+        main.style.backgroundImage = `url(${imageurl})`;
+      }
+      loader.style.display = "none";
+    };
+  </script>
+  <script>
+    let context_menu = document.getElementById("context_menu");
+    let menuListEl = document.getElementById("context_menu_list");
+
+    document.querySelectorAll(".menu_top").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const icons = {
+          delete: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
+          edit: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-pen-icon lucide-folder-pen"><path d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5"/><path d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>`,
+          move: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-icon lucide-move"><path d="M12 2v20"/><path d="m15 19-3 3-3-3"/><path d="m19 9 3 3-3 3"/><path d="M2 12h20"/><path d="m5 9-3 3 3 3"/><path d="m9 5 3-3 3 3"/></svg>`,
+          share: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`,
+          pin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pin-icon lucide-pin"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>`,
+        };
+
+        let { id, menuId, menus, userid, cardname, mtype } =
+          e.currentTarget.dataset;
+          
+        const actions = {
+          edit: () => editCard(id),
+          share: () => shareCard(userid, id),
+          pin: () => pinIt(id),
+          move: () => moveCard(id, cardname, mtype),
+          fav: () => favIt(id),
+          delete: () => deleteCard(id),
+        };
+        let menuItems = menus.split(",").map((i) => i.trim());
+        context_menu.style.display = "block";
+        context_menu.style.visibility = "hidden";
+        context_menu.style.left = "0px";
+        context_menu.style.top = "0px";
+
+        let menuWidth = context_menu.offsetWidth;
+        let menuHeight = context_menu.offsetHeight;
+
+        let x = e.clientX;
+        let y = e.clientY;
+
+        if (x + menuWidth > window.innerWidth)
+          x = window.innerWidth - menuWidth - 10;
+        if (y + menuHeight > window.innerHeight)
+          y = window.innerHeight - menuHeight - 10;
+
+        document.querySelector("body").classList.add("active");
+        context_menu.style.left = x + "px";
+        context_menu.style.top = y + "px";
+        context_menu.style.visibility = "visible";
+        context_menu.style.display = "block";
+
+        menuListEl.innerHTML = "";
+
+        menuItems.forEach((item) => {
+          let li = document.createElement("li");
+          li.innerHTML = `${icons[item]} ${item}`;
+          menuListEl.appendChild(li);
+          if (actions[item]) {
+            li.addEventListener("click", (ev) => {
+              ev.stopPropagation();
+              actions[item]();
+              context_menu.style.display = "none";
+            });
+          }
+        });
       });
     });
-  });
 
 
 
 
 
 
-</script>
+  </script>
 
-<script>
-  // if ("serviceWorker" in navigator) {
-  //     navigator.serviceWorker
-  //       .register("/service-worker.js")
-  //       .then((e) => console.log(`Service Worker registered ${e.installing}`))
-  //       .catch((err) => console.error("SW registration failed:", err));
-  //   }
-</script>
+  <script>
+    // if ("serviceWorker" in navigator) {
+    //     navigator.serviceWorker
+    //       .register("/service-worker.js")
+    //       .then((e) => console.log(`Service Worker registered ${e.installing}`))
+    //       .catch((err) => console.error("SW registration failed:", err));
+    //   }
+  </script>
 
-<script src="/scripts/home.js"></script>
-<!-- <script src="\scripts\shortcut.js"></script> -->
-<script src="\scripts\index.js"></script>
-<script src="\scripts\search.js"></script>
-<script src="\scripts\notificationbar.js"></script>
-<script src="\scripts\ad_search.js"></script>
+  <script src="/scripts/home.js"></script>
+  <!-- <script src="\scripts\shortcut.js"></script> -->
+  <script src="\scripts\index.js"></script>
+  <script src="\scripts\search.js"></script>
+  <script src="\scripts\notificationbar.js"></script>
+  <script src="\scripts\ad_search.js"></script>
+  <script src="\scripts\header.js"></script>
 </body>
 
 </html>

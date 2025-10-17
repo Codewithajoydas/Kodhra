@@ -2,12 +2,30 @@
   main {
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 40px;
+    flex-wrap: wrap;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    color: #111;
+
     .div1,
     .div2 {
-      width: 50%;
-      height: 90vh;
-      margin-inline: 10px;
+      flex: 1;
+      min-width: 400px;
+      max-width: 600px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        border-color: #d1d5db;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+      }
     }
+
     .div1 {
       .title,
       .des,
@@ -15,118 +33,141 @@
       .tags {
         display: flex;
         flex-direction: column;
-        margin-top: 10px;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
-      .title {
-        background: transparent;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(83, 83, 83, 0.493);
-        padding: 10px;
-        border-radius: 10px;
-        input {
-          margin: 10px 0px;
-          padding: 10px 0;
-          background: none;
-          border: none;
-          outline: none;
-          border-bottom: 1px solid rgba(83, 83, 83, 0.493);
+        gap: 8px;
+        margin-top: 16px;
+
+        label {
+          font-size: 14px;
+          font-weight: 600;
+          color: #374151;
         }
       }
-      .des {
-        background: transparent;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 0, 0, 0.4);
-        padding: 10px;
-        border-radius: 10px;
-        textarea {
-          margin: 10px 0px;
-          padding: 10px 0;
-          background: none;
-          border: none;
-          padding: 10px;
-          outline: none;
-          border: 1px solid rgba(0, 0, 0, 0.4);
-          resize: vertical;
-          border-radius: 10px;
-        }
-      }
+
+      .title,
+      .des,
       .lan {
-        background: transparent;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 0, 0, 0.4);
-        padding: 10px;
-        border-radius: 10px;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+
+        input,
+        textarea,
         select {
-          margin: 10px 0px;
-          border-radius: 10px;
-          padding: 10px 0;
-          background: none;
-          border: none;
-          accent-color: rgba(0, 0, 0, 0.4);
+          margin-top: 8px;
+          padding: 10px 12px;
+          border-radius: 6px;
+          border: 1px solid #d1d5db;
+          background-color: #f9fafb;
+          font-size: 15px;
+          color: #111;
           outline: none;
-          border: 1px solid rgba(0, 0, 0, 0.4);
+          transition: all 0.2s ease;
+
+          &:focus {
+            border-color: #2563eb;
+            background-color: #fff;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+          }
+        }
+
+        textarea {
+          resize: vertical;
+          min-height: 100px;
+        }
+
+        select {
+          cursor: pointer;
         }
       }
     }
+
     .div2 {
       .code,
       .tags {
         display: flex;
         flex-direction: column;
-        background: transparent;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 0, 0, 0.4);
-        padding: 10px;
-        border-radius: 10px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+          border-color: #d1d5db;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
         textarea,
         input {
-          margin: 10px 0px;
-          margin-top: 10px;
-          padding: 10px 0;
-          border-radius: 10px;
-          background: none;
-          padding: 10px;
-          border: none;
+          margin-top: 8px;
+          padding: 10px 12px;
+          border-radius: 6px;
+          background-color: #f9fafb;
+          border: 1px solid #d1d5db;
+          font-size: 15px;
+          color: #111;
           outline: none;
-          border: 1px solid rgba(0, 0, 0, 0.4);
-          resize: vertical;
+          transition: all 0.2s ease;
+
+          &:focus {
+            border-color: #2563eb;
+            background-color: #fff;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+          }
         }
       }
+
       button {
-        padding: 20px 50px;
-        margin: 10px;
-        background: #000;
+        width: 100%;
+        padding: 14px;
+        margin-top: 10px;
+        background-color: #111;
         color: white;
-        cursor: pointer;
+        font-weight: 600;
+        font-size: 16px;
         border: none;
-        border-radius: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+
+        &:hover {
+          background-color: #222;
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
       }
     }
+
     .loading {
       position: fixed;
       bottom: 2%;
       right: 2%;
-      padding: 20px 40px;
-      border-radius: 10px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      background: #111827;
+      color: white;
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 10px;
-      svg{
-        animation: loader .7s infinite linear;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+      svg {
+        animation: loader 0.8s infinite linear;
       }
+
       @keyframes loader {
-        0%{
+        0% {
           transform: rotate(0deg);
         }
-        100%{
+        100% {
           transform: rotate(360deg);
         }
-      }
-      span{
-        font-weight: bolder;
-        color: white;
       }
     }
   }

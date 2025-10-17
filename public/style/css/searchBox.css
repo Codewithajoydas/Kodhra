@@ -1,0 +1,28 @@
+main .searchContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+main .searchContainer label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  gap: 0.5rem;
+}
+main .searchContainer label input {
+  padding: 10px;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid var(--accent);
+  outline: none;
+}
+main .searchContainer label input:focus, main .searchContainer label input:hover {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+main .searchContainer button {
+  width: 300px;
+}
+
+/*# sourceMappingURL=searchBox.css.map */

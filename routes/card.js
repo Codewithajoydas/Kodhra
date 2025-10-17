@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const Card = require("../models/Card");
 const Folder = require("../models/folder");
 const mongoose = require("mongoose");
+const findFavPinned = require("../utils/findFavPin.module");
+const User = require("../models/User");
 cardRouter.get("/", async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
@@ -12,11 +14,19 @@ cardRouter.get("/", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 30;
   const skip = (page - 1) * limit;
-  const card = await cardSchema.find({ author: _id }).skip(skip).limit(limit);
+  const cards = await cardSchema
+    .find({ author: _id })
+    .populate("author", "userName userImage")
+    .skip(skip)
+    .limit(limit);
+  let card = await findFavPinned(cards, _id);
+
   const len = await cardSchema.find({ author: _id }).countDocuments();
+  const tags = await cardSchema.distinct("tags");
   const folders = await Folder.find({
     author: decode.checkUser._id,
   });
+
   res.render("allCards", {
     card,
     image: userImage,
@@ -24,8 +34,10 @@ cardRouter.get("/", async (req, res) => {
     userId: _id,
     len,
     folders,
+    tags,
   });
 });
+
 cardRouter.get("/create", async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
@@ -48,11 +60,8 @@ cardRouter.get("/json", async (req, res) => {
     const skip = (page - 1) * limit;
     const decode = jwt.verify(token, process.env.SECRET);
     const { _id, userName, userImage } = decode.checkUser;
-
-    const {search } = req.query;
-
-     let query = { author: _id };
-
+    const { search } = req.query;
+    let query = { author: _id };
     if (search) {
       query = {
         $or: [
@@ -65,10 +74,12 @@ cardRouter.get("/json", async (req, res) => {
         author: _id,
       };
     }
-
-    const card = await cardSchema.find(query).skip(skip).limit(limit);
-
-    // Only render cards that match, or empty if none
+    const cards = await cardSchema
+      .find(query)
+      .populate("author", "userName userImage")
+      .skip(skip)
+      .limit(limit);
+    let card = await findFavPinned(cards, _id);
     res.render("partials/cards", {
       card,
       image: userImage,
@@ -80,8 +91,6 @@ cardRouter.get("/json", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
-
-
 
 cardRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
@@ -134,67 +143,77 @@ cardRouter.put("/:id", async (req, res) => {
 
 cardRouter.put("/pin/:id", async (req, res) => {
   try {
-    const id = req.params.id;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    const cardId = req.params.id;
+    const token = req.cookies.token;
+    const decode = jwt.verify(token, process.env.SECRET);
+    const userId = decode.checkUser._id;
+
+    if (!mongoose.Types.ObjectId.isValid(cardId)) {
       return res.status(400).json({ error: "Invalid Card ID" });
     }
-    const card = await Card.findById(id);
 
-    if (!card) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Card not found" });
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const isPinned = user.pinnedCards.includes(cardId);
+
+    if (isPinned) {
+      user.pinnedCards.pull(cardId); // remove
+    } else {
+      user.pinnedCards.push(cardId); // add
     }
 
-    card.isPinned = !card.isPinned; // toggle
-    await card.save();
+    await user.save();
 
     res.json({
       success: true,
-      message: `Card ${card.isPinned ? "pinned" : "unpinned"} successfully`,
-      card,
+      message: `Card ${isPinned ? "unpinned" : "pinned"} successfully`,
+      pinnedCards: user.pinnedCards,
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Server error", error: err });
+    console.error("Error pinning card:", err.message);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
 cardRouter.put("/fav/:id", async (req, res) => {
   try {
-    const id = req.params.id;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    const cardId = req.params.id;
+    const token = req.cookies.token;
+    const decode = jwt.verify(token, process.env.SECRET);
+    const userId = decode.checkUser._id;
+
+    if (!mongoose.Types.ObjectId.isValid(cardId)) {
       return res.status(400).json({ error: "Invalid Card ID" });
     }
-    const card = await Card.findById(id);
 
-    if (!card) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Card not found" });
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const isFavorite = user.favoriteCards.includes(cardId);
+
+    if (isFavorite) {
+      user.favoriteCards.pull(cardId); // remove
+    } else {
+      user.favoriteCards.push(cardId); // add
     }
 
-    card.isFavorite = !card.isFavorite; // toggle
-    await card.save();
+    await user.save();
 
     res.json({
       success: true,
-      message: `Card ${
-        card.isFavorite ? "favorited" : "unfavorited"
-      } successfully`,
-      card,
+      message: `Card ${isFavorite ? "removed from" : "added to"} favorites`,
+      favoriteCards: user.favoriteCards,
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Server error", error: err });
+    console.error("Error favoriting card:", err.message);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
 cardRouter.post("/delete", (req, res) => {
   const getData = req.body.selected;
-  console.log(getData);
+
   try {
     cardSchema.deleteMany({ _id: { $in: getData } }).then(() => {
       res.json({ message: "Card deleted successfully" });
@@ -208,12 +227,11 @@ cardRouter.post("/download", async (req, res) => {
   try {
     const getSelectedData = req.body.selected;
     const cards = await Card.find({ _id: { $in: getSelectedData } });
-    res.send(JSON.stringify(cards, null, 2)); 
+    res.send(JSON.stringify(cards, null, 2));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to download cards" });
   }
 });
-
 
 module.exports = cardRouter;

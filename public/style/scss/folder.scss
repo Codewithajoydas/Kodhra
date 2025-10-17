@@ -1,0 +1,80 @@
+body[data-theme="dark"] {
+  --bg-color: rgb(20, 17, 17);
+  --secondary-bg-color: #000000b6;
+  --color: #fff;
+  background: var(--bg-color);
+  color: var(--color);
+  --accent: #242424;
+}
+
+body[data-theme="light"] {
+  --bg-color: #ffffff;
+  --secondary-bg-color: #f1f1f1;
+  --color: #000000;
+  --accent: #24242417;
+  background: var(--bg-color);
+  color: var(--color);
+}
+$accent: #2e2e2e21;
+main {
+  position: relative;
+  .foldersDiv {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
+    justify-content: start;
+    .folder {
+      &:hover,
+      &.active,
+      &:focus {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        background: var(--bg-color) !important;
+      }
+      .folder {
+        width: 250px !important;
+        background: var(--bg-color) !important;
+      }
+      border: 1px solid rgba(0, 0, 0, 0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 10px;
+      width: 270px;
+      border-radius: 5px;
+      margin: 10px;
+      .folder_name {
+        font-weight: bolder;
+        font-size: large;
+      }
+    }
+  }
+  .folder_info {
+    position: fixed;
+    top: 70px;
+    right: 0;
+    background: var(--bg-color) !important;
+    backdrop-filter: blur(10px);
+    width: 300px;
+    height: calc(100vh - 70px);
+    z-index: 999999999999;
+    padding: 10px;
+    overflow-y: scroll;
+    box-shadow: -10px -10px 10px rgba(0, 0, 0, 0.13);
+    border-left: 1px solid var(--accent);
+    .edit_name {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--accent);
+      padding-inline: 5px;
+      input {
+        padding: 10px 10px;
+        border: none;
+        width: 100%;
+        outline: none;
+        background: transparent;
+      }
+    }
+  }
+}

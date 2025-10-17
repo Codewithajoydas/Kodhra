@@ -2,7 +2,7 @@ const searchv1 = async (query) => {
   let query1 = encodeURIComponent(query);
   let res = await fetch(`/search?query=${query1}`);
   let data = await res.json();
-  return data.findCards;
+  return data.card;
 };
 
 let results = document.getElementById("results");
@@ -15,7 +15,7 @@ search1.addEventListener("keydown", (e) => {
     e.preventDefault();
     const query = search1.value.trim();
     if (query) {
-      window.location.href = `/search?query=${encodeURIComponent(query)}`;
+      window.location.href = `/search/?query=${encodeURIComponent(query)}`;
     }
   }
 });
@@ -49,7 +49,7 @@ search1.addEventListener(
         data.forEach((card) => {
           const li = document.createElement("li");
           li.innerHTML = `
-          <a href="/card/${card._id}">
+          <a href="/card/${card._id}" tabindex="0">
            <div class="name">
              <svg xmlns="http://www.w3.org/2000/svg" 
                  width="18" height="18" viewBox="0 0 24 24" 
@@ -78,9 +78,9 @@ function applytext(e, t) {
 document.addEventListener("click", (e) => {
   if (searchInput.contains(e.target) && search1.value !== "") {
     results.classList.add("active");
-    document.body.classList.add("active");
   } else {
     results.classList.remove("active");
-    document.body.classList.remove("active");
   }
 });
+
+

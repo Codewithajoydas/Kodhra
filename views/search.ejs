@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pinned | Code Snippet Manager</title>
+    <link rel="stylesheet" href="/style/css/partials/Header.css">
+    <link rel="stylesheet" href="/style/css/ad_search.css">
+    <link rel="stylesheet" href="/style/css/Notification.css">
+    <link rel="stylesheet" href="/style/css/index.css">
+    <link rel="stylesheet" href="/style/css/chip.css">
+    <link rel="stylesheet" href="/style/css/card.css">
+    <link rel="stylesheet" href="/style/css/folder.css">
+    <link rel="stylesheet" href="/style/css/searchBox.css">
+    <script src="/socket.io/socket.io.js"></script>
+
+    <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+    <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    <link rel="preload" href="/gEzG0w1WVY.lottie" as="fetch" crossorigin="anonymous" />
+    <style>
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            background: white;
+            z-index: 100000;
+            top: 0;
+            font-size: clamp(30px, 3vw, 40px);
+
+            font-weight: bolder;
+        }
+
+        .spain {
+            width: 0.5em;
+            height: 0.5em;
+            background: #000000;
+            border-radius: 50%;
+            margin: 5px;
+            animation: spin 0.6s ease-in-out infinite;
+        }
+
+        .spain:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .spain:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .spain:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+
+</head>
+
+<body data-theme="light">
+    <div class="loader">
+        <dotlottie-wc src="gEzG0w1WVY.lottie" style="width: 400px; height: 400px" speed="1" autoplay
+            loop></dotlottie-wc>
+    </div>
+    <div class="content">
+        <%- include("partials/header.ejs")%>
+            <div class="container">
+                <%- include("partials/sidebar.ejs", { navigation: 'search' })%>
+                    <main style="width: 100%;">
+                        <div class="page_title">
+                            Universal Search
+                        </div>
+                        <div class="searchContainer">
+                            <label for="searchBox">
+                                <span>Enter search term</span>
+                                <input type="search" id="searchBox" placeholder="Search...">
+                            </label>
+                            <label for="userId">
+                                <span>Search by user</span>
+                                <input type="search" id="userId" placeholder="User ID">
+                            </label>
+                            <label for="snippetId">
+                                <span>Search by snippet</span>
+                                <input type="search" id="snippetId" placeholder="Snippet ID">
+                            </label>
+                            <label for="language">
+                                <span>Search by language</span>
+                                <input type="search" id="languagea" placeholder="Language">
+                            </label>
+                            <button disabled style="display: block !important;">Search</button>
+                        </div>
+
+                        <div class="searchResults">
+                            <div class="page_title">
+                                Search Results
+                            </div>
+                            <div class="searchResultsContainer" style="width: 100%;">
+                                <h2 style="text-align: center; color: rgb(202, 93, 93);">Search results will appear here
+                                </h2>
+                            </div>
+                            <div id="cards">
+
+                            </div>
+                        </div>
+                    </main>
+                    <div id="context_menu"
+                        style="position: absolute;top: 0;left: 0;display: none;z-index: 1000000;width: 200px;">
+                        <ul id="context_menu_list"></ul>
+                    </div>
+            </div>
+    </div>
+
+    <script>
+        window.onload = () => {
+            let loader = document.querySelector(".loader");
+            loader.style.display = "none";
+        };
+    </script>
+
+    <script>
+        let searchBox = document.getElementById("searchBox");
+        let userId = document.getElementById("userId");
+        let snippetId = document.getElementById("snippetId");
+        let language = document.getElementById("languagea");
+        let searchButton = document.querySelector(".searchContainer button");
+        let searchContainer = document.querySelector(".searchContainer");
+        searchContainer.addEventListener("input", () => {
+            if (searchBox.value?.trim() || userId.value?.trim() || snippetId.value?.trim() || language.value?.trim()) {
+                searchButton.disabled = false;
+
+            } else {
+                searchButton.disabled = true;
+            }
+        })
+        let cards = document.getElementById("cards");
+        searchButton.addEventListener("click", async () => {
+            let searchQuery = searchBox.value?.trim() || userId.value?.trim() || snippetId.value?.trim() || language.value?.trim();
+            let res = await fetch("/search/universal/?q=" + searchQuery);
+            if (res.ok) {
+                let html = await res.text();
+                let searchResultsContainer = document.querySelector(".searchResultsContainer h2");
+                searchResultsContainer.style.display = "none";
+                if (html.trim()) {
+                    cards.innerHTML = html;
+                }
+
+            }
+
+        })
+    </script>
+
+    <script src="/scripts/ad_search.js"></script>
+    <script src="/scripts/Fab.js"></script>
+    <script src="/scripts/Notification.js"></script>
+    <script src="/scripts/searchFunction.js"></script>
+    <script src="/scripts/context_menu.js"></script>
+    <script src="\scripts\isonline.js"></script>
+    <script src="/scripts/header.js"></script>
+
+</body>
+
+</html>

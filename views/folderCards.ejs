@@ -917,7 +917,7 @@
 
         // function toggleMenu(e, id) {
         //   e.stopPropagation();
-        //   console.log(e);
+            //     
         //   document.querySelectorAll(".menu-popup").forEach((m) => {
         //     if (m.id !== "menu-" + id) m.classList.remove("active");
         //   });
@@ -1008,7 +1008,7 @@
 
                 let { id, menuId, menus, userid, cardname, mtype } =
                     e.currentTarget.dataset;
-                console.log(mtype);
+
                 const actions = {
                     edit: () => editCard(id),
                     share: () => shareCard(userid, id),
@@ -1237,7 +1237,7 @@
                 });
 
                 if (!res.ok) {
-                    console.log("Something went wrong!");
+
                     return;
                 }
                 let data = await res.json();
@@ -1263,7 +1263,7 @@
                     selectBtn.textContent = "Select";
 
                     selectBtn.addEventListener("click", () => {
-                        console.log("Selected image:", img.urls.regular);
+
                         const color = colorThief.getPalette(imgEl, 5)
                         console.log(color)
                         const bg_color = `rgb(${color[0][0]}, ${color[0][1]}, ${color[0][2]})`;

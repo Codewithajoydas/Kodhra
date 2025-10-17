@@ -20,8 +20,4 @@
   color: var(--bg-color);
 }
 
-::-webkit-scrollbar {
-  display: none !important;
-}
-
 /*# sourceMappingURL=chip.css.map */

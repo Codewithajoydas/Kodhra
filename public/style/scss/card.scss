@@ -1,3 +1,22 @@
+
+
+body[data-theme="dark"] {
+  --bg-color: rgb(20, 17, 17);
+  --secondary-bg-color: #000000b6;
+  --color: #fff;
+  background: var(--bg-color);
+  color: var(--color);
+  --accent: #242424;
+}
+
+body[data-theme="light"] {
+  --bg-color: #ffffff;
+  --secondary-bg-color: #f1f1f1;
+  --color: #000000;
+  --accent: #24242417;
+  background: var(--bg-color);
+  color: var(--color);
+}
 #cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -6,17 +25,12 @@
     position: relative;
     margin-block: 5px;
     margin-inline: 5px;
-    // box-shadow: 1px 2px 4px var(--accent);
     border: 1px solid rgba(128, 128, 128, 0.322);
-    // background-color: var(--bg-color) !important;
-    background: rgba(0, 0, 0, 0.027);
-    backdrop-filter: blur(100px);
+    background: var(--bg-color) !important;
     position: relative;
     border-radius: 10px;
-    background: transparent;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) !important;
     &:has(.select-card:checked) {
-      // background: rgba(167, 218, 100, 0.384);
       border: 2px solid rgba(2, 2, 2, 0.201);
       backdrop-filter: blur(100px);
       object-fit: contain;
@@ -45,7 +59,7 @@
       }
     }
     .code {
-      background: #00000063;
+      background: var(--secondary-bg-color) !important;
       margin: 10px;
       padding: 10px;
       border-radius: 10px;
@@ -59,7 +73,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      span {
+      .span {
         padding: 5px 20px;
         border-radius: 50px;
         background: rgba(128, 128, 128, 0.103);
@@ -83,6 +97,9 @@
         svg {
           width: 20px;
           cursor: pointer;
+          &.active{
+            fill: var(--color);
+          }
         }
       }
       .open {

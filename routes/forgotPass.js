@@ -28,7 +28,7 @@ fpRouter.post("/verifyOtp", async (req, res) => {
   const { otp } = req.body;
   if (!otp) return res.json({ error: "Please Enter OTP..." });
   const email = req.session.email;
-  console.log(email);
+
   try {
     if (!email) {
       return res.json({
@@ -37,7 +37,7 @@ fpRouter.post("/verifyOtp", async (req, res) => {
     }
     const checkOtp = await client.get(`otp:${email}`);
     if (checkOtp === otp) {
-      await client.del(`otp:${email}`)
+      await client.del(`otp:${email}`);
       res.redirect("/forgotPass/reset");
     } else {
       res.json({

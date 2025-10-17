@@ -36,7 +36,7 @@ signup.post("/", upload.single("userImage"), async (req, res) => {
   const uploadedImage = await cloudinary.uploader.upload(req.file.path, {
     folder: "my_images",
   });
-  console.log(uploadedImage);
+
   const createUser = await User.create({
     userName,
     email,

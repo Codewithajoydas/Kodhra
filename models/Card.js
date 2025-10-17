@@ -49,6 +49,7 @@ const cardSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+cardSchema.index({ title: "text", description: "text", content: "text" });
 
 module.exports = mongoose.model("Card", cardSchema);
 

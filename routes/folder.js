@@ -5,7 +5,7 @@ const user = require("../models/User.js");
 const jwt = require("jsonwebtoken");
 const Folder = require("../models/folder.js");
 const Card = require("../models/Card.js");
-
+const bson = require("bson");
 folderRouter.get("/userid/:userId/folderid/:folderId", async (req, res) => {
   const { userId, folderId } = req.params;
   const findFolder = await Folder.findOne({ author: userId, _id: folderId });
@@ -21,12 +21,32 @@ folderRouter.get("/all", async (req, res) => {
   res.json({ data: folderNames });
 });
 
+folderRouter.post("/create", async (req, res) => {
+  const { folderName } = req.body;
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+  try {
+    const findFolder = await Folder.findOne({ folderName, author: userId });
+    if (findFolder) {
+      return res.status(400).json({ error: "Folder already exists" });
+    } else {
+      const folder = new Folder({ folderName, author: userId });
+      folder.save();
+      res.json({ data: folder });
+    }
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
 folderRouter.get("/", async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
   const userId = decode.checkUser._id;
   const image = decode.checkUser.userImage;
   const folders = await Folder.find({ author: userId });
+  const strg = bson.calculateObjectSize(folders);
   res.render("folder", { folders, image, userId });
 });
 
@@ -47,7 +67,14 @@ folderRouter.get("/:id", async (req, res) => {
     const folders = await Folder.find({ parent: id });
     const getCardId = folder.cards.map((e) => e._id);
     const cards = await Card.find({ _id: { $in: getCardId } });
-    res.render("folderCards", { cards, folders, image, userId, author, app_url:process.env.APP_URL   });
+    res.render("folderCards", {
+      cards,
+      folders,
+      image,
+      userId,
+      author,
+      app_url: process.env.APP_URL,
+    });
   } catch (error) {
     res.json({ "Internal Server Error": error.message });
   }
