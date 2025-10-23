@@ -5,6 +5,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    goodName: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -12,7 +16,6 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
     },
     userImage: {
       type: String,
@@ -20,16 +23,9 @@ const UserSchema = new mongoose.Schema(
     },
     country: {
       type: String,
-      required: true,
     },
     address: {
       type: String,
-      required: true,
-    },
-    mobileNumber: {
-      type: Number,
-      required: true,
-      unique: true,
     },
     status: {
       type: String,
@@ -43,16 +39,22 @@ const UserSchema = new mongoose.Schema(
     },
     providerId: {
       type: String,
-      default: "",
     },
     emailVerified: {
       type: Boolean,
       default: false,
     },
+    follwers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    savedCards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
+    draftCards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
     pinnedCards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
     favoriteCards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
   },
   { timestamps: true }
 );
+
+
+
 
 module.exports = mongoose.model("User", UserSchema);

@@ -10,6 +10,8 @@ searchRouter.get("/", async (req, res) => {
   const { userName, userImage, id } = decode.checkUser;
   res.render("search", { author: userName, image: userImage, userId: id });
 });
+
+
 searchRouter.get("/universal", async (req, res) => {
   const { q } = req.query;
   const tokens = req.cookies.token;
@@ -22,8 +24,9 @@ searchRouter.get("/universal", async (req, res) => {
         { description: { $regex: q, $options: "i" } },
         { content: { $regex: q, $options: "i" } },
       ],
-    }).populate("author", "userName userImage");
+    }).populate("author", "_id userName userImage");
     const card = await findFavPin(cards, _id);
+    console.error(card)
     res.render("partials/cards", {
       card,
       author: userName,
@@ -46,8 +49,9 @@ searchRouter.get("/json", async (req, res) => {
         { title: { $regex: q, $options: "i" } },
         { description: { $regex: q, $options: "i" } },
         { content: { $regex: q, $options: "i" } },
+        { tags: { $regex: q, $options: "i" } },
       ],
-    }).populate("author", "userName userImage");
+    }).populate("author");
     const card = await findFavPin(cards, _id);
     res.json(card);
   } catch (error) {

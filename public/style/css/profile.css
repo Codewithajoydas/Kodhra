@@ -1,90 +1,47 @@
-main {
-  padding: 0 !important;
-}
-main::-webkit-scrollbar {
-  display: none;
-}
-main .hero-banner {
-  width: 100%;
-  height: 200px;
-  background-image: url("https://adamoonline.com/cdn/shop/collections/mens-jackets-958102.jpg?v=1732112187&width=1600");
-  background-size: conver;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  object-fit: contain;
-  border-radius: 0px 0px 10px 10px;
-  position: relative;
-}
-main .hero-banner .user-avatar {
-  position: absolute;
-  right: 10%;
-  bottom: -50px;
-  object-fit: contain;
-  border-radius: 50%;
-  width: 200px;
-  height: 200px;
-  border: 100px solid var(--secondary-bg-color);
+main .top-section {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  align-items: end;
+  margin-inline: 10px;
+}
+main .top-section .profile-image {
   padding: 10px;
-}
-main .hero-banner .user-avatar .img {
-  position: relative;
-}
-main .hero-banner .user-avatar .img:hover .change-avatar {
-  opacity: 1;
-}
-main .hero-banner .user-avatar .img .change-avatar {
-  transition: all 0.5s ease;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 200px;
-  height: 200px;
-  border-radius: 100px;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--accent);
+  border-radius: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  background: linear-gradient(40deg, rgba(62, 55, 201, 0.6901960784), rgba(72, 12, 168, 0.7529411765), rgba(87, 11, 173, 0.7960784314), rgba(247, 37, 132, 0.8078431373));
+  box-shadow: 10px 10px 20px rgba(62, 55, 201, 0.6901960784);
 }
-main .hero-banner .user-avatar .img .change-avatar svg {
-  width: 50px;
-  height: 50px;
-  stroke: var(--bg-color);
-}
-main .hero-banner .user-avatar .img img {
-  border-radius: 100px;
+main .top-section .profile-image img {
   width: 200px;
   height: 200px;
+  border-radius: 50px;
 }
-main .user-info {
+main .top-section .user-info {
   margin: 20px;
 }
-main .user-info .user-name {
-  font-size: 30px;
-  text-transform: uppercase;
+main .top-section .user-info .user-name {
+  font-size: 20px;
+  text-transform: capitalize;
 }
-main .user-info .userfollow {
+main .top-section .user-info .userfollow {
   display: flex;
   align-items: center;
   margin-top: 10px;
 }
-main .user-info .userfollow span {
+main .top-section .user-info .userfollow span {
   border-radius: 5px;
   font-weight: bolder;
   border: 1px solid transparent;
   transition: all 0.5s ease;
 }
-main .user-info .userfollow span:hover {
+main .top-section .user-info .userfollow span:hover {
   cursor: pointer;
   background: var(--secondary-bg-color);
   border: 1px solid var(--accent);
 }
-main .user-info .address {
+main .top-section .user-info .address {
   width: 300px;
   width: 300px;
   background: none;
@@ -94,28 +51,62 @@ main .user-info .address {
   font-size: 15px;
   color: var(--color);
 }
-main .user-info .user-social {
+main .top-section .user-info .btns {
   margin-top: 10px;
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 10px;
 }
-main .user-info .user-social ul {
-  list-style: none;
+main .top-section .user-info .btns .follow {
+  background: var(--color);
+  color: var(--secondary-bg-color);
 }
-main .user-info .user-social ul li a {
+main .top-section .counts {
+  margin: 20px;
+  display: flex;
+  align-items: end;
+  gap: 100px;
+}
+main .top-section .counts .followers,
+main .top-section .counts .following,
+main .top-section .counts .cards {
+  display: flex;
+  flex-direction: column;
+}
+main .top-section .counts .followers span:nth-child(1),
+main .top-section .counts .following span:nth-child(1),
+main .top-section .counts .cards span:nth-child(1) {
+  font-size: 15px;
+}
+main .top-section .counts .followers span:nth-child(2),
+main .top-section .counts .following span:nth-child(2),
+main .top-section .counts .cards span:nth-child(2) {
+  font-size: 45px;
+  font-weight: bolder;
+  color: var(--color);
+}
+main .dashboard {
+  margin-top: 30px;
+}
+main .dashboard .d-header {
+  border-bottom: 1px solid var(--accent);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 15px;
-  transition: 0.5s ease;
+  gap: 10%;
 }
-main .user-info .user-social ul li a:hover {
-  text-decoration: underline;
+main .dashboard .d-header label {
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  margin: 5px;
 }
-main .user-info .user-social ul li a svg {
-  width: 15px;
-  height: 15px;
-  stroke: var(--color);
+main .dashboard .d-header label input {
+  display: none;
+}
+main .dashboard .d-header label:has(input:checked), main .dashboard .d-header label:hover, main .dashboard .d-header label:focus {
+  background: var(--bg-color);
+  border-radius: 10px;
+  border: 1px solid var(--accent);
 }
 
 /*# sourceMappingURL=profile.css.map */

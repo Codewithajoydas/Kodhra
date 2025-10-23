@@ -17,7 +17,7 @@ header .logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   font-weight: bolder;
 }
 header .logo svg {
@@ -26,8 +26,12 @@ header .logo svg {
   height: 24px;
 }
 header .logo img {
-  width: 50px;
-  border-radius: 50%;
+  width: 40px;
+  object-fit: cover;
+  margin-left: 10px;
+}
+header .logo .lg:hover {
+  text-decoration: underline;
 }
 header nav {
   display: flex;

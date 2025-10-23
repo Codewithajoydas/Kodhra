@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 dotenv.config();
 gitroute.get("/", (req, res) => {
-  const redirect_uri = "http://localhost:5000/auth/github/callback";
+  const redirect_uri = "http://localhost:3000/auth/github/callback";
   res.redirect(
     `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirect_uri}&scope=user:email`
   );
@@ -44,17 +44,19 @@ gitroute.get("/callback", async (req, res) => {
     const { name, id, avatar_url, login } = userResponse.data;
     if (!checkUser) {
       const newUser = await User.create({
+        userName: primaryEmail.split("@")[0],
         providerId: id,
-        userName: name ?? login,
+        goodName: name ?? login,
         userImage: avatar_url,
         provider: "github",
         email: primaryEmail,
       });
-      let token = jwt.sign({ newUser }, process.env.SECRET);
+      let token = jwt.sign({ checkUser: newUser }, process.env.SECRET);
       res.cookie("token", token).redirect("/");
     } else {
+      checkUser.userName = primaryEmail.split("@")[0];
       checkUser.providerId = id;
-      checkUser.userName = name ?? login;
+      checkUser.goodName = name ?? login;
       checkUser.userImage = avatar_url;
       checkUser.provider = "github";
 

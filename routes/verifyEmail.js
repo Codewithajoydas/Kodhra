@@ -10,12 +10,11 @@ vRouter.post("/", async (req, res) => {
   const email = req.body.email;
   try {
     const otp = getOtp(6);
-    req.session.email = email;
     await sendMail(email, "Verify Email ID", otp);
     await client.set(`otp:${email}`, otp, {
       EX: 200,
     });
-    res.redirect("emailverification/verify");
+    res.cookie("email", email).redirect("emailverification/verify");
   } catch (error) {
     res.json({ Error: "Something Happend Wrong!" });
   }
@@ -58,7 +57,9 @@ vRouter.post("/verifyOtp", async (req, res) => {
 vRouter.get("/", (req, res) => {
   res.render("emailVerification");
 });
-vRouter.get("/verify", (req, res) => {
+
+vRouter.get("/verify", async (req, res) => {
   res.render("verifyPass");
 });
+
 module.exports = vRouter;

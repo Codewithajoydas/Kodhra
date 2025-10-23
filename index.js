@@ -7,6 +7,8 @@
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
+const { default: mongoose } = require("mongoose");
+
 dotenv.config();
 const router = require("./routes/authentication");
 const profileRouter = require("./routes/profile");
@@ -93,13 +95,13 @@ app.get("/", authMiddleware, async (req, res, next) => {
       author: decode.checkUser._id,
       parent: null,
     });
-    const cards = await Card.find({ author: decode.checkUser._id })
+    const card = await Card.find({ author: decode.checkUser._id })
       .sort({ createdAt: -1 })
-      .limit(50);
+      .limit(10);
 
     res.render("index", {
       image: decode.checkUser?.userImage || decode.user?.avatar,
-      cards,
+      card,
       author: decode.checkUser.userName,
       userId: decode.checkUser._id,
       folders,
@@ -204,6 +206,53 @@ app.get("/democards", async (req, res) => {
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
   res.redirect("/");
+});
+
+app.get("/report", authMiddleware, async (req, res) => {
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const { _id } = decode.checkUser;
+  if (!_id) return res.status(401).json({ error: "Unauthorized" });
+  const totalCards = await Card.countDocuments({ author: _id });
+  const totalFolders = await Folder.countDocuments({ author: _id });
+  const totalTags = (await Card.distinct("tags", { author: _id })).length;
+  let dailyCounts = [];
+  try {
+    dailyCounts = await Card.aggregate([
+      { $match: { author: new mongoose.Types.ObjectId(_id) } },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } },
+    ]);
+  } catch (error) {
+    console.error("Error fetching daily counts:", error);
+  }
+  const languageReport = await Card.aggregate([
+    { $match: { author: new mongoose.Types.ObjectId(_id) } },
+    {
+      $group: {
+        _id: "$category",
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { count: -1 } },
+  ]);
+
+  res.json({
+    totalCards,
+    totalFolders,
+    totalTags,
+    dailyCounts,
+    languageReport,
+  });
 });
 
 app.use((req, res, next) => {

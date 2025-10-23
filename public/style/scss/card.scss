@@ -2,7 +2,7 @@
 
 body[data-theme="dark"] {
   --bg-color: rgb(20, 17, 17);
-  --secondary-bg-color: #000000b6;
+  --secondary-bg-color: #131212;
   --color: #fff;
   background: var(--bg-color);
   color: var(--color);
@@ -17,16 +17,18 @@ body[data-theme="light"] {
   background: var(--bg-color);
   color: var(--color);
 }
+$accent: #2e2e2e21;
 #cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 10px;
   .card {
-    min-width: 300px;
+    min-width: 400px;
     position: relative;
     margin-block: 5px;
     margin-inline: 5px;
     border: 1px solid rgba(128, 128, 128, 0.322);
-    background: var(--bg-color) !important;
+    background-color: var(--bg-color) !important;
     position: relative;
     border-radius: 10px;
     backdrop-filter: blur(10px) !important;

@@ -7,6 +7,7 @@ const sendMail = require("../utils/sendmail.module.js");
 const { getIO } = require("./socket");
 const sendNotification = require("../utils/sendNotification.module");
 router.get("/", (req, res) => {
+  res.clearCookie("token");
   res.render("login");
 });
 

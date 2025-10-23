@@ -11,13 +11,69 @@
   <link rel="stylesheet" href="/style/css/index.css">
   <link rel="stylesheet" href="/style/css/chip.css">
   <link rel="stylesheet" href="/style/css/card.css">
+  <link rel="stylesheet" href="/style/css/toast.css">
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+  <link rel="preload" href="/gEzG0w1WVY.lottie" as="fetch" crossorigin="anonymous" />
   <script src="/socket.io/socket.io.js"></script>
   <!-- External CDN for image color -->
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
+<style>
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    z-index: 100000;
+    top: 0;
+    font-size: clamp(30px, 3vw, 40px);
 
+    font-weight: bolder;
+  }
+
+  .spain {
+    width: 0.5em;
+    height: 0.5em;
+    background: #000000;
+    border-radius: 50%;
+    margin: 5px;
+    animation: spin 0.6s ease-in-out infinite;
+  }
+
+  .spain:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .spain:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .spain:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
+  }
+</style>
 </head>
 
 <body data-theme="light">
+  <div class="loader">
+    <dotlottie-wc src="gEzG0w1WVY.lottie" style="width: 400px; height: 400px" speed="1" autoplay loop></dotlottie-wc>
+  </div>
+
   <div class="move_folder">
     <div class="header_title" style="font-weight: bolder">
       <div class="span">Move " folderName"</div>
@@ -86,8 +142,8 @@
       </div>
       <div class="container">
         <%- include("partials/sidebar", { navigation: 'card' }) %>
-          <main>
-            <div class="card-container">
+          <main style="height: calc(100vh - 70px);">
+            <div class="card-container" style="margin-bottom: 50px;">
               <div class="all-cards">
                 <span class="page_title">Browse by Tags</span>
                 <div class="chips">
@@ -135,13 +191,13 @@
                 </div>
               </div>
               <div id="sentinelLoader"
-                style=" text-align: center; width: 100%; display: flex; justify-content: center; align-items: center;">
+                style=" text-align: center; width: 100%; display: flex; justify-content: center; align-items: center; padding-block: 20px;">
                 <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif" alt="Loading..."
                   style="width: 10%;">
               </div>
             </div>
             <!-- <%- include("partials/fab")%> -->
-              <div id="context_menu" style="
+            <div id="context_menu" style="
                       position: absolute;
                       top: 0;
                       left: 0;
@@ -149,8 +205,21 @@
                       z-index: 1000000;
                       width: 200px;
                     ">
-                <ul id="context_menu_list"></ul>
-              </div>
+              <ul id="context_menu_list"></ul>
+            </div>
+
+
+            <div class="networkInfo" style="display: none;">
+              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-info-icon lucide-info">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 16v-4" />
+                  <path d="M12 8h.01" />
+                </svg></span>
+
+              <span id="networkInfo"></span>
+            </div>
           </main>
       </div>
   </div>
@@ -181,6 +250,7 @@
             if (html.trim()) {
               cardsContainer.insertAdjacentHTML("beforeend", html);
             } else {
+              sentinelA.innerHTML = `<p style="color:red">No more cards...</p>`
               observerA.unobserve(sentinelA);
             }
           }
@@ -193,212 +263,39 @@
     observerA.observe(sentinelA);
 
   </script>
-  <script>
-    const container = document.querySelector('.chips');
 
-    container.addEventListener('wheel', function (e) {
-      e.preventDefault();
-      container.scrollBy({
-        left: e.deltaY,
-        behavior: "smooth"
-      });
-    });
-
-
-    let isDragging = false;
-    let startX;
-    let scrollStart;
-
-    container.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      startX = e.pageX;
-      scrollStart = container.scrollLeft;
-    });
-
-    container.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    container.addEventListener('mouseleave', () => {
-      isDragging = false;
-    });
-
-    container.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      let moveX = e.pageX - startX;
-      container.scrollLeft = scrollStart - moveX;
-    });
-
-
-</script>
   <script src="/scripts/header.js"></script>
 
-  <script>
-    function contextMenu() {
-      let context_menu = document.getElementById("context_menu");
-      let menuListEl = document.getElementById("context_menu_list");
 
-      document.querySelectorAll(".menu_top").forEach((card) => {
-        card.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const icons = {
-            delete: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
-            edit: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-pen-icon lucide-folder-pen"><path d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5"/><path d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>`,
-            move: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-icon lucide-move"><path d="M12 2v20"/><path d="m15 19-3 3-3-3"/><path d="m19 9 3 3-3 3"/><path d="M2 12h20"/><path d="m5 9-3 3 3 3"/><path d="m9 5 3-3 3 3"/></svg>`,
-            share: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`,
-            pin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pin-icon lucide-pin"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>`,
-          };
-
-          let { id, menuId, menus, userid, cardname, mtype } =
-            e.currentTarget.dataset;
-
-          const actions = {
-            edit: () => editCard(id),
-            share: () => shareCard(userid, id),
-            pin: () => pinIt(id),
-            move: () => moveCard(id, cardname, mtype),
-            fav: () => favIt(id),
-            delete: () => deleteCard(id),
-          };
-          let menuItems = menus.split(",").map((i) => i.trim());
-          context_menu.style.display = "block";
-          context_menu.style.visibility = "hidden";
-          context_menu.style.left = "0px";
-          context_menu.style.top = "0px";
-
-          let menuWidth = context_menu.offsetWidth;
-          let menuHeight = context_menu.offsetHeight;
-
-          let x = e.clientX;
-          let y = e.clientY;
-
-          if (x + menuWidth > window.innerWidth)
-            x = window.innerWidth - menuWidth - 10;
-          if (y + menuHeight > window.innerHeight)
-            y = window.innerHeight - menuHeight - 10;
-
-          document.querySelector("body").classList.add("active");
-          context_menu.style.left = x + "px";
-          context_menu.style.top = y + "px";
-          context_menu.style.visibility = "visible";
-          context_menu.style.display = "block";
-
-          menuListEl.innerHTML = "";
-
-          menuItems.forEach((item) => {
-            let li = document.createElement("li");
-            li.innerHTML = `${icons[item]} ${item}`;
-            menuListEl.appendChild(li);
-            if (actions[item]) {
-              li.addEventListener("click", (ev) => {
-                ev.stopPropagation();
-                actions[item]();
-                context_menu.style.display = "none";
-              });
-            }
-          });
-        });
-      });
-
-      let move_folder = document.querySelector(".move_folder");
-      let getFoldername = document.querySelector(".header_title .span");
-      let folderId;
-      let cardId;
-      let movetype;
-      let folder = document
-        .querySelectorAll("input[name='moveFolder']")
-        .forEach((fl) => {
-          fl.addEventListener("change", (e) => {
-            folderId = e.target.value;
-          });
-        });
-
-      async function moveCard(id, cardName, mtype) {
-        cardId = id;
-        movetype = mtype;
-        getFoldername.textContent = `Move \"${cardName}\" :`;
-        move_folder.style.display = "block";
-        move_folder.style.visibility = "visible";
-      }
-
-
-
-      async function moveIt() {
-        const selected = document.querySelector(
-          "input[name='moveFolder']:checked"
-        );
-        if (!selected) {
-          showToast("⚠️ Please select a folder before moving.", "error");
-          return;
-        }
-
-        const folderId = selected.value;
-
-        try {
-          const res = await fetch(`moveit/${movetype}/${folderId}/${cardId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          });
-
-          if (!res.ok) {
-            let errorMsg = "Move failed. Please try again.";
-            try {
-              const data = await res.json();
-              if (data?.error) errorMsg = data.error;
-            } catch { }
-            showToast(`🚨 ${errorMsg}`, "error");
-          } else {
-            showToast(`🎉 Successfully moved ${movetype}!`, "success");
-          }
-        } catch (err) {
-          console.error("Error in moveIt:", err);
-          showToast(
-            "🚨 Unexpected error. Please check your connection.",
-            "error"
-          );
-        }
-      }
-
-      document.addEventListener("click", () => {
-        document.querySelector("body").classList.remove("active");
-        context_menu.style.display = "none";
-
-      });
-
-    }
-  </script>
   <script>
   </script>
 
   <script>
-      const containera = document.querySelector("#cards");
+    const containera = document.querySelector("#cards");
     containera.addEventListener("change", () => {
       updateSelectedCards();
-      contextMenu();
     });
 
-      const onDocumentChange = (mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-          if (mutation.type === 'childList') {
-            contextMenu()
-          } else if (mutation.type === 'attributes') {
-          }
+    const onDocumentChange = (mutationsList, observer) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+        } else if (mutation.type === 'attributes') {
         }
-      };
-
-      const config = {
-        attributes: true,
-        childList: true,
-        subtree: true
-      };
-
-      const observers = new MutationObserver(onDocumentChange);
-
-      if (containera) {
-        observers.observe(containera, config);
       }
-      let selectedCardsSet = new Set();
+    };
+
+    const config = {
+      attributes: true,
+      childList: true,
+      subtree: true
+    };
+
+    const observers = new MutationObserver(onDocumentChange);
+
+    if (containera) {
+      observers.observe(containera, config);
+    }
+    let selectedCardsSet = new Set();
 
 
 
@@ -423,7 +320,6 @@
       }
     }
     updateSelectedCards();
-    contextMenu()
 
 
     function selectAllButton() {
@@ -437,18 +333,18 @@
     async function deleteCards() {
       if (selectedCardsSet.size > 0) {
         try {
-         const res = await fetch("/card/delete", {
-           method: "POST",
-           headers: {
-             "Content-Type": "application/json"
-           },
-           body: JSON.stringify({
-             selected: [...selectedCardsSet]
-           })
-         });
-         if (res.ok) {
-           location.reload();
-         }
+          const res = await fetch("/card/delete", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              selected: [...selectedCardsSet]
+            })
+          });
+          if (res.ok) {
+            location.reload();
+          }
         } catch (error) {
           console.error("Error deleting cards:", error);
           showToast("🚨 Unexpected error. Please check your connection.", "error");
@@ -498,203 +394,8 @@
 
   </script>
 
-  <script>
-    const mf = document.querySelector(".move_folder");
-    let isDragginga = false;
-    let offsetX, offsetY;
-    mf.addEventListener("mousedown", (e) => {
-      e.preventDefault();
-      isDragginga = true;
-      offsetX = e.clientX - mf.offsetLeft;
-      offsetY = e.clientY - mf.offsetTop;
-      mf.style.position = "absolute";
-      mf.style.zIndex = 1000;
-    });
-    document.addEventListener("mousemove", (e) => {
-      if (!isDragginga) return;
-      mf.style.left = e.clientX - offsetX + "px";
-      mf.style.top = e.clientY - offsetY + "px";
-    });
-    document.addEventListener("mouseup", () => {
-      isDragginga = false;
-    });
-  </script>
-  <script>
-    let context_menu = document.getElementById("context_menu");
-    let menuListEl = document.getElementById("context_menu_list");
-
-      document.querySelectorAll(".menu_top").forEach((card) => {
-        card.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const icons = {
-            delete: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
-            edit: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-pen-icon lucide-folder-pen"><path d="M2 11.5V5a2 2 0 0 1 2-2h3.9c.7 0 1.3.3 1.7.9l.8 1.2c.4.6 1 .9 1.7.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-9.5"/><path d="M11.378 13.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>`,
-            move: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-icon lucide-move"><path d="M12 2v20"/><path d="m15 19-3 3-3-3"/><path d="m19 9 3 3-3 3"/><path d="M2 12h20"/><path d="m5 9-3 3 3 3"/><path d="m9 5 3-3 3 3"/></svg>`,
-            share: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`,
-            pin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pin-icon lucide-pin"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>`,
-          };
-
-        let { id, menuId, menus, userid, cardname, mtype } =
-          e.currentTarget.dataset;
-
-        const actions = {
-          edit: () => editCard(id),
-          share: () => shareCard(userid, id),
-          pin: () => pinIt(id),
-          move: () => moveCard(id, cardname, mtype),
-          fav: () => favIt(id),
-          delete: () => deleteCard(id),
-        };
-        let menuItems = menus.split(",").map((i) => i.trim());
-        context_menu.style.display = "block";
-        context_menu.style.visibility = "hidden";
-        context_menu.style.left = "0px";
-        context_menu.style.top = "0px";
-
-        let menuWidth = context_menu.offsetWidth;
-        let menuHeight = context_menu.offsetHeight;
-
-        let x = e.clientX;
-        let y = e.clientY;
-
-        if (x + menuWidth > window.innerWidth)
-          x = window.innerWidth - menuWidth - 10;
-        if (y + menuHeight > window.innerHeight)
-          y = window.innerHeight - menuHeight - 10;
-
-        document.querySelector("body").classList.add("active");
-        context_menu.style.left = x + "px";
-        context_menu.style.top = y + "px";
-        context_menu.style.visibility = "visible";
-        context_menu.style.display = "block";
-
-        menuListEl.innerHTML = "";
-
-        menuItems.forEach((item) => {
-          let li = document.createElement("li");
-          li.innerHTML = `${icons[item]} ${item}`;
-          menuListEl.appendChild(li);
-          if (actions[item]) {
-            li.addEventListener("click", (ev) => {
-              ev.stopPropagation();
-              actions[item]();
-              context_menu.style.display = "none";
-            });
-          }
-        });
-      });
-    });
-
-      let move_folder = document.querySelector(".move_folder");
-      let getFoldername = document.querySelector(".header_title .span");
-      let folderId;
-      let cardId;
-      let movetype;
-      let folder = document
-        .querySelectorAll("input[name='moveFolder']")
-        .forEach((fl) => {
-          fl.addEventListener("change", (e) => {
-            folderId = e.target.value;
-          });
-        });
-    async function deleteCard(id) {
-      const res = await fetch(`/card/${id}`, {
-        method: "delete"
-      });
-      if (res.ok) {
-        showToast("Card Deleted Successfully", "success");
-        location.reload();
-      } else {
-        showToast("🚨 Unexpected error. Please check your connection.", "error");
-      }
-    }
-      async function moveCard(id, cardName, mtype) {
-        cardId = id;
-        movetype = mtype;
-        getFoldername.textContent = `Move \"${cardName}\" :`;
-        move_folder.style.display = "block";
-        move_folder.style.visibility = "visible";
-      }
-
-      const toast = document.querySelector(".toast");
-      const toastCloseBtn = document.querySelector(".toast .close");
-      const toastMessage = document.querySelector(".toast-message");
-
-      let toastTimeoutId = null;
-
-      function showToast(message, type = "success", duration = 5000) {
-        if (toastTimeoutId) clearTimeout(toastTimeoutId);
-        toastMessage.textContent = message;
-        toast.dataset.type = type;
-        toast.style.display = "block";
-        toastTimeoutId = setTimeout(() => {
-          toast.style.display = "none";
-          toastTimeoutId = null;
-        }, duration);
-      }
-      toastCloseBtn.addEventListener("click", () => {
-        toast.style.display = "none";
-        if (toastTimeoutId) {
-          clearTimeout(toastTimeoutId);
-          toastTimeoutId = null;
-        }
-      });
-
-      async function moveIt() {
-        const selected = document.querySelector(
-          "input[name='moveFolder']:checked"
-        );
-        if (!selected) {
-          showToast("⚠️ Please select a folder before moving.", "error");
-          return;
-        }
-
-      const folderId = selected.value;
-
-      try {
-        const res = await fetch(`/moveit/${movetype}/${folderId}/${cardId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
-
-        if (!res.ok) {
-          let errorMsg = "Move failed. Please try again.";
-          try {
-            const data = await res.json();
-            if (data?.error) errorMsg = data.error;
-          } catch { }
-          showToast(`🚨 ${errorMsg}`, "error");
-        } else {
-          showToast(`🎉 Successfully moved ${movetype}!`, "success");
-        }
-      } catch (err) {
-        showToast(
-          "🚨 Unexpected error. Please check your connection.",
-          "error"
-        );
-      }
-    }
-
-      document.addEventListener("click", () => {
-        document.querySelector("body").classList.remove("active");
-        move_folder.style.display = "none";
-        context_menu.style.display = "none";
-        move_folder.querySelectorAll("input").forEach((inp) => {
-          if (inp.type === "radio" || inp.type === "checkbox") {
-            inp.checked = false;
-            folderId = null;
-          } else {
-            inp.value = "";
-          }
-        });
-      });
-      move_folder.addEventListener("click", (e) => {
-        e.stopPropagation();
-      });
 
 
-</script>
   <script>
     async function pinIt(btn, id) {
       try {
@@ -739,7 +440,12 @@
     }
 
   </script>
-
+  <script>
+    window.onload = () => {
+      let loader = document.querySelector(".loader");
+      loader.style.display = "none";
+    }
+  </script>
 </body>
 
 </html>

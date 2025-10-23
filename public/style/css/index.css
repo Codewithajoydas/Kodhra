@@ -3,8 +3,8 @@
   src: url("../../assets/Mulish/Mulish-VariableFont_wght.ttf") format("truetype");
 }
 body[data-theme=dark] {
-  --bg-color: rgb(20, 17, 17);
-  --secondary-bg-color: #161616;
+  --bg-color: rgb(0, 0, 0);
+  --secondary-bg-color: #131212;
   --color: #fff;
   background: var(--bg-color);
   color: var(--color);
@@ -23,6 +23,11 @@ body[data-theme=light] {
 .loader {
   background-color: var(--bg-color) !important;
   z-index: 10000000000000000000000000000000000000000000000000000000000000000000 !important;
+}
+
+.card {
+  background: var(--bg-color);
+  color: var(--color);
 }
 
 * {
@@ -170,7 +175,7 @@ body[data-theme=light] {
   background: rgba(255, 255, 255, 0.0352941176);
   width: 400px;
   height: auto;
-  z-index: 1;
+  z-index: 1000000000000000000000000;
   backdrop-filter: blur(10px);
   border-radius: 10px;
   border: 1px solid var(--accent);
@@ -400,126 +405,6 @@ body[data-theme=light] {
 * body .container main .recentSnippets #no-data a:hover {
   background: #000;
   color: white;
-}
-* body .container main #cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  width: 100%;
-}
-* body .container main #cards .card {
-  break-inside: avoid;
-  position: relative;
-  margin-block: 5px;
-  margin-inline: 5px;
-  position: relative;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.014);
-  backdrop-filter: blur(10px);
-}
-* body .container main #cards .card .header-info {
-  padding: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-inline: 10px;
-}
-* body .container main #cards .card .header-info .menu_top {
-  cursor: pointer;
-}
-* body .container main #cards .card .header-info .menu_top svg {
-  width: 20px;
-}
-* body .container main #cards .card .header-info .title h3 {
-  font-size: 25px;
-}
-* body .container main #cards .card .header-info .title div .author,
-* body .container main #cards .card .header-info .title .lan,
-* body .container main #cards .card .header-info .title .time {
-  font-size: smaller;
-}
-* body .container main #cards .card .code {
-  background: rgba(0, 0, 0, 0.3882352941);
-  margin: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: "Courier New", Courier, monospace !important;
-}
-* body .container main #cards .card .tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px;
-  margin: 10px;
-}
-* body .container main #cards .card .tags span {
-  padding: 5px 20px;
-  border-radius: 50px;
-  background: rgba(128, 128, 128, 0.103);
-  border: 0.5px solid gray;
-  font-size: small;
-  cursor: pointer;
-}
-* body .container main #cards .card .options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px;
-}
-* body .container main #cards .card .options .sub_menu {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-}
-* body .container main #cards .card .options .sub_menu svg {
-  width: 20px;
-  cursor: pointer;
-}
-* body .container main #cards .card .options .open {
-  background: var(--accent);
-  padding: 10px 30px;
-  border-radius: 10px;
-}
-* body .container main #cards .card .options .open a {
-  text-decoration: none;
-  background: none !important;
-}
-* body .container main #cards .card .menu {
-  display: flex;
-  position: absolute;
-  top: 50px;
-  right: 10px;
-  flex-direction: column;
-  break-inside: avoid;
-  gap: 10px;
-  background: var(--accent);
-  border: 1px solid gray;
-  width: 200px;
-  backdrop-filter: blur(100px) !important;
-  padding: 10px;
-  border-radius: 10px;
-  transition: all 0.5s;
-  opacity: 1;
-}
-* body .container main #cards .card .menu.active {
-  display: none;
-  opacity: 0;
-}
-* body .container main #cards .card .menu li {
-  text-decoration: none;
-  list-style: none;
-  border: 1px solid rgb(255, 255, 255);
-  color: var(--color);
-  padding: 10px 20px;
-  transition: all 0.5s;
-  border-radius: 10px;
-}
-* body .container main #cards .card .menu li:hover {
-  background: rgba(0, 0, 0, 0.2196078431);
 }
 
 header,
@@ -978,7 +863,7 @@ button:hover {
 }
 
 .CodeMirror {
-  background-color: rgba(0, 0, 0, 0.062) !important;
+  background-color: var(--accent) !important;
   backdrop-filter: blur(10px);
   border-radius: 10px;
 }
@@ -995,7 +880,7 @@ button:hover {
 
 .page_title {
   display: inline-block;
-  color: var(--color) !important;
+  color: var(--color);
   font-size: small;
   mix-blend-mode: multiply;
   margin: 10px;
@@ -1074,6 +959,97 @@ main > * {
   color: var(--color);
   outline: none;
   text-transform: capitalize;
+}
+
+.greeting {
+  margin-inline: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.greeting img {
+  width: 50px;
+  height: 50px;
+  border-radius: 100px;
+}
+
+.count {
+  margin-block: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.count .totalSnippet,
+.count .totalFolder,
+.count .totalTag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  background: var(--bg-color);
+}
+.count .totalSnippet .img,
+.count .totalFolder .img,
+.count .totalTag .img {
+  background: var(--secondary-bg-color);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.count .totalSnippet .img img,
+.count .totalFolder .img img,
+.count .totalTag .img img {
+  width: 50px;
+}
+.count > div {
+  min-width: 20%;
+  height: 100px;
+  padding: 10px;
+  background: var(--bg-color);
+  border-radius: 10px;
+}
+.count > div > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 15px !important;
+}
+.count > div > div #totalSnippet,
+.count > div > div #totalFolder,
+.count > div > div #totalTag {
+  font-size: 30px;
+}
+
+.reports {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+.reports .dailywisechart {
+  width: 100% !important;
+  height: auto;
+  background: var(--bg-color);
+  padding: 10px;
+  border-radius: 10px;
+}
+.reports .dailywisechart #dailyChart {
+  background: var(--bg-color);
+  border-radius: 10px;
+  height: 250px !important;
+  width: 100% !important;
+}
+.reports #languageChart {
+  width: 30% !important;
+  height: 300px !important;
+  background: var(--bg-color);
+  border-radius: 10px;
+  padding: 10px;
 }
 
 /*# sourceMappingURL=index.css.map */

@@ -1,80 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>verify password</title>
-    <style>
-      .loader {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100%;
-        position: fixed;
-        background: white;
-        z-index: 100000;
-        top: 0;
-        font-size: clamp(30px, 3vw, 40px);
 
-        font-weight: bolder;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify OTP | Code Snippet Manager</title>
+  <link rel="stylesheet" href="/style/css/login.css" />
+  <link rel="stylesheet" href="/style/css/toast.css" />
+  <!-- <link rel="stylesheet" href="/style/css/index.css"> -->
+  <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+  <style>
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+      position: fixed;
+      background: white;
+      z-index: 100000;
+      top: 0;
+      font-size: clamp(30px, 3vw, 40px);
+
+      font-weight: bolder;
+    }
+
+    .spain {
+      width: 0.5em;
+      height: 0.5em;
+      background: #000000;
+      border-radius: 50%;
+      margin: 5px;
+      animation: spin 0.6s ease-in-out infinite;
+    }
+
+    .spain:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .spain:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .spain:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: translateY(0);
       }
 
-      .spain {
-        width: 0.5em;
-        height: 0.5em;
-        background: #000000;
-        border-radius: 50%;
-        margin: 5px;
-        animation: spin 0.6s ease-in-out infinite;
+      50% {
+        transform: translateY(-10px);
       }
 
-      .spain:nth-child(1) {
-        animation-delay: 0.1s;
+      100% {
+        transform: translateY(0);
       }
+    }
 
-      .spain:nth-child(2) {
-        animation-delay: 0.2s;
-      }
+    #otp-label {
+      display: flex;
+      flex-direction: column;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+    }
 
-      .spain:nth-child(3) {
-        animation-delay: 0.3s;
-      }
+    #otp {
+      width: 80%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      outline: none;
+    }
 
-      @keyframes spin {
-        0% {
-          transform: translateY(0);
-        }
+    .varify-btn {
+      background: black;
+      color: white;
+      width: 80%;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
 
-        50% {
-          transform: translateY(-10px);
-        }
+<body data-theme="light">
+  <div class="t-parent">
+    <div class="toast"></div>
+    <span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-circle-x-icon lucide-circle-x">
+        <circle cx="12" cy="12" r="10" />
+        <path d="m15 9-6 6" />
+        <path d="m9 9 6 6" />
+      </svg>
+    </span>
+  </div>
 
-        100% {
-          transform: translateY(0);
-        }
-      }
-    </style>
-  </head>
-
-  <body data-theme="light">
-    <div class="loader">
-      <div style="display: flex; justify-content: center; align-items: end">
-        Loading
-        <div class="spain"></div>
-        <div class="spain"></div>
-        <div class="spain"></div>
-      </div>
+  <div class="loader">
+    <div style="display: flex; justify-content: center; align-items: end">
+      Loading
+      <div class="spain"></div>
+      <div class="spain"></div>
+      <div class="spain"></div>
     </div>
-    <form action="verifyOtp" method="post">
-      <input type="text" placeholder="enter your otp" name="otp" />
-      <input type="submit" value="submit" />
-    </form>
-  </body>
+  </div>
+  <div class="container">
+    <!-- Section for Inputs -->
+    <div class="div1" style="display: flex;flex-direction: column;justify-content: start; align-items: center;">
+      <img src="/assets/logo.png" alt="" width="70px" />
+      <h1>Verify OTP</h1>
+      <p style="margin: 0;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;text-align: center;">Enter the 6-digit OTP sent to your registered mobile or email.</p>
+      <br><br>
+      <label for="otp" id="otp-label">
+        <b>Enter Your OTP </b>
+        <input type="text" placeholder="XXXXXX" id="otp" style="margin-top:10px">
+        <span
+          style="font-size: smaller; float: right; text-align: right !important;padding-block: 10px; color: rgb(65, 65, 233);display: flex;justify-content: end;align-items: center;gap: 5px;"
+          class="otp-r"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+          </svg> Resend OTP</span>
+      </label>
+
+      <button onclick="varify()" class="varify-btn" style="width: 85%;">Verify OTP</button>
+    </div>
+    <!-- Section for Inputs End-->
+
+    <!-- ============================= X =============================-->
+
+    <!-- Section for images -->
+    <div class="div2">
+      <img src="/assets/login-banner.jpg" alt="" width="100%" />
+      <span class="credit">Photo by <strong>Shubham Dhage</strong> on
+        <a href="https://unsplash.com/photos/field-of-daisies-against-a-soft-blue-sky-cFuC4zUW8Lw">Unsplash</a></span>
+    </div>
+    <!-- Section for images End -->
+  </div>
   <script>
+
+    function showToast(msg, type, duration = 10000) {
+      let toast = document.querySelector(".toast");
+      toast.textContent = msg;
+      toast.classList.remove("success", "error");
+      toast.classList.add(type);
+      toast.style.display = "block";
+      let timeout = setTimeout(() => {
+        toast.style.display = "none";
+        clearTimeout(timeout);
+      }, duration);
+    }
     window.onload = () => {
       let loader = document.querySelector(".loader");
       loader.style.display = "none";
-    };
+      let resend = document.querySelector(".otp-r");
+      let email = localStorage.getItem("email");
+      let time = localStorage.getItem("time") ?? 60;
+      resend.innerHTML = `Resend OTP ${time}s`;
+      let interval = setInterval(async () => {
+        time--;
+        resend.textContent = `Resend OTP ${time}s`;
+        if (time === 0) {
+          clearInterval(interval);
+          resend.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+          </svg> Resend OTP`;
+          resend.onclick = () => resendOtp();
+          resend.style.cursor = "pointer";
+        }
+      }, 1000);
+    }
+    async function resendOtp() {
+      showToast("⏱️ Please wait Email is being sent ", "success", 3000);
+      let email = localStorage.getItem("email");
+      let res = await fetch("/forgotPass/resend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      let data = await res.json();
+      if (res.ok) {
+        showToast("🎉 Email Sent Successfully", "success", 3000);
+      }
+    }
+    async function varify() {
+      let otp = document.querySelector("#otp").value;
+      let res = await fetch("/forgotPass/verifyOtp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ otp }),
+      })
+      let data = await res.json();
+      if (res.ok) {
+        window.location.href = "/forgotPass/reset";
+      } else {
+        showToast(`🚨 ${data.error}`, "error");
+      }
+    }
+
   </script>
+</body>
+
 </html>

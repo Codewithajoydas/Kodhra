@@ -194,4 +194,12 @@ folderRouter.put("/movecard/:id", async (req, res) => {
   }
 });
 
+folderRouter.get("/all", async (req, res) => {
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+  const folder = await Folder.find({ author: userId });
+  let folderNames = folder.map((folder) => folder.folderName);
+  res.json({ folderNames });
+});
 module.exports = folderRouter;

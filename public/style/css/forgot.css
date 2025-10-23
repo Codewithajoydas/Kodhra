@@ -31,6 +31,7 @@ body .container header .logo img {
 }
 body .container .inputs {
   width: 30%;
+  min-width: 400px;
   height: 100vh;
   display: flex;
   flex-direction: column;

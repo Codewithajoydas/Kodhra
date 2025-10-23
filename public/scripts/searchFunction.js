@@ -1,10 +1,9 @@
 const searchv1 = async (query) => {
   let query1 = encodeURIComponent(query);
-  let res = await fetch(`/search?query=${query1}`);
+  let res = await fetch(`/search/json?q=${query1}`);
   let data = await res.json();
-  return data.card;
+  return data;
 };
-
 let results = document.getElementById("results");
 let list = document.getElementById("results-list");
 let searchInput = document.querySelector(".searchResult");
@@ -15,7 +14,7 @@ search1.addEventListener("keydown", (e) => {
     e.preventDefault();
     const query = search1.value.trim();
     if (query) {
-      window.location.href = `/search/?query=${encodeURIComponent(query)}`;
+      window.location.href = `/search/json?q=${encodeURIComponent(query)}`;
     }
   }
 });
@@ -70,6 +69,8 @@ search1.addEventListener(
     });
   }, 500)
 );
+
+
 function applytext(e, t) {
   e.preventDefault();
   e.stopPropagation();

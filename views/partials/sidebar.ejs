@@ -1,3 +1,6 @@
+<style>
+    
+</style>
 <aside>
     <ul>
         <span>Main Pages</span>
@@ -226,16 +229,38 @@
         </div>
         <label for="folderName" id="createFolder">
             <span>Folder Name:</span>
-            <input type="text" name="folderName" id="folderName" placeholder="Folder Name" value="New Folder">
+            <input type="text" name="folderName" id="folderName" placeholder="Folder Name" autocomplete="off"
+                list="folderNames">
+            <datalist id="folderNames">
+
+            </datalist>
         </label>
         <button id="createFolderButton">Create</button>
         <button id="close" style="margin-left:10px; border: none; background: red; width: 40%;">Close</button>
         <span class="info" style="display: inline-block; text-align: center; margin-block:10px; width: 100%;"></span>
     </div>
+    <div class="toast"></div>
 </aside>
 
 <script>
-    let close = document.getElementById("close").addEventListener("click", (e) => {
+    function showToast(msg, type, duration = 10000) {
+        let toast = document.querySelector(".toast");
+        toast.textContent = msg;
+        toast.classList.remove("success", "error");
+        toast.classList.add(type);
+        toast.style.display = "block";
+        let timeout = setTimeout(() => {
+            toast.style.display = "none";
+            clearTimeout(timeout);
+        }, duration);
+    }
+
+    async function folderNames() {
+        let res = await fetch("/folder/all");
+        let data = await res.json();
+        return data.data;
+    }
+     document.getElementById("close").addEventListener("click", (e) => {
         const createFolderModal = document.getElementById('create-folder-modal');
         createFolderModal.classList.remove("active")
     })
@@ -257,6 +282,16 @@
     createFolderButton.addEventListener("click", async (e) => {
         e.preventDefault();
         const folderName = document.getElementById("folderName").value;
+        if (!folderName) { 
+            console.info("Please enter a folder name")
+            showToast("Please enter a folder name", "error", 10000)
+            return;
+         };
+         let allfolderNames  = await folderNames();
+         if(allfolderNames.includes(folderName)){
+            showToast("Folder name already exists", "error", 10000)
+            return;
+         }
         const info = document.querySelector(".info");
         try {
             let res = await fetch("/folder/create", {
@@ -267,16 +302,17 @@
                 body: JSON.stringify({ folderName: folderName })
             })
             if (res.ok) {
-                info.innerHTML = "<span style='color:green'>Folder Created Successfully</span>"
+                showToast("Folder Created Successfully", "success", 3000)
                 createFolderModal.classList.remove("active")
             } else {
                 let data = await res.json();
-                info.innerHTML = `<span style='color:red'>Folder Creation Failed</span>`
+                showToast("Error in creating folder", "error", 3000)
             }
         } catch (error) {
             console.log(error.message)
-            info.textContent = error.message
+            showToast("Internal Server Error", "error", 3000)
         }
     });
+
 
 </script>

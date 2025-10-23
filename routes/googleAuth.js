@@ -43,9 +43,11 @@ googleAuthrouter.get("/callback", async (req, res) => {
     const userInfo = JSON.parse(Buffer.from(base64, "base64").toString("utf8"));
     const { sub, email, name, picture } = userInfo;
     const user = await User.findOne({ email });
+    const userName = user.email.split("@")[0];
     if (!user) {
       let newUser = await User.create({
-        userName: name,
+        userName,
+        goodName: name,
         email,
         providerId: sub,
         userImage: picture,
@@ -56,7 +58,8 @@ googleAuthrouter.get("/callback", async (req, res) => {
       return;
     } else {
       await user.updateOne({
-        userName: name,
+        userName,
+        goodName: name,
         providerId: sub,
         userImage: picture,
         provider: "google",

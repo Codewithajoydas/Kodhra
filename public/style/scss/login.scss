@@ -14,11 +14,11 @@ body {
   }
   .container {
     display: flex;
-    justify-content: center;
     align-items: center;
     width: 100%;
     .div1 {
       width: 30%;
+      min-width: 400px;
       img {
         margin: 5% 0 0 0;
         border-radius: 10px;
@@ -154,3 +154,4 @@ body {
     }
   }
 }
+

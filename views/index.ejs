@@ -5,23 +5,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home | Code Snippet Manager</title>
-  <link rel="stylesheet" href="/style/css/index.css" />
-  <!-- <link rel="stylesheet" href="/style/css/notificationBar.css"> -->
-  <link rel="stylesheet" href="/style/css/Notification.css">
   <link rel="stylesheet" href="/style/css/partials/Header.css">
   <link rel="stylesheet" href="/style/css/ad_search.css">
+  <link rel="stylesheet" href="/style/css/Notification.css">
+  <link rel="stylesheet" href="/style/css/chip.css">
   <link rel="stylesheet" href="/style/css/card.css">
+  <link rel="stylesheet" href="/style/css/toast.css">
+  <link rel="stylesheet" href="/style/css/index.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
-  <script src="https://unpkg.com/@barba/core"></script>
   <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
   <link rel="preload" href="/gEzG0w1WVY.lottie" as="fetch" crossorigin="anonymous" />
   <link rel="manifest" href="manifest.json" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
-  <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
   <style>
@@ -76,7 +73,7 @@
   </style>
 </head>
 
-<body data-theme="light">
+<body>
   <div class="loader">
     <dotlottie-wc src="gEzG0w1WVY.lottie" style="width: 400px; height: 400px" speed="1" autoplay loop></dotlottie-wc>
   </div>
@@ -84,358 +81,81 @@
     <%- include("partials/header", {appVersion}) %>
       <div class="container">
         <%- include("partials/sidebar", { navigation: 'home' }) %>
-          <main >
-            <div style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              width: 100%;
-            ">
-              <h1 id="greeting" style="
-                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-                  sans-serif;
-                margin: 10px;
-              "></h1>
-              <br />
-              <span id="wifi-speed" title="Wifi Speed" style="
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                font-weight: 500;
-              ">Checking speed...</span>
+          <main>
+            <div class="page_title">
+              Overview Section
+            </div>
+            <div class="greeting">
+              <img src="https://cdn3d.iconscout.com/3d/premium/thumb/motivation-3d-icon-png-download-11696859.png"
+                alt="">
+              <span>
+                <h1>Hello, <span id="username" style="text-transform: capitalize;">
+                    <%= author %>
+                  </span></h1>
+                <span class="motivation"></span>
+              </span>
+            </div>
+            <div class="count">
+              <div class="totalSnippet" onclick="window.location.assign('/card')">
+                <div class="img">
+                  <img src="https://cdn3d.iconscout.com/3d/premium/thumb/code-snippet-3d-icon-png-download-9483695.png"
+                    alt="" width="60px">
+                </div>
+                <div>
+                  <span id="totalSnippet">0</span>
+                  <span>Total Snippets</span>
+                </div>
+              </div>
+              <div class="totalFolder" onclick="window.location.assign('/folder')">
+                <div class="img">
+                  <img src="https://cdn3d.iconscout.com/3d/premium/thumb/folder-3d-icon-png-download-5727518.png"
+                    alt="">
+                </div>
+                <div>
+                  <span id="totalFolder">0</span>
+                  <span>Total Folders</span>
+                </div>
+              </div>
+              <div class="totalTag" onclick="window.location.assign('/tags')">
+                <div class="img">
+                  <img
+                    src="https://static.vecteezy.com/system/resources/previews/010/988/613/non_2x/3d-isolated-price-tag-icon-free-png.png"
+                    alt="">
+                </div>
+                <div>
+                  <span id="totalTag">0</span>
+                  <span>Total Tags</span>
+                </div>
+              </div>
+              <div class="totalTag">
+                <div class="img">
+                  <img src="https://cdn3d.iconscout.com/3d/premium/thumb/document-3d-icon-png-download-8779273.png"
+                    alt="">
+                </div>
+                <div>
+                  <span id="totalTag">0</span>
+                  <span>Total Drafts</span>
+                </div>
+              </div>
+            </div>
+            <div class="reports">
+              <div class="dailywisechart">
+                <div style="display: flex;justify-content: space-between;align-items: center;">
+                  <span style="font-weight: bolder; padding-bottom: 10px;">Daily Wise Report</span>
+                  <input type="month" style="border: 1px solid var(--accent);padding: 10px;border-radius: 10px;"
+                    id="datePicker">
+                </div>
+                <canvas id="dailyChart"></canvas>
+              </div>
+              <canvas id="languageChart"></canvas>
             </div>
 
-            <% if (folders.length !==0) { %>
-              <div class="title1" style="margin-block:10px"> Recently Created Folders</div>
-              <% } %>
-                <div class="folders">
-                  <% folders.forEach((e)=>{%>
-                    <div class="folder" draggable="true" ondblclick="window.open('/folder/<%= e._id %>', '_blank')"
-                      data-id="<%= e._id %>" data-menus="delete, pin, rename, move, share" data-userId="<%= userId %>"
-                      data-mtype="folder" data-contextMenu="true" data-cardname="<%= e.folderName %>">
-                      <div style="
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  gap: 10px;
-                ">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-folder-icon lucide-folder">
-                          <path
-                            d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
-                        </svg>
-                        <span class="name" style="line-height: 14px">
-                          <div style="
-                      display: flex;
-                      justify-content: center;
-                      align-items: center;
-                      gap: 10px;
-                      display: block;
-                      width: 120px;
-                      white-space: nowrap;
-                      overflow: hidden;
-                      text-overflow: ellipsis;
-                    " title="<%= e.folderName %>">
-                            <%= e.folderName %>
-                          </div>
-                        </span>
-                      </div>
-                      <div class="menu" onclick="sharebtn('<%=userId %>', '<%=e._id%>')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-share2-icon lucide-share-2">
-                          <circle cx="18" cy="5" r="3" />
-                          <circle cx="6" cy="12" r="3" />
-                          <circle cx="18" cy="19" r="3" />
-                          <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />
-                          <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
-                        </svg>
-                      </div>
-                    </div>
-                    <%})%>
-                </div>
-                <div class="recentSnippets">
-                  <% if (cards.length !==0) { %>
-                    <div class="title1">
-                      <span>Recently Created Snippets</span>
-                      <div class="grid-list">
-                        <input type="radio" name="grid" id="grid" checked="checked" value="grid" />
-                        <label for="grid">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-grid-icon lucide-grid">
-                            <rect x="3" y="3" width="7" height="7" rx="1" ry="1" />
-                            <rect x="14" y="3" width="7" height="7" rx="1" ry="1" />
-                            <rect x="14" y="14" width="7" height="7" rx="1" ry="1" />
-                            <rect x="3" y="14" width="7" height="7" rx="1" ry="1" />
-                          </svg>
-                        </label>
-                        <input type="radio" name="grid" id="list" value="list" />
-                        <label for="list">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-list-icon lucide-list">
-                            <path d="M3 5h.01" />
-                            <path d="M3 12h.01" />
-                            <path d="M3 19h.01" />
-                            <path d="M8 5h13" />
-                            <path d="M8 12h13" />
-                            <path d="M8 19h13" />
-                          </svg>
-                        </label>
-                      </div>
-                    </div>
-                    <% } %>
-                      <% if (cards.length===0) { %>
-                        <div id="no-data" style="
-                text-align: center;
-                width: 100%;
-                font-size: 20px;
-                margin-top: 20px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                gap: 20px;
-              ">
-                          <img src="/assets/Stickers/nothing.png" alt="" />
-                          <a href="/card/create" style="
-                  border: 1px solid var(--accent);
-                  padding: 5px 10px;
-                  border-radius: 5px;
-                ">+ Create Snippet</a>
-                          No Snippets found. Create a new Snippet to get started!
-                        </div>
-                        <% } %>
-
-                          <div id="cards">
-                            <% cards.forEach(e=> { %>
-                              <div class="card" id="card-<%= e._id%>" draggable="true"
-                                ondblclick="window.open('/card/<%= e._id %>', '_blank')" data-id="<%= e._id %>"
-                                data-menus="delete, pin, edit, move, share" data-userId="<%= userId %>"
-                                data-contextMenu="true" data-cardName="<%= e.title %>" data-mtype="card">
-                                <div class="header-info">
-                                  <div style="display: flex; align-items: center; gap: 10px">
-                                    <img src="<%= image %>" alt="" width="40" height="40" style="border-radius: 50%" />
-                                    <div class="title">
-                                      <h3>
-                                        <span style="display: block;" class="sd">
-                                          <%= e.title %>
-                                        </span>
-                                        <span style="font-size: 13px !important; display: block;">
-                                          <%= e.description %>
-                                        </span>
-                                      </h3>
-                                      <div>
-                                        <span class="author"><strong>
-                                            <%= author%>
-                                          </strong></span>, <span class="lan">
-                                          <%= e.category%>
-                                        </span>,
-                                        <span class="time">
-                                          <%= new Date(e.metadata.createdAt).toLocaleString() %>
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="menu_top" data-tooltip="More options" data-menu-id="<%= e._id %>"
-                                    data-id="<%= e._id %>" data-menus="delete, pin, edit, move, share"
-                                    data-userId="<%= userId %>" data-cardName="<%= e.title %>" data-mtype="card">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
-                                      <circle cx="12" cy="12" r="1" />
-                                      <circle cx="12" cy="5" r="1" />
-                                      <circle cx="12" cy="19" r="1" />
-                                    </svg>
-                                  </div>
-                                </div>
-                                <div class="code" title="<%= e.content%>">
-                                  <code> <%= e.content %> </code>
-                                </div>
-                                <div class="tags">
-                                  <% e.tags.forEach(tag=> { %>
-                                    <span>
-                                      <%= tag %>
-                                    </span>
-                                    <% }) %>
-                                </div>
-
-                                <div class="options">
-                                  <div class="open">
-                                    <a href="/card/<%= e.id%>" style="
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        gap: 10px;
-                        background: var(--accent);
-                      ">
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="lucide lucide-badge-info-icon lucide-badge-info">
-                                        <path
-                                          d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                                        <line x1="12" x2="12" y1="16" y2="12" />
-                                        <line x1="12" x2="12.01" y1="8" y2="8" />
-                                      </svg>
-                                      View Details
-                                    </a>
-                                  </div>
-                                  <div class="sub_menu">
-                                    <div class="pin" onclick="pinIt('<%= e._id %>')" data-id="<%= e._id%>">
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="<%= e.isPinned ? 'black' : 'none' %>" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="lucide lucide-pin-icon lucide-pin">
-                                        <path d="M12 17v5" />
-                                        <path
-                                          d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
-                                      </svg>
-                                    </div>
-
-                                    <div class="fav" onclick="favIt('<%= e._id %>')" data-id="<%= e._id%>">
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="<%= e.isFavorite? 'black' : 'none' %>" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="lucide lucide-star-icon lucide-star">
-                                        <path
-                                          d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
-                                      </svg>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- <div class="menu active" id="menu-<%= e._id %>" data-id="<%= e._id %>">
-                              <li onclick="editCard('<%= e._id %>')">Edit</li>
-                              <li onclick="deleteCard('<%= e._id %>')">Delete</li>
-                              <li onclick="pinIt('<%= e._id %>')">Pin</li>
-                            </div> -->
-                              </div>
-                              <% }) %>
-                          </div>
-                          <div id="showMore"
-                            style="font-size: large; font-weight: bolder; text-align: center; width: 100%; margin: 10px; display: flex;justify-content: center;">
-                            <a href="/card"
-                              style="text-decoration: none; text-align: center; display: flex; justify-content: center;align-items: center;width: 100%; ">Show
-                              more cards...</a>
-                          </div>
-                          <br>
-                          <table id="tableView" style="display: none">
-                            <thead>
-                              <tr>
-                                <th>Title</th>
-                                <th>Description</th>
-                                <th>Language</th>
-                                <th>Author</th>
-                                <th>Created At</th>
-                              </tr>
-                              <% cards.forEach((card, i)=> { %>
-                                <tr ondblclick="window.open('/card/<%= card._id %>', '_blank')"
-                                  data-id="<%= card._id %>" data-menus="delete, pin, edit, move, share"
-                                  data-userId="<%= userId %>" data-contextMenu="true" data-cardName="<%= card.title %>"
-                                  data-mtype="card">
-                                  <td><a href="card/<%=card._id%>">
-                                      <%= card.title %>
-                                    </a></td>
-                                  <td>
-                                    <%= card.description %>
-                                  </td>
-                                  <td>
-                                    <%= card.category %>
-                                  </td>
-                                  <td>
-                                    <%= author %>
-                                  </td>
-                                  <td><%- new Date(card.createdAt).toDateString() %></td>
-                                </tr>
-                                <% }) %>
-                            </thead>
-                          </table>
-                </div>
-                <!-- <%- include("partials/fab")%> -->
-
-                  <div class="images">
-                    <div
-                      style="display: flex;justify-content: space-between;align-items: center; margin-block: 20px; margin-inline:10px;">
-                      <h2>Pick an image</h2> <button onclick="removeImage()">Remove Image</button>
-                    </div>
-                    <div style="display: flex; justify-content: center;align-items: center;">
-                      <label for="search2" id="sa">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-search-icon lucide-search">
-                          <path d="m21 21-4.34-4.34" />
-                          <circle cx="11" cy="11" r="8" />
-                        </svg>
-                        <input type="search" id="search2" placeholder="Search images..." autocomplete="off">
-                      </label>
-                    </div>
-                    <div id="Suggestions">
-                      <span class="bg-topic">Abstract</span>
-                      <span class="bg-topic">Nature</span>
-                      <span class="bg-topic">Animals</span>
-                      <span class="bg-topic">People</span>
-                      <span class="bg-topic">Technology</span>
-                      <span class="bg-topic">Places</span>
-                      <span class="bg-topic">Objects</span>
-                      <span class="bg-topic">Architecture</span>
-                      <span class="bg-topic">Food</span>
-                      <span class="bg-topic">Music</span>
-                      <span class="bg-topic">Art</span>
-                      <span class="bg-topic">Travel</span>
-                      <span class="bg-topic">Science</span>
-                      <span class="bg-topic">Business</span>
-                      <span class="bg-topic">Health</span>
-                      <span class="bg-topic">Education</span>
-                      <span class="bg-topic">Entertainment</span>
-                      <span class="bg-topic">News</span>
-                      <span class="bg-topic">Sports</span>
-                      <span class="bg-topic">Politics</span>
-                      <span class="bg-topic">Religion</span>
-                      <span class="bg-topic">Coding</span>
-                      <span class="bg-topic">Design</span>
-                      <span class="bg-topic">Development</span>
-                      <span class="bg-topic">Programming</span>
-                      <span class="bg-topic">Web Development</span>
-                      <span class="bg-topic">Mobile Development</span>
-                      <span class="bg-topic">Game Development</span>
-                      <span class="bg-topic">Software Development</span>
-                      <span class="bg-topic">Data Science</span>
-                      <span class="bg-topic">Machine Learning</span>
-                      <span class="bg-topic">Artificial Intelligence</span>
-                      <span class="bg-topic">India</span>
-                      <span class="bg-topic">USA</span>
-                      <span class="bg-topic">UK</span>
-                      <span class="bg-topic">Australia</span>
-                      <span class="bg-topic">Canada</span>
-                      <span class="bg-topic">France</span>
-                      <span class="bg-topic">Germany</span>
-                      <span class="bg-topic">Italy</span>
-                      <span class="bg-topic">Spain</span>
-                      <span class="bg-topic">Japan</span>
-                      <span class="bg-topic">Korea</span>
-                      <span class="bg-topic">China</span>
-                      <span class="bg-topic">Taiwan</span>
-                      <span class="bg-topic">Hindu</span>
-                      <span class="bg-topic">Muslim</span>
-                      <span class="bg-topic">Christian</span>
-                      <span class="bg-topic">Islam</span>
-                      <span class="bg-topic">Sikh</span>
-                      <span class="bg-topic">Black</span>
-                      <span class="bg-topic">White</span>
-                      <span class="bg-topic">Asian</span>
-                      <span class="bg-topic">Latin</span>
-                      <span class="bg-topic">Indian</span>
-                      <span class="bg-topic">Others</span>
-
-                    </div>
-                    <ul id="images_data">
-                    </ul>
-                    <div class="sentinel" style="margin:10px; text-align: center;">
-                      <span>
-                        Loading images...
-                      </span>
-                    </div>
-                  </div>
+            <div class="page_title">
+              Recent Snippets
+            </div>
+            <div id="cards" style="overflow-y: scroll !important;">
+              <%- include("partials/cards") %>
+            </div>
           </main>
       </div>
   </div>
@@ -451,140 +171,6 @@
     <ul id="context_menu_list"></ul>
   </div>
 
-  <div class="move_folder">
-    <div class="header_title" style="font-weight: bolder">
-      <div class="span">Move " folderName"</div>
-    </div>
-    <hr />
-    <div class="folders_name">
-      <ul>
-        <% if (folders.length===0) { %>
-          <span style="margin: 10px; color: red">No folder found</span>
-          <% } %>
-            <% folders.forEach((folder, i)=> { %>
-              <li>
-                <label>
-                  <input type="radio" name="moveFolder" value="<%= folder._id %>" id="moveFolder<%= i %>" />
-                  <div class="folder">
-                    <div class="folder_icon">
-                      <!-- SVG folder icon -->
-                    </div>
-                    <div class="folder_name" style="
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 10px;
-                  ">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#EDCE44"
-                        stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-folder-icon lucide-folder">
-                        <path
-                          d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
-                      </svg>
-                      <span style="
-                      display: block;
-                      width: 120px;
-                      white-space: nowrap;
-                      overflow: hidden;
-                      text-overflow: ellipsis;
-                    " title="<%= folder.folderName %>">
-                        <%= folder.folderName %>
-                      </span>
-                    </div>
-                  </div>
-                </label>
-              </li>
-              <% }) %>
-      </ul>
-      <button class="move_btn" onclick="moveIt()" <%=folders.length===0 ? "disabled" : "" %> > Move </button>
-    </div>
-  </div>
-  <div class="toast" data-type="success">
-    <div class="toast-content">
-      <span class="toast-message"> </span>
-      <div class="close">
-        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-          class="lucide lucide-octagon-x-icon lucide-octagon-x">
-          <path d="m15 9-6 6" />
-          <path
-            d="M2.586 16.726A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2h6.624a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586z" />
-          <path d="m9 9 6 6" />
-        </svg>
-      </div>
-    </div>
-  </div>
-
-  <div class="notification-bar">
-    <h3>Notifications</h3>
-    <ul class="notification-lists">
-    </ul>
-  </div>
-
-  <div class="advanced-search">
-    <h3>Advanced Search</h3>
-    <div class="feildList">
-      <label for="title">
-        <span>Title:</span>
-        <input type="text" name="title" id="title" placeholder="Title" />
-      </label>
-      <label for="code"><span>Code:</span> <input type="text" name="code" id="code" placeholder="Code"></label>
-      <label for="description">
-        <span>Description:</span>
-        <textarea type="text" name="description" id="description" placeholder="Description" rows="5"></textarea>
-      </label>
-      <label for="language">
-        <span>Language:</span>
-        <input type="text" name="language" id="language" placeholder="Language" list="languages" />
-        <datalist id="languages">
-          <option value="JavaScript">JavaScript</option>
-          <option value="CSS">CSS</option>
-          <option value="HTML">HTML</option>
-          <option value="C">C</option>
-          <option value="C++">C++</option>
-          <option value="C#">C#</option>
-          <option value="Java">Java</option>
-          <option value="TypeScript">TypeScript</option>
-          <option value="Python">Python</option>
-          <option value="Ruby">Ruby</option>
-          <option value="PHP">PHP</option>
-          <option value="Go">Go</option>
-          <option value="Rust">Rust</option>
-          <option value="Swift">Swift</option>
-          <option value="Kotlin">Kotlin</option>
-          <option value="Objective-C">Objective-C</option>
-          <option value="Scala">Scala</option>
-          <option value="Perl">Perl</option>
-          <option value="R">R</option>
-          <option value="Dart">Dart</option>
-          <option value="Haskell">Haskell</option>
-          <option value="Lua">Lua</option>
-          <option value="Elixir">Elixir</option>
-          <option value="Clojure">Clojure</option>
-          <option value="Shell">Shell (Bash)</option>
-          <option value="PowerShell">PowerShell</option>
-          <option value="SQL">SQL</option>
-          <option value="GraphQL">GraphQL</option>
-          <option value="MATLAB">MATLAB</option>
-          <option value="Assembly">Assembly</option>
-          <option value="Fortran">Fortran</option>
-          <option value="COBOL">COBOL</option>
-          <option value="Erlang">Erlang</option>
-          <option value="VB.NET">VB.NET</option>
-        </datalist>
-      </label>
-      <label for="folder">
-        <span>Folder:</span>
-        <input type="text" name="folder" id="folder" placeholder="Folder" />
-      </label>
-      <label for="date">
-        <span>Date:</span>
-        <input type="date" name="date" id="date" placeholder="Date" />
-      </label>
-    </div>
-    <button id="searchBtn" onclick="advance_search()">Search</button>
-
-  </div>
 
   <div class="networkInfo" style="display: none;">
     <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -599,570 +185,153 @@
   </div>
 
 
+
   <script>
-    document.querySelectorAll(".card").forEach((card) => {
-      card.addEventListener("dragstart", (e) => {
-        e.dataTransfer.setData("id", e.target.dataset.id);
-        e.dataTransfer.setData("mtype", e.target.dataset.mtype);
-
-        const ghost = document.createElement("div");
-        ghost.textContent = card.querySelector(".title h3 .sd").textContent;
-        ghost.style.padding = "8px 12px";
-        ghost.style.background = "lightyellow";
-        ghost.style.border = "1px solid gray";
-        ghost.style.borderRadius = "6px";
-        ghost.style.fontWeight = "bold";
-        ghost.style.position = "absolute";
-        ghost.style.top = "-9999px";
-        document.body.appendChild(ghost);
-
-        e.dataTransfer.setDragImage(ghost, 0, 20);
-        setTimeout(() => ghost.remove(), 0);
-      });
-    });
-
-    document.querySelectorAll(".folder").forEach((folder) => {
-      folder.addEventListener("dragstart", (e) => {
-        e.dataTransfer.setData("id", e.target.dataset.id);
-        e.dataTransfer.setData("mtype", e.target.dataset.mtype);
-
-        const ghost = document.createElement("div");
-        ghost.textContent = folder.querySelector(".title h3 .sd").textContent;
-        ghost.style.padding = "8px 12px";
-        ghost.style.background = "lightyellow";
-        ghost.style.border = "1px solid gray";
-        ghost.style.borderRadius = "6px";
-        ghost.style.fontWeight = "bold";
-        ghost.style.position = "absolute";
-        ghost.style.top = "-9999px";
-        document.body.appendChild(ghost);
-
-        e.dataTransfer.setDragImage(ghost, 0, 20);
-        setTimeout(() => ghost.remove(), 0);
-      });
-
-      folder.addEventListener("dragover", (e) => {
-        e.preventDefault();
-      });
-
-      folder.addEventListener("drop", async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const draggedId = e.dataTransfer.getData("id");
-        const mtype = e.dataTransfer.getData("mtype");
-        const folderId = folder.dataset.id;
-
-
-
-        const res = await fetch(
-          `<%=app_url%>/moveit/${mtype}/${folderId}/${draggedId}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
-
-        if (!res.ok) {
-          showToast(`Move failed: ${res.statusText}`, "error");
-        } else {
-          showToast(`Successfully moved ${mtype}!`, "success");
-        }
-      });
-    });
-  </script>
-  <script>
-    let socket = io();
-    socket.emit("register", "<%= userId %>");
-
-    socket.on("notification", (data) => {
-      createNotification([data]);
-      updateUnreadCount(data.unreadCount);
-    });
-
-    async function getNotifications() {
-      const res = await fetch("/notifications");
+    const datePicker = document.getElementById("datePicker");
+    const motivation = document.querySelector(".motivation");
+    window.onload = async () => {
+      const res = await fetch("/motivational.json");
       const data = await res.json();
-      createNotification(data);
-    }
-    getNotifications();
-
-    async function getUnreadCount() {
-      const res = await fetch("/notifications/unread-count");
-      const data = await res.json();
-      updateUnreadCount(data.count);
-    }
-    getUnreadCount();
-
-    function updateUnreadCount(count) {
-      const numberEl = document.querySelector(".number");
-      numberEl.textContent = count > 0 ? count : "";
-      numberEl.style.display = count > 0 ? "block" : "none";
-    }
-
-    function createNotification(data) {
-      const notificationDiv = document.querySelector(".notification-lists");
-      data.forEach((e) => {
-        const li = document.createElement("li");
-        li.className = "notification-list";
-        li.innerHTML = `
-      <div class="n-title">
-       <span> ${e.title}</span>
-        <span style="font-size: 10px">${new Date(e.createdAt).toLocaleString()}</span>
-      </div>
-      <p class="n-description">${e.message}</p>
-      <a href="${e.link || '#'}" class="action-button">Take action <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg></a>
-    `;
-        notificationDiv.prepend(li);
-      });
-    }
-
-    let notification = document.querySelector(".notification");
-    notification.addEventListener("click", async () => {
-      let res = await fetch("/notifications/mark-read", {
-        method: "POST",
-      });
-      let data = await res.json();
-      updateUnreadCount(0);
-
-    })
-
-  </script>
-  <script>
-    document.querySelectorAll("input[name='grid']").forEach((input) => {
-      input.addEventListener("change", () => {
-        if (input.value === "grid") {
-          localStorage.setItem("view", "grid");
-          document.getElementById("cards").style.display = "grid";
-          document.getElementById("tableView").style.display = "none";
-          document.getElementById("showMore").style.display = "flex"
-        } else if (input.value === "list") {
-          localStorage.setItem("view", "list");
-          document.getElementById("tableView").style.display = "table";
-          document.getElementById("cards").style.display = "none";
-          document.getElementById("showMore").style.display = "none"
-        }
-      });
-    });
-    window.addEventListener("DOMContentLoaded", () => {
-      let view = localStorage.getItem("view");
-      if (view === "grid") {
-        document.getElementById("grid").checked = true;
-        document.getElementById("cards").style.display = "grid";
-        document.getElementById("tableView").style.display = "none";
-        document.getElementById("showMore").style.display = "flex"
-
-      } else if (view === "list") {
-        document.getElementById("list").checked = true;
-        document.getElementById("tableView").style.display = "table";
-        document.getElementById("cards").style.display = "none";
-        document.getElementById("showMore").style.display = "none"
-
-      }
-    });
-  </script>
-  <script>
-    let results = document.getElementById("results");
-    let list = document.getElementById("results-list");
-    let searchInput = document.querySelector(".searchResult");
-    let search1 = document.getElementById("search");
-    function debounce(fn, delay) {
-      let timer;
-      return function (...args) {
-        clearTimeout(timer);
-        timer = setTimeout(() => fn.apply(this, args), delay);
-      };
-    }
-
-    search1.addEventListener(
-      "input",
-      debounce(() => {
-        results.classList.add("active");
-        list.textContent = "Loading Suggestions...";
-        const query = search1.value.trim();
-        if (!query) {
-          results.classList.remove("active");
-          list.innerHTML = "";
-          return;
-        }
-        searchv1(query).then((data) => {
-          list.innerHTML = "";
-          if (!Array.isArray(data) || data.length === 0) {
-            list.innerHTML = "<span style='color:red'>No Cards Found</span>";
-            return;
-          } else {
-            data.forEach((card) => {
-              const li = document.createElement("li");
-              li.innerHTML = `
-          <a href="/card/${card._id}">
-           <div class="name">
-             <svg xmlns="http://www.w3.org/2000/svg" 
-                 width="18" height="18" viewBox="0 0 24 24" 
-                 fill="none" stroke="currentColor" 
-                 stroke-width="2" stroke-linecap="round" 
-                 stroke-linejoin="round" 
-                 class="lucide lucide-search-icon lucide-search">
-              <path d="m21 21-4.34-4.34"/>
-              <circle cx="11" cy="11" r="8"/>
-            </svg> 
-            ${card.title}
-            </div>
-            <div class="arrow" onclick="applytext(event,'${card.title}')"><svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-left-icon lucide-arrow-up-left"><path d="M7 17V7h10"/><path d="M17 17 7 7"/></svg></div>
-          </a>`;
-              list.appendChild(li);
-            });
-          }
-        });
-      }, 500)
-    );
-    function applytext(e, t) {
-      e.preventDefault();
-      e.stopPropagation();
-      search1.value = t;
-
-    }
-    document.addEventListener("click", (e) => {
-      if (searchInput.contains(e.target) && search1.value !== "") {
-        results.classList.add("active");
-      } else {
-        results.classList.remove("active");
-      }
-    });
-
-
-
-    async function testInternetSpeed() {
-      const speedDiv = document.getElementById("wifi-speed");
-      // Tiny file (about 43 bytes)
-      const fileUrl =
-        "https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js";
-      const fileSizeInBytes = 87236;
-
-      const startTime = performance.now();
-      try {
-        const response = await fetch(fileUrl + "?_=" + Date.now(), {
-          cache: "no-store",
-        });
-        await response.arrayBuffer();
-        const endTime = performance.now();
-
-        const duration = (endTime - startTime) / 1000; // seconds
-        const bitsLoaded = fileSizeInBytes * 8;
-        let speedMbps = (bitsLoaded / duration / 1024 / 1024).toFixed(2);
-        speedMbps = speedMbps.toString().padStart(5, "0");
-        speedDiv.textContent = `${speedMbps} Mbps`;
-      } catch (err) {
-        speedDiv.textContent = "Speed test failed";
-        console.error("Speed Test Error:", err);
-      }
-    }
-
-    testInternetSpeed();
-    setInterval(testInternetSpeed, 1500); // test every 1.5s
-
-    function getGreeting(author) {
-      const hour = new Date().getHours();
-      const name = author.split(" ")[0];
-      let greet = "";
-
-      if (hour < 12) {
-        greet = "Good Morning";
-      } else if (hour < 18) {
-        greet = "Good Afternoon";
-      } else if (hour < 21) {
-        greet = "Good Evening";
-      } else {
-        greet = "Good Night";
-      }
-      return `${greet}, ${name}`;
-    }
-
-    document.getElementById("greeting").innerText =
-      getGreeting("<%= author %>");
-
-    function setActiveStyle(element, active) {
-      if (active) {
-        element.style.fill = "black";
-        element.style.transition = "0.3s ease";
-      } else {
-        element.style.fill = "none";
-      }
-    }
-
-    async function pinIt(id) {
-      const pinIcon = document.querySelector(`.pin[data-id="${id}"] svg`);
-      try {
-        const res = await fetch(`/card/pin/${id}`, {
-          method: "PUT",
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          setActiveStyle(pinIcon, data.card.isPinned);
-        }
-      } catch (err) {
-        console.error("Error pinning:", err);
-      }
-    }
-
-    async function favIt(id) {
-      const favIcon = document.querySelector(`.fav[data-id="${id}"] svg`);
-      try {
-        const res = await fetch(`/card/fav/${id}`, {
-          method: "PUT",
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          setActiveStyle(favIcon, data.card.isFavorite);
-        }
-      } catch (err) {
-        console.error("Error favoriting:", err);
-      }
-    }
-
-    // document.querySelectorAll(".menu_top").forEach((el) => {
-    //   el.addEventListener("click", (e) => {
-    //     e.stopPropagation();
-    //     toggleMenu(e, el.dataset.id);
-    //   });
-    // });
-
-    // function toggleMenu(e, id) {
-    //   e.stopPropagation();
-      //     
-    //   document.querySelectorAll(".menu-popup").forEach((m) => {
-    //     if (m.id !== "menu-" + id) m.classList.remove("active");
-    //   });
-
-    //   let menu = document.getElementById("menu-" + id);
-    //   menu.classList.toggle("active");
-    // }
-
-    async function deleteCard(id) {
-      try {
-        const res = await fetch(`/card/${id}`, {
-          method: "DELETE",
-          credentials: "include",
-        });
-
-        if (res.ok) {
-          const cardEl = document.getElementById(`card-${id}`);
-          if (cardEl) {
-            cardEl.remove();
-          }
-          window.location.reload();
-        } else {
-          console.error("Failed to delete card:", await res.text());
-        }
-      } catch (err) {
-        console.error("Delete error:", err);
-      }
-    }
-
-    function editCard(id) {
-      window.location.assign(`/card/${id}`);
-    }
-
-    let search = document.getElementById("search");
-    search.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        let query = search.value;
-        if (query.trim() !== "") {
-          window.location.href = `/search?query=${encodeURIComponent(query)}`;
-        }
-      }
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.ctrlKey && e.key === "k") {
-        e.preventDefault();
-        search.focus();
-      }
-    });
-  </script>
-  <script>
-    window.onload = () => {
-      let loader = document.querySelector(".loader");
-      let main = document.querySelector("main");
-      let imageurl = localStorage.getItem("image");
-      let bg_color = localStorage.getItem("bg_color");
-      let text_color = localStorage.getItem("text_color");
-      let accent = localStorage.getItem("accent");
-      console.log(accent)
-      if (bg_color) {
-        document.body.style.setProperty("--bg-color", bg_color);
-      }
-      if (text_color) {
-        document.body.style.setProperty("--color", text_color);
-      }
-      if (accent) {
-        document.body.style.setProperty("--accent", accent);
-      }
-      if (imageurl) {
-        main.style.backgroundImage = `url(${imageurl})`;
-      }
-      loader.style.display = "none";
+      motivation.textContent = data[Math.floor(Math.random() * data.length)];
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      datePicker.value = `${year}-${month}`;
+      document.querySelector(".loader").style.display = "none";
     };
-</script>
-
-
-  <script>
-    // if ("serviceWorker" in navigator) {
-    //     navigator.serviceWorker
-    //       .register("/service-worker.js")
-    //       .then((e) => console.log(`Service Worker registered ${e.installing}`))
-    //       .catch((err) => console.error("SW registration failed:", err));
-    //   }
+    datePicker.addEventListener("input", () => {
+      console.log(datePicker.value)
+    })
   </script>
+
   <script>
-    const colorThief = new ColorThief();
+    let dailyCounts = [];
+    let dailyChartInstance = null;
 
-    let fab = document.querySelector(".fab");
-    let imagesDiv = document.querySelector(".images");
-    let sentinel = document.querySelector(".sentinel");
-    fab.addEventListener("click", (e) => {
-      e.stopPropagation()
-      imagesDiv.classList.toggle("active");
-      document.querySelector("body").classList.toggle("active");
-    })
-    imagesDiv.addEventListener("click", (e) => {
-      e.stopPropagation()
-    })
-    document.addEventListener("click", (e) => {
-      imagesDiv.classList.remove("active");
-      document.querySelector("body").classList.remove("active");
+    window.onload = async () => {
+      const res = await fetch("/motivational.json");
+      const data = await res.json();
+      motivation.textContent = data[Math.floor(Math.random() * data.length)];
 
-    })
-    let imagesList = document.querySelector(".images #images_data");
-    let search2 = document.getElementById("search2");
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      datePicker.value = `${year}-${month}`;
 
-    let main = document.querySelector("main");
-    let page = 1;
-    let img = "illustration";
-    document.querySelectorAll(".bg-topic").forEach((e) => {
-      e.addEventListener("click", (e) => {
-        imagesList.innerHTML = "";
-        search2.value = e.target.innerHTML
-        img = e.target.innerHTML
-        images()
-      })
-    })
-    search2.addEventListener("change", (e) => {
-      imagesList.innerHTML = "";
-      let value = e.target.value.trim();
-      img = value;
-      if (img === "") img = "3d illustration";
-      debounce(() => {
-        imagesList.innerHTML = "";
-        images();
-      }, 300)
-    })
-    async function images() {
-      try {
-        let res = await fetch(`/images?q=${img}&page=${page}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
+      document.querySelector(".loader").style.display = "none";
 
-        if (!res.ok) {
+      getCounts(year, Number(month));
+    };
 
-          return;
+    async function getCounts(selectedYear, selectedMonth) {
+      const res = await fetch("/report");
+      const data = await res.json();
+
+      document.getElementById("totalSnippet").textContent = data.totalCards;
+      document.getElementById("totalFolder").textContent = data.totalFolders;
+      document.getElementById("totalTag").textContent = data.totalTags;
+
+      dailyCounts = data.dailyCounts;
+      const languageReport = data.languageReport;
+
+      const langLabels = languageReport.map(l => l._id);
+      const langData = languageReport.map(l => l.count);
+      const colors = languageReport.map(() => getRandomColor());
+
+      const langCtx = document.getElementById("languageChart").getContext("2d");
+      new Chart(langCtx, {
+        type: "polarArea",
+        data: {
+          labels: langLabels,
+          datasets: [{
+            label: "Snippets per Language",
+            data: langData,
+            backgroundColor: colors,
+            borderColor: "rgba(255, 255, 255, 1)",
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: "Snippets per Language" }
+          }
         }
-        let data = await res.json();
-        data.images.results.forEach((img) => {
-          // Create li
-          let li = document.createElement("li");
-          li.className = "li"
-          li.style.position = "relative";
+      });
 
-          // Create image
-          let imgEl = document.createElement("img");
-          imgEl.src = img.urls.regular;
-          imgEl.alt = img.alt_description || "Unsplash image";
-          imgEl.crossOrigin = "anonymous";
-
-          li.appendChild(imgEl);
-
-          // Create button wrapper
-          let btnDiv = document.createElement("div");
-          btnDiv.classList.add("select_bnt");
-
-          let selectBtn = document.createElement("button");
-          selectBtn.textContent = "Select";
-
-          selectBtn.addEventListener("click", () => {
-
-            const color = colorThief.getPalette(imgEl, 5)
-            console.log(color)
-            const bg_color = `rgb(${color[0][0]}, ${color[0][1]}, ${color[0][2]})`;
-            const text_color = `rgb(${color[1][0]}, ${color[1][1]}, ${color[1][2]})`;
-            const accent = `rgb(${color[2][0]}, ${color[2][1]}, ${color[2][2]})`;
-            document.body.style.setProperty("--bg-color", bg_color);
-            document.body.style.setProperty("--color", text_color);
-            document.body.style.setProperty("--accent", accent);
-            localStorage.setItem("bg_color", bg_color);
-            localStorage.setItem("text_color", text_color);
-            localStorage.setItem("accent", accent);
-            console.log(accent)
-            main.style.background = `url(${img.urls.regular})`;
-            localStorage.setItem("image", img.urls.full);
-            main.style.backgroundSize = "cover";
-            main.style.backgroundRepeat = "no-repeat";
-            main.style.backgroundPosition = "center";
-          });
-
-          btnDiv.appendChild(selectBtn);
-          li.appendChild(btnDiv);
-
-          imagesList.appendChild(li);
-        });
-        page++;
-      } catch (err) {
-        console.error("Error fetching images:", err);
-      }
+      renderDailyChart(selectedYear, selectedMonth);
     }
-    images();
 
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        images();
-      }
-    },
-      {
-        rootMargin: "0px 0px 1000px 0px",
-        threshold: 0.5
-      }
-    );
-    observer.observe(sentinel);
-    const hiddenElements = document.querySelectorAll('.hidden');
-    hiddenElements.forEach(element => {
-      observer.observe(element);
+    function getRandomColor(alpha = 0.6) {
+      const r = Math.floor(Math.random() * 255);
+      const g = Math.floor(Math.random() * 255);
+      const b = Math.floor(Math.random() * 255);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function renderDailyChart(selectedYear, selectedMonth) {
+      const filtered = dailyCounts.filter(d =>
+        d._id.year === selectedYear && d._id.month === selectedMonth
+      );
+
+      const dailyCountsLabels = filtered.map(d =>
+        `${String(d._id.day).padStart(2, "0")}`
+      );
+
+      const dailyCountsData = filtered.map(d => d.count);
+
+      const dailyCtx = document.getElementById("dailyChart").getContext("2d");
+
+      if (dailyChartInstance) dailyChartInstance.destroy();
+
+      dailyChartInstance = new Chart(dailyCtx, {
+        type: "line",
+        data: {
+          labels: dailyCountsLabels,
+          datasets: [{
+            label: "Snippets per Day",
+            data: dailyCountsData,
+            backgroundColor: "#7274E0",
+            borderColor: "rgba(255, 255, 255, 0.5)",
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 5,
+            pointHoverRadius: 7
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: "Snippets per Day" }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    datePicker.addEventListener("change", () => {
+      const [year, month] = datePicker.value.split("-").map(Number);
+      renderDailyChart(year, month);
     });
-    function removeImage() {
-      main.style.background = ``;
-      document.body.style.setProperty("--bg-color", "#ffffff");
-      document.body.style.setProperty("--color", "#000000");
-      document.body.style.setProperty("--accent", "#24242417");
-      localStorage.setItem("image", "");
-      localStorage.setItem("bg_color", "#ffffff");
-      localStorage.setItem("text_color", "#000000");
-      localStorage.setItem("accent", "#24242417");
-
-    }
   </script>
+
+
 
 
   <script src="/scripts/home.js"></script>
   <script src="\scripts\shortcut.js"></script>
   <script src="\scripts\index.js"></script>
   <script src="\scripts\context_menu.js"></script>
-  <script src="\scripts\search.js"></script>
-  <script src="\scripts\notificationbar.js"></script>
+  <script src="\scripts\Notification.js"></script>
   <script src="\scripts\ad_search.js"></script>
   <script src="\scripts\isonline.js"></script>
-<script src="\scripts\header.js"></script>
+  <script src="\scripts\header.js"></script>
+  <script src="\scripts\searchFunction.js"></script>
 
 </body>
 

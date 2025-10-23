@@ -1,0 +1,34 @@
+.t-parent {
+  position: relative;
+}
+.t-parent .toast {
+  position: fixed;
+  bottom: 2%;
+  right: 2%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: #111827;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+.t-parent .toast.success {
+  background: rgba(140, 233, 140, 0.986);
+}
+.t-parent .toast.error {
+  background: rgba(235, 124, 124, 0.986);
+}
+.t-parent .toast.info {
+  background: rgba(228, 226, 124, 0.986);
+}
+.t-parent span {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+
+/*# sourceMappingURL=toast.css.map */
