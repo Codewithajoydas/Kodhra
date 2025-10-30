@@ -40,7 +40,7 @@ Kodhra provides a modern interface and backend to manage your personal or team-b
 - **Snippet Creation:** Add, edit, and delete code snippets easily.
 - **Categorization:** Organize snippets by tags, categories, and languages.
 - **Search and Filter:** Quickly find snippets using powerful search filters.
-- **Syntax Highlighting:** Code syntax is rendered cleanly using CodeMirror or Monaco Editor.
+- **Syntax Highlighting:** Code syntax is rendered cleanly.
 - **Authentication:** Secure user login and registration system using JWT.
 - **Cloud Storage:** Snippets are stored persistently in MongoDB.
 - **Responsive Design:** Works seamlessly on desktop, tablet, and mobile.
