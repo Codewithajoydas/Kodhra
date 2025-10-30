@@ -3,11 +3,12 @@ const googleAuthrouter = express.Router();
 const querystring = require("querystring");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config()
 googleAuthrouter.get("/", (req, res) => {
   const params = querystring.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri:
-      "https://kodhra.codewithajoydas.live/auth/google/callback",
+    redirect_uri: "https://kodhra.codewithajoydas.live/auth/google/callback",
     response_type: "code",
     scope: [
       "https://www.googleapis.com/auth/userinfo.email",
@@ -33,7 +34,8 @@ googleAuthrouter.get("/callback", async (req, res) => {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: "http://localhost:3000/auth/google/callback",
+        redirect_uri:
+          "https://kodhra.codewithajoydas.live/auth/google/callback",
         grant_type: "authorization_code",
       }),
     });
