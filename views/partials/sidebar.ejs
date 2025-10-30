@@ -1,10 +1,15 @@
 <style>
-    
+    .payment-button:hover {
+        cursor: pointer;
+        transform: scale(1.01);
+        background: linear-gradient(40deg, #000000, #2e2e2e9d 70%) !important;
+        color: black !important;
+    }
 </style>
 <aside>
     <ul>
-        <span>Main Pages</span>
         <li>
+            <span>Main Pages</span>
             <a href="/" class="<%- navigation === 'home' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -77,10 +82,27 @@
                 Favorites
             </a>
         </li>
+        <li>
+            <a href="/draft" class="<%- navigation === 'draft' ? 'active' : '' %>" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-shredder-icon lucide-shredder">
+                    <path d="M10 22v-5" />
+                    <path d="M14 19v-2" />
+                    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                    <path d="M18 20v-3" />
+                    <path d="M2 13h20" />
+                    <path d="M20 13V7l-5-5H6a2 2 0 0 0-2 2v9" />
+                    <path d="M6 20v-3" />
+                </svg>
+                Draft
+            </a>
+        </li>
 
         <!-- Creation Shortcuts -->
-        <span>Creation Shortcuts</span>
         <li>
+            <hr>
+            <span>Creation Shortcuts</span>
             <a href="/card/create" class="<%- navigation === 'card-create' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -110,8 +132,9 @@
         </li>
 
         <!-- Search & Explore -->
-        <span>Search & Explore</span>
         <li>
+            <hr>
+            <span>Search & Explore</span>
             <a href="/search" class="<%- navigation === 'search' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -142,8 +165,9 @@
         </li>
 
         <!-- Settings & Tools -->
-        <span>Settings & Tools</span>
         <li>
+            <hr>
+            <span>Settings & Tools</span>
             <a href="/import-export" class="<%- navigation === 'import-export' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -193,8 +217,9 @@
         </li>
 
         <!-- Auth -->
-        <span>Auth</span>
         <li>
+            <hr>
+            <span>Auth</span>
             <a href="/login" class="<%- navigation === 'login' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -222,6 +247,17 @@
                 Sign Up
             </a>
         </li>
+        <li>
+            <hr>
+            <span>Payment Options</span>
+            <button
+                style="width: 100%; border-radius: 30px 5px 30px 5px !important; padding: 15px !important; background: #000000; color: white; outline: none !important; border: 1px solid white;font-weight: bolder; display: flex;justify-content: center;align-items: center; height: 50px; transition: all .2s ease-in-out; gap: 5px;"
+                class="payment-button" onclick="payNow()">
+                Upgrade Plan
+                <img src="https://images.icon-icons.com/3609/PNG/512/climate_forecast_weather_rain_storm_thunderstorm_thunder_icon_226629.png"
+                    alt="" width="30px" height="30px" style="padding: 0 !important; margin:0 !important;">
+            </button>
+        </li>
     </ul>
     <div id="create-folder-modal">
         <div class="page_title">
@@ -242,6 +278,9 @@
     <div class="toast"></div>
 </aside>
 
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <script>
     function showToast(msg, type, duration = 10000) {
         let toast = document.querySelector(".toast");
@@ -260,7 +299,7 @@
         let data = await res.json();
         return data.data;
     }
-     document.getElementById("close").addEventListener("click", (e) => {
+    document.getElementById("close").addEventListener("click", (e) => {
         const createFolderModal = document.getElementById('create-folder-modal');
         createFolderModal.classList.remove("active")
     })
@@ -282,16 +321,16 @@
     createFolderButton.addEventListener("click", async (e) => {
         e.preventDefault();
         const folderName = document.getElementById("folderName").value;
-        if (!folderName) { 
+        if (!folderName) {
             console.info("Please enter a folder name")
             showToast("Please enter a folder name", "error", 10000)
             return;
-         };
-         let allfolderNames  = await folderNames();
-         if(allfolderNames.includes(folderName)){
+        };
+        let allfolderNames = await folderNames();
+        if (allfolderNames.includes(folderName)) {
             showToast("Folder name already exists", "error", 10000)
             return;
-         }
+        }
         const info = document.querySelector(".info");
         try {
             let res = await fetch("/folder/create", {
@@ -315,4 +354,47 @@
     });
 
 
+</script>
+
+<script>
+    async function payNow() {
+        const res = await fetch("/payment/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: 500 }) // amount in rupees
+        });
+        const data = await res.json();
+        console.log(data)
+        const options = {
+            key: "rzp_test_RYWagNme1MBx3k",
+            name: "NoteSpace",
+            description: "Test Payment",
+            order_id: data.order.id,
+            amount: 50000,
+            currency: "INR",
+            theme: { color: "#fff" },
+
+            handler: async function (response) {
+                console.log("Razorpay Response:", response);
+
+                const verifyRes = await fetch("/payment/verify", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(response)
+                });
+
+                const verifyData = await verifyRes.json();
+                console.log("Verification result:", verifyData);
+
+                if (verifyData.success) {
+                    alert("✅ Payment Successful and Verified!");
+                } else {
+                    alert("❌ Payment Verification Failed!");
+                }
+            },
+        };
+
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
 </script>

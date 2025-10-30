@@ -96,6 +96,12 @@ $accent: #2e2e2e21;
       margin-top: 70px;
       background: var(--secondary-bg-color);
       aside {
+        hr{
+          border: none;
+          outline: none;
+          background: var(--accent);
+          height: 1px;
+        }
         padding-block: 5px;
         height: calc(100vh - 70px);
         overflow-y: scroll;
@@ -110,24 +116,18 @@ $accent: #2e2e2e21;
           min-width: 0px;
           overflow-x: hidden;
         }
-        &::-webkit-scrollbar {
-          width: 0;
-          height: 0;
-        }
-        &:hover::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
-        }
         ul {
           list-style: none;
-          span {
-            margin: 10px 20px;
-            font-size: 13px;
-            color: gray;
-          }
           li {
-            transition: background 0.2s ease;
+            span {
+              margin-block: 10px;
+              display: block;
+              font-size: 13px;
+              color: rgb(83, 83, 83);
+              width: 300px;
+            }
             margin: 10px 20px;
+            transition: background 0.2s ease;
             a {
               padding-inline: 10px;
               width: auto;

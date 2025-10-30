@@ -18,7 +18,7 @@
             </svg>
         </div>
         <span class="lg" style="display: flex; justify-content: center;align-items: center; gap: 10px;" onmouseover="" onclick="window.location.assign('/')">
-            <img src="/assets/logo.png" alt="code snippet manager" />
+            <img src="/assets/logo.webp" alt="code snippet manager" />
             <span><span style="white-space: nowrap; font-size: larger;">Kodhra</span>
             </span>
         </span>
@@ -35,8 +35,8 @@
 
                 <input type="search" placeholder="Search Snippets..." id="search" autocomplete="off" />
                 <kbd style="
-                  background: rgba(128, 128, 128, 0.21);
-                  color: rgb(122, 122, 122);
+                  background: var(--accent);
+                  color: rgb(65, 65, 65);
                   padding: 5px;
                   border-radius: 5px;
                   box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
@@ -71,7 +71,7 @@
             </svg>
             <span class="number"></span>
         </div>
-        <a class="help" href="/csm-info-page.html" data-tooltip="Help">
+        <a class="help" href="/csm-info-page.html" data-tooltip="Help" tabindex="0" aria-label="Know more about Kodhra">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-info-icon lucide-info">
@@ -94,10 +94,10 @@
             <img src="<%= image %>" alt="profile image of user" onerror="this.src='https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg'"/>
             <div class="profile-bar">
                 <div class="header">
-                    <img src="<%= image %>" alt="" />
+                    <img id="userImage" src="<%= image %>" alt="" onerror="this.src='https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg'" />
                     <div class="name">
-                        <span>Codewithajoydas</span>
-                        <span>Ajoy Das</span>
+                        <span id="userName" style="text-transform: capitalize;">Dummy123</span>
+                        <span id="goodName">Good User</span>
                     </div>
                 </div>
                 <hr class="hr">
@@ -414,4 +414,31 @@
             applyTheme("auto");
         }
     });
+</script>
+
+<script>
+    async function getUserDetails() {
+        try {
+            const res = await fetch("/a");
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    getUserDetails().then((a) => {
+        localStorage.setItem(
+            "data",
+            btoa(unescape(encodeURIComponent(JSON.stringify(a))))
+        );
+        let userImage = document.getElementById("userImage");
+        userImage.src = a.userImage;
+        let userName = document.getElementById("userName");
+        userName.innerHTML = a.userName;
+        let goodName = document.getElementById("goodName");
+        goodName.innerHTML = a.goodName;
+
+    });
+
 </script>

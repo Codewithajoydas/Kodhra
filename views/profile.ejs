@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile | Code Snippet Manager</title>
+  <title>Profile of <%= user.goodName %> | Code Snippet Manager</title>
   <link rel="stylesheet" href="/style/css/partials/Header.css">
   <link rel="stylesheet" href="/style/css/ad_search.css">
   <link rel="stylesheet" href="/style/css/Notification.css">
@@ -13,8 +13,9 @@
   <link rel="stylesheet" href="/style/css/card.css">
   <link rel="stylesheet" href="/style/css/profile.css">
   <link rel="stylesheet" href="/style/css/toast.css">
-
+  <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <meta name="id" content="<%= user._id %>">
 
 </head>
 
@@ -26,7 +27,7 @@
           <main>
             <div class="top-section">
               <div class="profile-image">
-                <img src="<%= user.userImage %>" alt="profile image of user"
+                <img src="<%= user.userImage %>" alt="profile image of user" id="profileImage" crossOrigin="anonymous"
                   onerror="this.src='https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg'">
               </div>
               <div class="user-info">
@@ -45,7 +46,7 @@
                       d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
                     <circle cx="12" cy="10" r="3" />
                   </svg>
-                  <%= user.address %>
+                  <%= user.address ?? "Address not found" %>
                 </div>
                 <div class="joined">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
@@ -59,22 +60,24 @@
                   </svg> Joined in: <%= new Date(user.createdAt).toDateString() %>
                 </div>
                 <div class="btns">
-                  <button class="follow">Follow</button>
+                  <button class="follow" onclick="follow('<%= user._id %>')">Follow</button>
                   <button class="contact">Get In Touch</button>
                 </div>
               </div>
               <div class="counts">
                 <div class="followers">
                   <span>Followers</span>
-                  <span>200</span>
+                  <span>
+                    <%= user.followers?.length ?? 0%>
+                  </span>
                 </div>
                 <div class="following">
                   <span>Following</span>
-                  <span>10</span>
+                  <span><%= user.following?.length ?? 0%></span>
                 </div>
                 <div class="cards">
                   <span>Snippets</span>
-                  <span>93</span>
+                  <span>0</span>
                 </div>
               </div>
             </div>
@@ -104,6 +107,79 @@
   <script src="/scripts/searchFunction.js"></script>
   <script src="/scripts/context_menu.js"></script>
   <script src="\scripts\isonline.js"></script>
+  <script>
+    window.onload = () => {
+      const profile_image = document.querySelector(".profile-image");
+      const profileImage = document.getElementById("profileImage");
+
+      if (profileImage.complete) {
+        applyGradient();
+      } else {
+        profileImage.addEventListener("load", applyGradient);
+      }
+
+      function applyGradient() {
+        const colorThief = new ColorThief();
+        const colors = colorThief.getPalette(profileImage, 5);
+
+        const colorStrings = colors.map(c => `rgb(${c[0]}, ${c[1]}, ${c[2]})`);
+
+        profile_image.style.background = `linear-gradient(
+      40deg,
+      ${colorStrings[0]},
+      ${colorStrings[1]},
+      ${colorStrings[2]},
+      ${colorStrings[3]},
+      ${colorStrings[4]}
+    )`;
+      }
+    };
+  </script>
+
+
+  <!-- AUTHENTICATION -->
+
+  <script>
+    const ID = document.querySelector("meta[name='id']").content;
+    const DATA = atob(localStorage.getItem("data"));
+    const USER = JSON.parse(DATA);
+    try {
+      if (USER._id !== ID) {
+        let btns = document.querySelector(".btns");
+        btns.style.display = "flex";
+      } else {
+        let btn = document.querySelector(".btns");
+        btn.style.display = "none";
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+
+    async function follow(id) {
+      try {
+        const res = await fetch(`/profile/follow/${id}`, {
+          method: "post",
+          contentType: "application/json",
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          console.log("Follow status updated:", data);
+        } else {
+          console.log("Something went wrong");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+  </script>
+
+  <!-- AUTHENTICATION PARTS-->
+
+
 </body>
 
 </html>

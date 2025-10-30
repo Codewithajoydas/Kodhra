@@ -44,7 +44,7 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    follwers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     savedCards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
     draftCards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],

@@ -65,14 +65,16 @@ folderRouter.get("/:id", async (req, res) => {
         .json({ error: "Folder not found please provide folder name!" });
     }
     const folders = await Folder.find({ parent: id });
+    const folderName = await Folder.findOne({ _id: id, author: userId }).select("folderName");
     const getCardId = folder.cards.map((e) => e._id);
-    const cards = await Card.find({ _id: { $in: getCardId } });
+    const card = await Card.find({ _id: { $in: getCardId } });
     res.render("folderCards", {
-      cards,
+      card,
       folders,
       image,
       userId,
       author,
+      fName:folderName.folderName,
       app_url: process.env.APP_URL,
     });
   } catch (error) {

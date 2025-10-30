@@ -8,19 +8,54 @@
   <link rel="stylesheet" href="/style/css/partials/Header.css">
   <link rel="stylesheet" href="/style/css/ad_search.css">
   <link rel="stylesheet" href="/style/css/Notification.css">
-  <link rel="stylesheet" href="/style/css/chip.css">
   <link rel="stylesheet" href="/style/css/card.css">
   <link rel="stylesheet" href="/style/css/toast.css">
   <link rel="stylesheet" href="/style/css/index.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+  <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
+
+  <!-- META Tags -->
+  <meta name="title" content="Home | Kodhra">
+  <meta name="description"
+    content="Kodhra is a modern code snippet manager designed for developers to save, organize, and search snippets instantly with cloud sync and a clean interface."">
+      <meta name=" keywords"
+    content="Kodhra, code snippet manager, code storage, developer tools, programming snippets, save code, organize code, code search, web app for developers, cloud snippet manager, codewithajoydas, ajoy das">
+  <meta name="language" content="">
+  <meta name="revisit-after" content="3">
+
+  <!-- Robot Control Tags -->
+  <meta name="robots" content="index, follow">
+
+  <!-- Advanced META Tags -->
+  <meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://kodhra.codewithajoydas.live/" />
+
+  <!-- Social Facebook/Meta Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kodhra.codewithajoydas.live/" />
+  <meta property="og:title" content="Home | Kodhra" />
+  <meta property="og:description"
+    content="Kodhra is a modern code snippet manager designed for developers to save, organize, and search snippets instantly with cloud sync and a clean interface."" />
+      <meta property=" og:image" content="https://kodhra.codewithajoydas.live/icons/icon-512.png" />
+
+  <!-- Social Twitter Tags -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://kodhra.codewithajoydas.live/" />
+  <meta property="twitter:title" content="Home | Kodhra" />
+  <meta property="twitter:description"
+    content="Kodhra is a modern code snippet manager designed for developers to save, organize, and search snippets instantly with cloud sync and a clean interface."" />
+      <meta property=" twitter:image" content="https://kodhra.codewithajoydas.live/icons/icon-512.png" />
+
   <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
   <link rel="preload" href="/gEzG0w1WVY.lottie" as="fetch" crossorigin="anonymous" />
   <link rel="manifest" href="manifest.json" />
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
+  <script>
+    window.USER_ID = "<%= userId %>";
+  </script>
   <style>
     .loader {
       display: flex;
@@ -86,8 +121,7 @@
               Overview Section
             </div>
             <div class="greeting">
-              <img src="https://cdn3d.iconscout.com/3d/premium/thumb/motivation-3d-icon-png-download-11696859.png"
-                alt="">
+              <img src="\assets\motivation-3d-icon.webp" alt="motivational image">
               <span>
                 <h1>Hello, <span id="username" style="text-transform: capitalize;">
                     <%= author %>
@@ -98,8 +132,7 @@
             <div class="count">
               <div class="totalSnippet" onclick="window.location.assign('/card')">
                 <div class="img">
-                  <img src="https://cdn3d.iconscout.com/3d/premium/thumb/code-snippet-3d-icon-png-download-9483695.png"
-                    alt="" width="60px">
+                  <img src="\assets\code-snippet-3d-icon.webp" alt="" width="60px">
                 </div>
                 <div>
                   <span id="totalSnippet">0</span>
@@ -108,8 +141,7 @@
               </div>
               <div class="totalFolder" onclick="window.location.assign('/folder')">
                 <div class="img">
-                  <img src="https://cdn3d.iconscout.com/3d/premium/thumb/folder-3d-icon-png-download-5727518.png"
-                    alt="">
+                  <img src="\assets\folder-3d-icon.webp" alt="">
                 </div>
                 <div>
                   <span id="totalFolder">0</span>
@@ -118,22 +150,19 @@
               </div>
               <div class="totalTag" onclick="window.location.assign('/tags')">
                 <div class="img">
-                  <img
-                    src="https://static.vecteezy.com/system/resources/previews/010/988/613/non_2x/3d-isolated-price-tag-icon-free-png.png"
-                    alt="">
+                  <img src="\assets\3d-isolated-price-tag.webp" alt="">
                 </div>
                 <div>
                   <span id="totalTag">0</span>
                   <span>Total Tags</span>
                 </div>
               </div>
-              <div class="totalTag">
+              <div class="totalTag" onclick="window.location.assign('/draft')">
                 <div class="img">
-                  <img src="https://cdn3d.iconscout.com/3d/premium/thumb/document-3d-icon-png-download-8779273.png"
-                    alt="">
+                  <img src="\assets\folder-3d-icon.webp" alt="">
                 </div>
                 <div>
-                  <span id="totalTag">0</span>
+                  <span id="totalTag" class="draft">0</span>
                   <span>Total Drafts</span>
                 </div>
               </div>
@@ -143,7 +172,7 @@
                 <div style="display: flex;justify-content: space-between;align-items: center;">
                   <span style="font-weight: bolder; padding-bottom: 10px;">Daily Wise Report</span>
                   <input type="month" style="border: 1px solid var(--accent);padding: 10px;border-radius: 10px;"
-                    id="datePicker">
+                    aria-label="Select Month" id="datePicker">
                 </div>
                 <canvas id="dailyChart"></canvas>
               </div>
@@ -187,6 +216,7 @@
 
 
   <script>
+
     const datePicker = document.getElementById("datePicker");
     const motivation = document.querySelector(".motivation");
     window.onload = async () => {
@@ -209,6 +239,7 @@
     let dailyChartInstance = null;
 
     window.onload = async () => {
+      document.querySelector(".loader").style.display = "none";
       const res = await fetch("/motivational.json");
       const data = await res.json();
       motivation.textContent = data[Math.floor(Math.random() * data.length)];
@@ -218,7 +249,7 @@
       const month = String(now.getMonth() + 1).padStart(2, "0");
       datePicker.value = `${year}-${month}`;
 
-      document.querySelector(".loader").style.display = "none";
+
 
       getCounts(year, Number(month));
     };
@@ -318,12 +349,15 @@
       const [year, month] = datePicker.value.split("-").map(Number);
       renderDailyChart(year, month);
     });
+
+
+
   </script>
 
 
 
 
-  <script src="/scripts/home.js"></script>
+  <script src="\scripts\home.js"></script>
   <script src="\scripts\shortcut.js"></script>
   <script src="\scripts\index.js"></script>
   <script src="\scripts\context_menu.js"></script>
@@ -332,6 +366,10 @@
   <script src="\scripts\isonline.js"></script>
   <script src="\scripts\header.js"></script>
   <script src="\scripts\searchFunction.js"></script>
+
+  <script src="\scripts\saveDraft.js"></script>
+  <script src="\scripts\getAllDraft.js"></script>
+
 
 </body>
 

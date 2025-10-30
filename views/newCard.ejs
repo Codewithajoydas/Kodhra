@@ -146,7 +146,7 @@
       <div class="container">
         <%- include("partials/sidebar", {navigation: 'card-create' })%>
           <main style="width: 100%;height: calc(100vh - 70px);">
-            
+
             <div class="div1">
               <div class="title">
                 <label for="title">What is the title?</label>
@@ -164,7 +164,7 @@
               <div class="lan">
                 <label for="lan"> Last what is language you prefer? </label>
                 <select name="language" id="category">
-                  <option value="JavaScript">JavaScript</option>
+                  <option value="JavaScript" selected>JavaScript</option>
                   <option value="CSS">CSS</option>
                   <option value="HTML">HTML</option>
                   <option value="C">C</option>
@@ -255,132 +255,153 @@
 
 
   <script>
+    let editor;
     window.onload = () => {
-      let loader = document.querySelector(".loader");
-      loader.style.display = "none";
-    }
-    let lan = document.getElementById("category");
-    const modeMap = {
-      JavaScript: "javascript",
-      C: "text/x-csrc",
-      "C++": "text/x-c++src",
-      "C#": "text/x-csharp",
-      Java: "text/x-java",
-      TypeScript: "text/typescript",
-      Python: "python",
-      Ruby: "ruby",
-      PHP: "php",
-      Go: "go",
-      Rust: "rust",
-      Swift: "swift",
-      Kotlin: "text/x-kotlin",
-      "Objective-C": "text/x-objectivec",
-      Scala: "text/x-scala",
-      Perl: "perl",
-      R: "r",
-      Dart: "dart",
-      Haskell: "haskell",
-      Lua: "lua",
-      Elixir: "elixir",
-      Clojure: "clojure",
-      Shell: "shell",
-      PowerShell: "powershell",
-      SQL: "sql",
-      GraphQL: "graphql",
-      MATLAB: "octave", // MATLAB uses octave mode
-      Assembly: "gas", // GNU assembly
-      Fortran: "fortran",
-      COBOL: "cobol",
-      Erlang: "erlang",
-      "VB.NET": "vb",
-      HTML: "htmlmixed",
-      CSS: "css",
-    };
-    let themeRadio = document.querySelector("input[name='theme']:checked");
-    let currentTheme = themeRadio ? (themeRadio.value === "light" ? "eclipse" : "ayu-dark") : "ayu-dark";
+      const loader = document.querySelector(".loader");
+      if (loader) loader.style.display = "none";
 
-    const editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-      lineNumbers: true,
-      mode: modeMap[lan.value],
-      lineWrapping: true,
-      theme: currentTheme,
-    });
-    lan.addEventListener("change", function () {
-      let val = modeMap[this.value];
-      editor.setOption("mode", val);
-    });
-    document.querySelectorAll("input[name='theme']").forEach((inp) => {
-      inp.addEventListener("change", () => {
-        const newTheme = inp.value === "light" ? "eclipse" : "ayu-dark";
-        editor.setOption("theme", newTheme);
-        localStorage.setItem("theme", inp.value); // optional: save preference
+      const params = new URLSearchParams(window.location.search);
+      const title = params.get("title") || "";
+      const description = params.get("description") || "";
+      const category = params.get("category") || "";
+      const content = params.get("content") || "";
+      const tags = params.get("tags") || "";
+      const folderName = params.get("folderName") || "";
+
+      const modeMap = {
+        JavaScript: "javascript",
+        C: "text/x-csrc",
+        "C++": "text/x-c++src",
+        "C#": "text/x-csharp",
+        Java: "text/x-java",
+        TypeScript: "text/typescript",
+        Python: "python",
+        Ruby: "ruby",
+        PHP: "php",
+        Go: "go",
+        Rust: "rust",
+        Swift: "swift",
+        Kotlin: "text/x-kotlin",
+        "Objective-C": "text/x-objectivec",
+        Scala: "text/x-scala",
+        Perl: "perl",
+        R: "r",
+        Dart: "dart",
+        Haskell: "haskell",
+        Lua: "lua",
+        Elixir: "elixir",
+        Clojure: "clojure",
+        Shell: "shell",
+        PowerShell: "powershell",
+        SQL: "sql",
+        GraphQL: "graphql",
+        MATLAB: "octave",
+        Assembly: "gas",
+        Fortran: "fortran",
+        COBOL: "cobol",
+        Erlang: "erlang",
+        "VB.NET": "vb",
+        HTML: "htmlmixed",
+        CSS: "css",
+      };
+
+      const lan = document.getElementById("category");
+
+      const themeRadio = document.querySelector("input[name='theme']:checked");
+      const currentTheme =
+        themeRadio && themeRadio.value === "light" ? "eclipse" : "ayu-dark";
+
+      editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        mode: modeMap[lan?.value] || "javascript",
+        lineWrapping: true,
+        theme: currentTheme,
       });
-    });
-  </script>
-  <script>
-    async function submitData() {
-      let title = document.getElementById("title1").value;
-      let description = document.getElementById("des").value;
-      let category = document.getElementById("category").value;
-      let content = (document.getElementById("code").value =
-        editor.getValue());
-      let folderName = document.getElementById("folderName1").value;
-      console.log(title, description, category, content, folderName)
-      let tags = document
-        .getElementById("tags")
-        .value.split(",")
-        .map((tag) => tag.trim());
-      let loader = document.querySelector(".loading");
-      let msgloader = document.querySelector(".loading span");
-      loader.style.display = "flex";
-      try {
-        let startTime = performance.now();
-        let res = await fetch("/card", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            title,
-            description,
-            category,
-            content,
-            tags,
-            folderName,
-          }),
+
+      const titleEl = document.getElementById("title1");
+      const desEl = document.getElementById("des");
+      const catEl = document.getElementById("category");
+      const tagEl = document.getElementById("tags");
+      const folderEl = document.getElementById("folderName1");
+
+      if (titleEl) titleEl.value = title;
+      if (desEl) desEl.value = description;
+      if (catEl) catEl.value = category;
+      if (tagEl) tagEl.value = tags;
+      if (folderEl) folderEl.value = folderName;
+
+      editor.setValue(content);
+
+      if (lan) {
+        lan.addEventListener("change", function () {
+          const newMode = modeMap[this.value] || "javascript";
+          editor.setOption("mode", newMode);
         });
-
-        let data = await res.json();
-        console.log(data)
-        const endTime = performance.now();
-        const duration = ((endTime - startTime) / 1000).toFixed(2);
-        if (res.ok) {
-          loader.style.background = "lightgreen";
-          loader.style.display = "flex";
-          msgloader.textContent = `🎉 Snippet created in just ${duration}s`;
-        } else {
-          loader.style.background = "pink";
-          loader.style.display = "flex";
-          msgloader.textContent = `🚫 Snippet Not Created!`;
-        }
-
-        let timeout = setTimeout(() => {
-          loader.style.display = "none";
-          loader.style.background = "none";
-          clearTimeout(timeout);
-        }, 3000);
-      } catch (err) {
-        console.error("Error submitting data:", err);
-        loader.style.background = "#ff474c";
-        loader.style.display = "flex";
-        msgloader.textContent = `🌋 Error submitting data`;
-        let timeout = setTimeout(() => {
-          loader.style.display = "none";
-          clearInterval(timeout);
-        }, 3000);
       }
-    }
+
+      document.querySelectorAll("input[name='theme']").forEach((inp) => {
+        inp.addEventListener("change", () => {
+          const newTheme = inp.value === "light" ? "eclipse" : "ayu-dark";
+          editor.setOption("theme", newTheme);
+          localStorage.setItem("theme", inp.value);
+        });
+      });
+
+      window.submitData = async function () {
+        const title = titleEl?.value || "";
+        const description = desEl?.value || "";
+        const category = catEl?.value || "";
+        const content = editor.getValue() || "";
+        const folderName = folderEl?.value || "";
+        const tags = (tagEl?.value || "")
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean);
+
+        const loader = document.querySelector(".loading");
+        const msgloader = loader?.querySelector("span");
+
+        if (loader) loader.style.display = "flex";
+
+        try {
+          const startTime = performance.now();
+
+          const res = await fetch("/card", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ title, description, category, content, tags, folderName }),
+          });
+
+          const data = await res.json();
+          console.log("Response:", data);
+
+          const duration = ((performance.now() - startTime) / 1000).toFixed(2);
+
+          if (res.ok) {
+            loader.style.background = "lightgreen";
+            msgloader.textContent = `🎉 Snippet created in just ${duration}s`;
+          } else {
+            loader.style.background = "pink";
+            msgloader.textContent = `🚫 Snippet Not Created!`;
+          }
+
+          setTimeout(() => {
+            loader.style.display = "none";
+            loader.style.background = "none";
+          }, 3000);
+        } catch (err) {
+          console.error("Error submitting data:", err);
+          if (loader) {
+            loader.style.background = "#ff474c";
+            msgloader.textContent = `🌋 Error submitting data`;
+          }
+          setTimeout(() => {
+            if (loader) loader.style.display = "none";
+          }, 3000);
+        }
+      };
+    };
   </script>
 
 
@@ -413,6 +434,11 @@
     });
   </script>
 
+
+  <script>
+
+  </script>
+
   <script src="/scripts/home.js"></script>
   <script src="\scripts\index.js"></script>
   <script src="\scripts\search.js"></script>
@@ -420,6 +446,7 @@
   <script src="\scripts\ad_search.js"></script>
   <script src="\scripts\header.js"></script>
   <script src="\scripts\searchFunction.js"></script>
+  <script src="\scripts\saveDraft.js"></script>
 </body>
 
 </html>

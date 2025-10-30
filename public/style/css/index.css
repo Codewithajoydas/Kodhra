@@ -103,6 +103,12 @@ body[data-theme=light] {
   min-width: 280px;
   transition: width 0.2s ease-in-out;
 }
+* body .container aside hr {
+  border: none;
+  outline: none;
+  background: var(--accent);
+  height: 1px;
+}
 * body .container aside.active {
   opacity: 0;
   visibility: hidden;
@@ -110,25 +116,19 @@ body[data-theme=light] {
   min-width: 0px;
   overflow-x: hidden;
 }
-* body .container aside::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-* body .container aside:hover::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
 * body .container aside ul {
   list-style: none;
 }
-* body .container aside ul span {
-  margin: 10px 20px;
-  font-size: 13px;
-  color: gray;
-}
 * body .container aside ul li {
-  transition: background 0.2s ease;
   margin: 10px 20px;
+  transition: background 0.2s ease;
+}
+* body .container aside ul li span {
+  margin-block: 10px;
+  display: block;
+  font-size: 13px;
+  color: rgb(83, 83, 83);
+  width: 300px;
 }
 * body .container aside ul li a {
   padding-inline: 10px;

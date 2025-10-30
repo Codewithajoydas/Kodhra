@@ -1,5 +1,3 @@
-
-
 body[data-theme="dark"] {
   --bg-color: rgb(20, 17, 17);
   --secondary-bg-color: #131212;
@@ -18,7 +16,8 @@ body[data-theme="light"] {
   color: var(--color);
 }
 $accent: #2e2e2e21;
-#cards {
+#cards,
+#cards1 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 10px;
@@ -50,7 +49,7 @@ $accent: #2e2e2e21;
         cursor: pointer;
       }
       .title {
-        h3 {
+        p {
           font-size: 20px !important;
         }
         div .author,
@@ -99,7 +98,7 @@ $accent: #2e2e2e21;
         svg {
           width: 20px;
           cursor: pointer;
-          &.active{
+          &.active {
             fill: var(--color);
           }
         }

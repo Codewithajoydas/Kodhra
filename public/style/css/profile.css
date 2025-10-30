@@ -10,8 +10,6 @@ main .top-section .profile-image {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(40deg, rgba(62, 55, 201, 0.6901960784), rgba(72, 12, 168, 0.7529411765), rgba(87, 11, 173, 0.7960784314), rgba(247, 37, 132, 0.8078431373));
-  box-shadow: 10px 10px 20px rgba(62, 55, 201, 0.6901960784);
 }
 main .top-section .profile-image img {
   width: 200px;

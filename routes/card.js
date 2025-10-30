@@ -18,7 +18,7 @@ cardRouter.get("/", async (req, res) => {
     .find({ author: _id })
     .populate("author", "userName userImage")
     .skip(skip)
-    .limit(limit);
+    .limit(limit).sort({ createdAt: -1 });
   let card = await findFavPinned(cards, _id);
 
   const len = await cardSchema.find({ author: _id }).countDocuments();

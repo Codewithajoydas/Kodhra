@@ -8,14 +8,13 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const { default: mongoose } = require("mongoose");
-
 dotenv.config();
+const fs = require("fs");
+const paymentRouter = require("./routes/payments");
 const router = require("./routes/authentication");
 const profileRouter = require("./routes/profile");
-
 const signup = require("./routes/authoraization");
 const googleAuthrouter = require("./routes/googleAuth");
-
 const gitroute = require("./routes/githubOauth");
 const cardRouter = require("./routes/card");
 const session = require("express-session");
@@ -26,7 +25,6 @@ const RedisStore = require("connect-redis").RedisStore;
 const client = require("./config/redis.config.js");
 const path = require("path");
 const cors = require("cors");
-
 const Folder = require("./models/folder");
 app.use(express.json({ limit: "50mb" }));
 app.use(
@@ -67,8 +65,11 @@ const io = socket.init(server);
 io.on("connection", (socket) => {
   socket.on("register", (userId) => {
     socket.join(userId);
+    console.log("User connected:", userId);
   });
-  socket.on("disconnect", () => {});
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
 });
 
 app.get("/favicon.ico", (req, res) => res.status(204).end());
@@ -97,7 +98,8 @@ app.get("/", authMiddleware, async (req, res, next) => {
     });
     const card = await Card.find({ author: decode.checkUser._id })
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit(10)
+      .populate("author", "userName userImage");
 
     res.render("index", {
       image: decode.checkUser?.userImage || decode.user?.avatar,
@@ -128,7 +130,7 @@ app.post("/card", async (req, res) => {
       content,
       tags,
       category,
-      author: _id,
+      author: new mongoose.Types.ObjectId(_id),
     });
 
     try {
@@ -156,7 +158,17 @@ app.post("/card", async (req, res) => {
     res.status(500).json({ error: `Server error ${err.message}` });
   }
 });
-
+app.get("/draft", authMiddleware, async (req, res) => {
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  res.render("draft", {
+    image: decode.checkUser?.userImage || decode.user?.avatar,
+    author: decode.checkUser.userName,
+    userId: decode.checkUser._id,
+    app_url: process.env.APP_URL,
+    appVersion,
+  });
+});
 app.use("/login", router);
 app.use("/signup", signup);
 app.use("/card", authMiddleware, cardRouter);
@@ -178,6 +190,7 @@ app.use("/images", authMiddleware, imageRouter);
 app.use("/notifications", authMiddleware, notificationRouter);
 app.use("/profile", authMiddleware, profileRouter);
 app.use("/auth/google", googleAuthrouter);
+app.use("/payment", authMiddleware, paymentRouter);
 /*
 Demo routes remove it before deployment
 */
@@ -201,6 +214,13 @@ app.get("/democards", async (req, res) => {
     userId: decode.checkUser._id,
     folders,
   });
+});
+
+app.get("/a", authMiddleware, (req, res) => {
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const { _id, userName, goodName, email, userImage } = decode.checkUser;
+  res.json({ _id, userName, goodName, email, userImage });
 });
 
 app.get("/logout", (req, res) => {
@@ -265,7 +285,6 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-const fs = require("fs");
 let rs = JSON.parse(
   fs.readFileSync(path.join(__dirname, "package.json"), "utf-8")
 );

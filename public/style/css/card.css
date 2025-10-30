@@ -16,12 +16,14 @@ body[data-theme=light] {
   color: var(--color);
 }
 
-#cards {
+#cards,
+#cards1 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 10px;
 }
-#cards .card {
+#cards .card,
+#cards1 .card {
   min-width: 400px;
   position: relative;
   margin-block: 5px;
@@ -32,33 +34,42 @@ body[data-theme=light] {
   border-radius: 10px;
   backdrop-filter: blur(10px) !important;
 }
-#cards .card:has(.select-card:checked) {
+#cards .card:has(.select-card:checked),
+#cards1 .card:has(.select-card:checked) {
   border: 2px solid rgba(2, 2, 2, 0.201);
   backdrop-filter: blur(100px);
   object-fit: contain;
 }
-#cards .card .header-info {
+#cards .card .header-info,
+#cards1 .card .header-info {
   padding: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-inline: 10px;
 }
-#cards .card .header-info .menu_top {
+#cards .card .header-info .menu_top,
+#cards1 .card .header-info .menu_top {
   cursor: pointer;
 }
-#cards .card .header-info .menu_top svg {
+#cards .card .header-info .menu_top svg,
+#cards1 .card .header-info .menu_top svg {
   width: 20px;
 }
-#cards .card .header-info .title h3 {
+#cards .card .header-info .title p,
+#cards1 .card .header-info .title p {
   font-size: 20px !important;
 }
 #cards .card .header-info .title div .author,
 #cards .card .header-info .title .lan,
-#cards .card .header-info .title .time {
+#cards .card .header-info .title .time,
+#cards1 .card .header-info .title div .author,
+#cards1 .card .header-info .title .lan,
+#cards1 .card .header-info .title .time {
   font-size: smaller;
 }
-#cards .card .code {
+#cards .card .code,
+#cards1 .card .code {
   background: var(--secondary-bg-color) !important;
   margin: 10px;
   padding: 10px;
@@ -69,14 +80,16 @@ body[data-theme=light] {
   white-space: nowrap;
   font-family: "Courier New", Courier, monospace !important;
 }
-#cards .card .tags {
+#cards .card .tags,
+#cards1 .card .tags {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
   margin: 10px;
 }
-#cards .card .tags .span {
+#cards .card .tags .span,
+#cards1 .card .tags .span {
   padding: 5px 20px;
   border-radius: 50px;
   background: rgba(128, 128, 128, 0.103);
@@ -84,35 +97,42 @@ body[data-theme=light] {
   font-size: small;
   cursor: pointer;
 }
-#cards .card .options {
+#cards .card .options,
+#cards1 .card .options {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 10px;
 }
-#cards .card .options .sub_menu {
+#cards .card .options .sub_menu,
+#cards1 .card .options .sub_menu {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
 }
-#cards .card .options .sub_menu svg {
+#cards .card .options .sub_menu svg,
+#cards1 .card .options .sub_menu svg {
   width: 20px;
   cursor: pointer;
 }
-#cards .card .options .sub_menu svg.active {
+#cards .card .options .sub_menu svg.active,
+#cards1 .card .options .sub_menu svg.active {
   fill: var(--color);
 }
-#cards .card .options .open {
+#cards .card .options .open,
+#cards1 .card .options .open {
   background: var(--accent);
   padding: 10px 30px;
   border-radius: 10px;
 }
-#cards .card .options .open a {
+#cards .card .options .open a,
+#cards1 .card .options .open a {
   text-decoration: none;
   background: none !important;
 }
-#cards .card .menu {
+#cards .card .menu,
+#cards1 .card .menu {
   display: flex;
   position: absolute;
   top: 50px;
@@ -129,11 +149,13 @@ body[data-theme=light] {
   transition: all 0.5s;
   opacity: 1;
 }
-#cards .card .menu.active {
+#cards .card .menu.active,
+#cards1 .card .menu.active {
   display: none;
   opacity: 0;
 }
-#cards .card .menu li {
+#cards .card .menu li,
+#cards1 .card .menu li {
   text-decoration: none;
   list-style: none;
   border: 1px solid rgb(255, 255, 255);
@@ -142,7 +164,8 @@ body[data-theme=light] {
   transition: all 0.5s;
   border-radius: 10px;
 }
-#cards .card .menu li:hover {
+#cards .card .menu li:hover,
+#cards1 .card .menu li:hover {
   background: rgba(0, 0, 0, 0.2196078431);
 }
 

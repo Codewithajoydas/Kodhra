@@ -15,12 +15,11 @@ async function findFavPinned(cardIds = [], userId) {
 
   const result = cardIds.map((card) => ({
     ...card._doc,
+    author: card.author,
     isFavorite: favoriteCards.has(card._id.toString()),
     isPinned: pinnedCards.has(card._id.toString()),
   }));
-
   return result;
 }
-
 
 module.exports = findFavPinned;
