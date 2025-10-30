@@ -6,7 +6,8 @@ const jwt = require("jsonwebtoken");
 googleAuthrouter.get("/", (req, res) => {
   const params = querystring.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: "http://localhost:3000/auth/google/callback",
+    redirect_uri:
+      "https://kodhra.codewithajoydas.live/auth/google/callback",
     response_type: "code",
     scope: [
       "https://www.googleapis.com/auth/userinfo.email",
