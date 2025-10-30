@@ -191,14 +191,15 @@ NODE_ENV=development
 
 ## Screenshots
 
-*(Add screenshots once UI is ready)*
-
-Example placeholders:
-
 * Dashboard View
+  <img width="1365" height="633" alt="image" src="https://github.com/user-attachments/assets/0bc37a10-b0de-48d0-bf75-ca421b7f50db" />
+  
 * Snippet Editor
-* Search Results
-* Profile Page
+* <img width="1365" height="635" alt="image" src="https://github.com/user-attachments/assets/6f6ed48b-3731-4d49-9f6c-a46db5cd5bee" />
+
+* Snippets Results
+* <img width="1365" height="636" alt="image" src="https://github.com/user-attachments/assets/36b7e9a2-46e2-434f-88c1-3b12f073b4d3" />
+
 
 ---
 
