@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/style/css/signup.css" />
   <link rel="stylesheet" href="/style/css/login.css" />
   <!-- <link rel="stylesheet" href="/style/css/index.css"> -->
-  <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+  <link rel="shortcut icon" href="\assets\logo.webp" type="image/webp" />
   <style>
     .loader {
       display: flex;
@@ -74,7 +74,7 @@
   <div class="container">
     <!-- Section for Inputs -->
     <div class="div1">
-      <img src="/assets/logo.png" alt="" width="70px" />
+      <img src="/assets/wordmark.png" alt="" width="70px" />
       <h1>Sign-Up</h1>
       <h4>Welcome to CMD — Where Your Code Finds Order.</h4>
       <form action="/signup" enctype="multipart/form-data" method="post" id="signupForm">
@@ -313,21 +313,23 @@
             required />
         </span>
         <div class="error">
-          
+
         </div>
         <button type="submit" onclick=" validate()">Submit</button>
         <a href="/login">Already have an account?</a>
         <hr>
-        <div class="google_login">
-          <img
-            src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png"
-            alt="" />
-          <span><a href="/auth/google">Log-In With Google</a></span>
-        </div>
-        <br />
-        <div class="github_login">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733609.png" alt="" />
-          <span><a href="/auth/github/">Log-In With Github</a></span>
+        <div class="external">
+          <div class="google_login">
+            <img
+              src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png"
+              alt="" />
+            <span><a href="/auth/google">Google</a></span>
+          </div>
+          <br />
+          <div class="github_login">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733609.png" alt="" />
+            <span><a href="/auth/github/">Github</a></span>
+          </div>
         </div>
       </form>
     </div>
@@ -337,12 +339,13 @@
 
     <!-- Section for images -->
     <div class="div2">
-      <img src="/assets/signup-banner.jpg" alt="" width="100%" />
+      <img src="\assets\coding-bg.jpg" alt="" width="100%" />
       <span class="credit">Photo by <strong>Shubham Dhage</strong> on
         <a href="https://unsplash.com/photos/field-of-daisies-against-a-soft-blue-sky-cFuC4zUW8Lw">Unsplash</a></span>
     </div>
     <!-- Section for images End -->
   </div>
+  <script type="module" src="/utils/toast.js"></script>
   <script>
     window.onload = () => {
       let loader = document.querySelector(".loader");
@@ -419,6 +422,9 @@
     }
 
 
+  </script>
+  <script>
+    
   </script>
 </body>
 

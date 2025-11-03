@@ -21,9 +21,8 @@ signup.post("/", upload.single("userImage"), async (req, res) => {
     userImage,
     country,
     address,
-    mobileNumber,
   } = req.body;
-  if (!email || !mobileNumber) {
+  if (!email) {
     return res
       .status(400)
       .json({ message: "Email and Mobile Number are required" });
@@ -33,18 +32,21 @@ signup.post("/", upload.single("userImage"), async (req, res) => {
     return res.status(400).redirect("/login");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  const uploadedImage = await cloudinary.uploader.upload(req.file.path, {
-    folder: "my_images",
-  });
+  let uploadedImage;
+  if (userImage) {
+    await cloudinary.uploader.upload(req.file.path, {
+      folder: "my_images",
+    });
+  }
 
-  const createUser = await User.create({
-    userName,
+  await User.create({
+    userName: email.split("@")[0],
+    goodName: userName,
     email,
     password: hashPassword,
-    userImage: uploadedImage.secure_url,
+    userImage: uploadedImage?.secure_url,
     country,
     address,
-    mobileNumber,
   });
   res.redirect("/login");
 });

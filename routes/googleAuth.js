@@ -4,7 +4,7 @@ const querystring = require("querystring");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-dotenv.config()
+dotenv.config();
 googleAuthrouter.get("/", (req, res) => {
   const params = querystring.stringify({
     client_id: process.env.GOOGLE_CLIENT_ID,
@@ -17,6 +17,7 @@ googleAuthrouter.get("/", (req, res) => {
     access_type: "offline",
     prompt: "consent",
   });
+  console.log(params);
 
   res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
 });

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home | Code Snippet Manager</title>
+  <title>Home | Kodhra</title>
   <link rel="stylesheet" href="/style/css/partials/Header.css">
   <link rel="stylesheet" href="/style/css/ad_search.css">
   <link rel="stylesheet" href="/style/css/Notification.css">
@@ -18,7 +18,7 @@
   <meta name="title" content="Home | Kodhra">
   <meta name="description"
     content="Kodhra is a modern code snippet manager designed for developers to save, organize, and search snippets instantly with cloud sync and a clean interface.">
-      <meta name=" keywords"
+  <meta name=" keywords"
     content="Kodhra, code snippet manager, code storage, developer tools, programming snippets, save code, organize code, code search, web app for developers, cloud snippet manager, codewithajoydas, ajoy das">
   <meta name="language" content="">
   <meta name="revisit-after" content="3">
@@ -116,7 +116,7 @@
     <%- include("partials/header", {appVersion}) %>
       <div class="container">
         <%- include("partials/sidebar", { navigation: 'home' }) %>
-          <main>
+          <main style="height: calc(100vh - 70px);">
             <div class="page_title">
               Overview Section
             </div>
@@ -184,6 +184,54 @@
             </div>
             <div id="cards" style="overflow-y: scroll !important;">
               <%- include("partials/cards") %>
+            </div>
+            <div class="move_folder">
+              <div class="header_title" style="font-weight: bolder">
+                <div class="span">Move " folderName"</div>
+              </div>
+              <hr />
+              <div class="folders_name">
+                <ul>
+                  <% if (folders.length===0) { %>
+                    <span style="margin: 10px; color: red">No folder found</span>
+                    <% } %>
+                      <% folders.forEach((folder, i)=> { %>
+                        <li>
+                          <label>
+                            <input type="radio" name="moveFolder" value="<%= folder._id %>" id="moveFolder<%= i %>" />
+                            <div class="folder">
+                              <div class="folder_icon">
+                                <!-- SVG folder icon -->
+                              </div>
+                              <div class="folder_name" style="
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                gap: 10px;
+                              ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                  fill="#EDCE44" stroke="none" stroke-width="2" stroke-linecap="round"
+                                  stroke-linejoin="round" class="lucide lucide-folder-icon lucide-folder">
+                                  <path
+                                    d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
+                                </svg>
+                                <span style="
+                                  display: block;
+                                  width: 120px;
+                                  white-space: nowrap;
+                                  overflow: hidden;
+                                  text-overflow: ellipsis;
+                                " title="<%= folder.folderName %>">
+                                  <%= folder.folderName %>
+                                </span>
+                              </div>
+                            </div>
+                          </label>
+                        </li>
+                        <% }) %>
+                </ul>
+                <button class="move_btn" onclick="moveIt()" <%=folders.length===0 ? "disabled" : "" %> > Move </button>
+              </div>
             </div>
           </main>
       </div>

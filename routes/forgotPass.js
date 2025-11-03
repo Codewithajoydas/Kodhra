@@ -13,7 +13,12 @@ fpRouter.post("/", async (req, res) => {
   const email = req.body.email;
   try {
     const otp = getOtp(6);
-    await sendMail(email, "Password Reset Request", otp);
+    try {
+      await sendMail(email, "Password Reset Request", otp);
+    } catch (err) {
+      console.error("Mail error:", err);
+      return res.status(500).json({ Error: "Failed to send email!" });
+    }
     await client.set(`otp:${email}`, otp, {
       EX: 200,
     });
@@ -43,7 +48,7 @@ fpRouter.post("/resend", async (req, res) => {
 fpRouter.post("/verifyOtp", async (req, res) => {
   const { otp } = req.body;
   if (!otp) return res.json({ error: "Please Enter OTP..." });
-  const email = req.session.email;
+  const email = req.cookies.email;
 
   try {
     if (!email) {
@@ -54,7 +59,13 @@ fpRouter.post("/verifyOtp", async (req, res) => {
     const checkOtp = await client.get(`otp:${email}`);
     if (checkOtp === otp) {
       await client.del(`otp:${email}`);
-      res.redirect("/forgotPass/reset");
+      await client.set(`otp_verified:${email}`, "true", {
+        EX: 200,
+      })
+      res.json({
+        message: "OTP verified successfully!",
+        email,
+      });
     } else {
       res.json({
         error: "Invalid or expired OTP!",
@@ -72,20 +83,13 @@ fpRouter.get("/verify", async (req, res) => {
   res.render("verifyPass");
 });
 
-fpRouter.get("/otpexp", async (req, res) => {
-  const email = req.session.email;
-  if (!email) return res.json({ error: "Session expired" });
 
-  const ttl = await client.ttl(`otp:${email}`);
-  if (ttl === -2) return res.json({ error: "OTP expired or not found" });
-  if (ttl === -1) return res.json({ ttl: 0 }); // no expiry
-
-  res.json({ ttl }); // send seconds left
-});
-
-
-fpRouter.get("/reset", (req, res) => {
-  const { email } = req.cookies;
+fpRouter.get("/reset", async (req, res) => {
+   const verified = await client.get(`otp_verified:${req.cookies.email}`) === "true";
+  if (!verified) {
+     
+     return res.status(401).json({ error: "You Are a BokaChoda!", email:req.cookies.email, verified });
+   }
   res.render("passwordReset");
 });
 

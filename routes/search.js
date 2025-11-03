@@ -38,11 +38,15 @@ searchRouter.get("/universal", async (req, res) => {
 });
 
 searchRouter.get("/json", async (req, res) => {
-  const { title, des, content, author } = req.query;
+  const { q, pageNum } = req.query;
   try {
     const tokens = req.cookies.token;
     const decode = jwt.verify(tokens, process.env.SECRET);
     const { _id, userImage, userName } = decode.checkUser;
+    const page = parseInt(pageNum) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+
     const cards = await Card.find({
       $or: [
         { title: { $regex: q, $options: "i" } },
@@ -52,11 +56,8 @@ searchRouter.get("/json", async (req, res) => {
         {
           content: { $regex: q, $options: "i" },
         },
-        {
-          author:{ $regex: q, $options: "i" },
-        }
       ],
-    }).populate("author");
+    }).skip(skip).limit(limit); 
     const card = await findFavPin(cards, _id);
     res.json(cards);
   } catch (error) {

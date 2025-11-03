@@ -59,4 +59,11 @@ profileRouter.post("/follow/:id", async (req, res) => {
 });
 
 
+
+
+profileRouter.post("/:id", (req, res) => {
+  const { id } = req.params;
+  
+})
+
 module.exports = profileRouter;

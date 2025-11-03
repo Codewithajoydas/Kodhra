@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="/style/css/toast.css" />
   <!-- <link rel="stylesheet" href="/style/css/index.css"> -->
   <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+  <script src="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.css">
   <style>
     .loader {
       display: flex;
@@ -63,18 +65,7 @@
 </head>
 
 <body data-theme="light">
-  <div class="t-parent">
-    <div class="toast"></div>
-    <span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="lucide lucide-circle-x-icon lucide-circle-x">
-        <circle cx="12" cy="12" r="10" />
-        <path d="m15 9-6 6" />
-        <path d="m9 9 6 6" />
-      </svg>
-    </span>
-  </div>
+
 
   <div class="loader">
     <div style="display: flex; justify-content: center; align-items: end">
@@ -87,17 +78,17 @@
   <div class="container">
     <!-- Section for Inputs -->
     <div class="div1">
-      <img src="/assets/logo.png" alt="" width="70px" />
-      <h1>Log-In</h1>
+      <img src="/assets/wordmark.png" alt="" width="70px" />
+      <h1 style="font-weight: 600;">Log-In</h1>
       <h4>Welcome Back to CMD — Where Your Code Finds Order.</h4>
       <form action="/login" method="post" id="signupForm">
         <span>
           <label for="email">Email <sup>*</sup></label>
-          <input type="email" name="email" id="email" placeholder="Enter Your Email... " />
+          <input type="email" name="email" id="email" placeholder="Enter Your Email... " required />
         </span>
         <span>
           <label for="password">Password <sup>*</sup></label>
-          <input type="password" name="password" id="password" placeholder="Enter Your Password..." />
+          <input type="password" name="password" id="password" placeholder="Enter Your Password..." required />
           <div style="text-align: end; color: gray; font-size: small">
             <a href="/forgotPass" style="text-decoration: none" onclick="verifyEmail()" id="forgotlink">Forgot
               Password</a>
@@ -105,7 +96,7 @@
         </span>
 
         <button type="submit">Login</button>
-        <a href="/signup">Create an account</a>
+        <a href="/signup" style="margin-top: 10px;">Create an account</a>
         <div style="
               display: flex;
               width: 350px;
@@ -121,16 +112,18 @@
           Or
           <div style="border-top: 0.2px solid rgba(87, 87, 87, 0.76); flex: 1"></div>
         </div>
-        <div class="google_login">
-          <img
-            src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png"
-            alt="" />
-          <span><a href="/auth/google">Log-In With Google</a></span>
-        </div>
-        <br />
-        <div class="github_login">
-          <img src="https://cdn-icons-png.flaticon.com/512/733/733609.png" alt="" />
-          <span><a href="/auth/github/">Log-In With Github</a></span>
+        <div class="external">
+          <div class="google_login">
+            <img
+              src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png"
+              alt="" />
+            <span><a href="/auth/google">Google</a></span>
+          </div>
+          <br />
+          <div class="github_login">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733609.png" alt="" />
+            <span><a href="/auth/github/">Github</a></span>
+          </div>
         </div>
       </form>
     </div>
@@ -140,7 +133,7 @@
 
     <!-- Section for images -->
     <div class="div2">
-      <img src="/assets/login-banner.jpg" alt="" width="100%" />
+      <img src="\assets\coding-bg.jpg" alt="" width="100%" />
       <span class="credit">Photo by <strong>Shubham Dhage</strong> on
         <a href="https://unsplash.com/photos/field-of-daisies-against-a-soft-blue-sky-cFuC4zUW8Lw">Unsplash</a></span>
     </div>
@@ -153,21 +146,12 @@
     };
   </script>
   <script>
-    function showToast(msg, type, duration = 10000) {
-      let toast = document.querySelector(".toast");
-      toast.textContent = msg;
-      toast.classList.remove("success", "error");
-      toast.classList.add(type);
-      toast.style.display = "block";
-      let timeout = setTimeout(() => {
-        toast.style.display = "none";
-        clearTimeout(timeout);
-      }, duration);
-    }
+    const notificationA = new Toastmaster();
+
     async function verifyEmail() {
       const email = document.getElementById("email").value;
       localStorage.setItem("email", email);
-      showToast("⏱️ Please wait Email is being sent", "success")
+      new Toastmaster({ title: "Sending email", message: "Please wait...", type: "success", delay: 5000 }).showNotification()
       if (email) {
         const response = await fetch("/forgotPass", {
           method: "POST",
@@ -178,11 +162,11 @@
           body: JSON.stringify({ email }),
         });
         if (response.ok) {
-          showToast("✅ Email sent successfully", "success")
+          new Toastmaster({ title: "Email sent successfully", message: "Please check your inbox", type: "success", delay: 3000 }).showNotification()
           window.location.href = "/forgotPass/verify";
         }
       } else {
-        showToast("✍️ Please enter your email", "error")
+        new Toastmaster({ title: "Error", message: "Please enter your email", type: "error", delay: 3000 }).showNotification()
       }
     }
     document.querySelector("#forgotlink").addEventListener("click", (e) => {

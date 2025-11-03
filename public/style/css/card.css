@@ -24,6 +24,7 @@ body[data-theme=light] {
 }
 #cards .card,
 #cards1 .card {
+  transition: all 0.5s ease;
   min-width: 400px;
   position: relative;
   margin-block: 5px;
@@ -208,6 +209,17 @@ body[data-theme=light] {
   min-height: 20px !important;
   width: 20px !important;
   height: 20px !important;
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /*# sourceMappingURL=card.css.map */

@@ -19,7 +19,8 @@ const UserSchema = new mongoose.Schema(
     },
     userImage: {
       type: String,
-      default: "",
+      default:
+        "https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg",
     },
     country: {
       type: String,
@@ -53,8 +54,5 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-
-
 
 module.exports = mongoose.model("User", UserSchema);

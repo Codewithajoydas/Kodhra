@@ -22,6 +22,7 @@ $accent: #2e2e2e21;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 10px;
   .card {
+    transition: all .5s ease;
     min-width: 400px;
     position: relative;
     margin-block: 5px;
@@ -187,5 +188,16 @@ $accent: #2e2e2e21;
         height: 20px !important;
       }
     }
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
