@@ -18,7 +18,8 @@ cardRouter.get("/", async (req, res) => {
     .find({ author: _id })
     .populate("author", "userName userImage")
     .skip(skip)
-    .limit(limit).sort({ createdAt: -1 });
+    .limit(limit)
+    .sort({ createdAt: -1 });
   let card = await findFavPinned(cards, _id);
 
   const len = await cardSchema.find({ author: _id }).countDocuments();
@@ -167,7 +168,7 @@ cardRouter.put("/pin/:id", async (req, res) => {
 
     res.json({
       success: true,
-      message: `Card ${isPinned ? "unpinned" : "pinned"} successfully`,
+      message: isPinned ? "unpinned" : "pinned",
       pinnedCards: user.pinnedCards,
     });
   } catch (err) {

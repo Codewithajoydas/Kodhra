@@ -9,7 +9,7 @@ draftDB1.onupgradeneeded = (e) => {
 };
 
 draftDB1.onsuccess = (e) => {
-  db1 = e.target.result; 
+  db1 = e.target.result;
   window.draft_Delete = function (id) {
     const tx = db1.transaction("drafts", "readwrite");
     const store = tx.objectStore("drafts");
@@ -201,7 +201,25 @@ async function pinIt(ele, id) {
     let svg = ele.querySelector("svg");
     svg.classList.toggle("active");
   }
-  res.json().then((data) => {});
+  res.json().then((data) => {
+    if (data.message == "pinned") {
+      new Toastmaster({
+        title: "Success",
+        message: "Card pinned successfully",
+        type: "success",
+        delay: 5000,
+      }).showNotification();
+      console.log(data.message);
+    } else {
+      new Toastmaster({
+        title: "Success",
+        message: "Card unpinned successfully",
+        type: "success",
+        delay: 5000,
+      }).showNotification();
+      console.log(data.message);
+    }
+  });
 }
 
 function editCard(id) {
@@ -210,28 +228,6 @@ function editCard(id) {
 
 let move_folder = document.querySelector(".move_folder");
 let getFoldername = document.querySelector(".header_title .span");
-const toast = document.querySelector(".toast");
-const toastCloseBtn = document.querySelector(".toast .close");
-const toastMessage = document.querySelector(".toast-message");
-let toastTimeoutId = null;
-
-function showToast(message, type = "success", duration = 5000) {
-  if (toastTimeoutId) clearTimeout(toastTimeoutId);
-  toastMessage.textContent = message;
-  toast.dataset.type = type;
-  toast.style.display = "block";
-  toastTimeoutId = setTimeout(() => {
-    toast.style.display = "none";
-    toastTimeoutId = null;
-  }, duration);
-}
-toastCloseBtn?.addEventListener("click", () => {
-  toast.style.display = "none";
-  if (toastTimeoutId) {
-    clearTimeout(toastTimeoutId);
-    toastTimeoutId = null;
-  }
-});
 
 async function moveCard(id, cardName, mtype) {
   cardId = id;
@@ -244,7 +240,13 @@ async function moveCard(id, cardName, mtype) {
 async function moveIt() {
   const selected = document.querySelector("input[name='moveFolder']:checked");
   if (!selected) {
-    showToast("⚠️ Please select a folder before moving.", "error");
+    new Toastmaster({
+      title: "No folder selected",
+      message: "Please select a folder before moving.",
+      type: "error",
+      delay: 5000,
+    }).showNotification();
+
     return;
   }
 
@@ -263,13 +265,28 @@ async function moveIt() {
         const data = await res.json();
         if (data?.error) errorMsg = data.error;
       } catch {}
-      showToast(`🚨 ${errorMsg}`, "error");
+      new Toastmaster({
+        title: "Move Failed",
+        message: `${errorMsg}`,
+        type: "error",
+        delay: 5000,
+      }).showNotification();
     } else {
-      showToast(`🎉 Successfully moved ${movetype}!`, "success");
+      new Toastmaster({
+        title: "Move Success",
+        message: "Card moved successfully.",
+        type: "success",
+        delay: 5000,
+      }).showNotification();
     }
   } catch (err) {
     console.error("Error in moveIt:", err);
-    showToast("🚨 Unexpected error. Please check your connection.", "error");
+    new Toastmaster({
+      title: "Move Failed",
+      message: "An error occurred while moving the card.",
+      type: "error",
+      delay: 5000,
+    }).showNotification();
   }
 }
 const mf = document.querySelector(".move_folder");
@@ -294,8 +311,8 @@ document.addEventListener("mouseup", () => {
 
 document.addEventListener("click", () => {
   document.querySelector("body").classList.remove("active");
-  if(move_folder) move_folder.style.display = "none";
-  if(contextMenu) contextMenu.style.display = "none";
+  if (move_folder) move_folder.style.display = "none";
+  if (contextMenu) contextMenu.style.display = "none";
   move_folder?.querySelectorAll("input").forEach((inp) => {
     if (inp.type === "radio" || inp.type === "checkbox") {
       inp.checked = false;
@@ -311,4 +328,3 @@ move_folder?.addEventListener("click", (e) => {
 function draft_Edit(id, url) {
   window.location.assign(url);
 }
-

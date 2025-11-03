@@ -118,9 +118,8 @@ header {
         height: auto;
         padding: 10px;
         border-radius: 10px;
-        background: var(--bg-color);
+        background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
-        box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.1);
         border: 1px solid var(--accent);
         top: 115%;
         right: 10px;
@@ -185,7 +184,8 @@ header {
           align-items: center;
           gap: 20px;
           padding: 10px;
-          background: var(--accent);
+          background: rgba(255, 255, 255, 0.001);
+          border: 1px solid var(--accent);
           border-radius: 10px;
           label {
             cursor: pointer;
