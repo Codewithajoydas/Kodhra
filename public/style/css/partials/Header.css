@@ -29,6 +29,7 @@ header .logo img {
   width: 40px;
   object-fit: cover;
   margin-left: 10px;
+  cursor: pointer;
 }
 header .logo .lg:hover {
   text-decoration: underline;
@@ -98,11 +99,11 @@ header nav .notification .number {
   justify-content: center;
   align-items: center;
   background: red;
+  text-align: center;
   color: #fff;
-  width: 25px;
-  height: 25px;
-  padding: 2px;
-  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  font-size: x-small;
   border: 2px solid var(--bg-color);
 }
 header nav .profile {
@@ -118,37 +119,27 @@ header nav .profile img {
   object-fit: cover;
 }
 header nav .profile .profile-bar {
-  display: none;
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  transition: all 0.5s ease;
   position: absolute;
   width: 300px;
   height: auto;
   padding: 10px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.014);
   backdrop-filter: blur(10px);
   border: 1px solid var(--accent);
   top: 115%;
   right: 10px;
 }
 header nav .profile .profile-bar.active {
-  display: block;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
 header nav .profile .profile-bar hr {
   outline: none;
   border: none;
   height: 1px;
   background: var(--accent);
-}
-header nav .profile .profile-bar::before {
-  position: absolute;
-  content: "";
-  top: -10px;
-  right: 10px;
-  width: 0px;
-  height: 0px;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid var(--bg-color);
 }
 header nav .profile .profile-bar .header {
   display: flex;
@@ -171,6 +162,7 @@ header nav .profile .profile-bar .menus {
   margin-block: 10px;
 }
 header nav .profile .profile-bar .menus li a {
+  font-size: small;
   padding: 10px 10px;
   width: 100%;
   border-radius: 10px;
@@ -179,6 +171,7 @@ header nav .profile .profile-bar .menus li a {
   align-items: center;
   gap: 10px;
   outline: none;
+  transition: all 0.5s ease;
 }
 header nav .profile .profile-bar .menus li a svg {
   width: 20px;

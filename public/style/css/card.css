@@ -33,11 +33,12 @@ body[data-theme=light] {
   background-color: var(--bg-color) !important;
   position: relative;
   border-radius: 10px;
+  border: 2px solid rgba(2, 2, 2, 0);
   backdrop-filter: blur(10px) !important;
 }
 #cards .card:has(.select-card:checked),
 #cards1 .card:has(.select-card:checked) {
-  border: 2px solid rgba(2, 2, 2, 0.201);
+  border: 2px solid var(--accent);
   backdrop-filter: blur(100px);
   object-fit: contain;
 }
@@ -74,12 +75,15 @@ body[data-theme=light] {
   background: var(--secondary-bg-color) !important;
   margin: 10px;
   padding: 10px;
+  padding-top: 3px !important;
+  border: 1px solid var(--accent);
   border-radius: 10px;
-  text-overflow: ellipsis;
   overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: "Courier New", Courier, monospace !important;
+  max-height: 4.5em;
 }
 #cards .card .tags,
 #cards1 .card .tags {
@@ -124,13 +128,18 @@ body[data-theme=light] {
 #cards .card .options .open,
 #cards1 .card .options .open {
   background: var(--accent);
-  padding: 10px 30px;
+  padding: 10px 20px;
   border-radius: 10px;
+  border: 1px solid transparent;
 }
 #cards .card .options .open a,
 #cards1 .card .options .open a {
   text-decoration: none;
   background: none !important;
+}
+#cards .card .options .open:hover,
+#cards1 .card .options .open:hover {
+  border: 1px solid var(--accent) !important;
 }
 #cards .card .menu,
 #cards1 .card .menu {
@@ -175,6 +184,7 @@ body[data-theme=light] {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: row-reverse;
 }
 .cardContainer-header .card-options {
   display: flex;

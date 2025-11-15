@@ -4,8 +4,13 @@
   overflow-x: scroll;
   transition: all 0.2s ease;
   gap: 5px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   .chip {
     span {
+      cursor: pointer;
+      transition: all 0.2s ease;
       font-size: medium;
       border: 1px solid var(--accent);
       white-space: nowrap;
@@ -13,12 +18,32 @@
       border-radius: 5px;
     }
     padding: 10px;
-    &.active{
-      span{
+    &.active,
+    &:hover,
+    &:focus {
+      span {
         background: var(--color);
         color: var(--bg-color);
+        outline: none;
       }
     }
+  }
+}
+
+.left_arrow, .right_arrow {
+  z-index: 100;
+  background: var(--accent);
+  backdrop-filter: blur(10px);
+  width: 30px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid gray;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  &:hover {
+    transform: scale(1.1);
   }
 }
 

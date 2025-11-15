@@ -19,7 +19,7 @@
         </div>
         <span class="lg" style="display: flex; justify-content: center;align-items: center; gap: 10px;" onmouseover=""
             onclick="window.location.assign('/')">
-            <img src="/assets/logo.webp" alt="code snippet manager" />
+            <img src="\assets\wordmark.png" alt="code snippet manager" />
             <span><span style="white-space: nowrap; font-size: larger;">Kodhra</span>
             </span>
         </span>
@@ -323,42 +323,13 @@
 
 
 
-<script type="module">
-    import { tooltip } from "/scripts/tooltip.js";
-    ["#filter", ".notification", ".help", ".profile", ".music"].forEach(e => {
-        tooltip(e);
-    })
 
-    function isReallyFullscreen() {
-        return (
-            document.fullscreenElement ||
-            window.innerHeight === screen.height
-        );
-    }
-    isReallyFullscreen() && window.location.pathname !== "/" ? document.querySelector(".backButton").style.display = "flex" : document.querySelector(".backButton").style.display = "none";
-    window.addEventListener("resize", (e) => {
-        isReallyFullscreen() && window.location.pathname !== "/" ? document.querySelector(".backButton").style.display = "flex" : document.querySelector(".backButton").style.display = "none";
-    });
-
-
-    let svg = document.querySelector(".music");
-    let audio = document.getElementById("audio");
-    document.querySelector(".music").addEventListener("click", () => {
-        if (audio.paused) {
-            audio.play();
-        } else {
-            audio.pause();
-        }
-    })
-    audio.addEventListener("playing", () => {
-        svg.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="animated" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-disc3-icon lucide-disc-3"><circle cx="12" cy="12" r="10"/><path d="M6 12c0-1.7.7-3.2 1.8-4.2"/><circle cx="12" cy="12" r="2"/><path d="M18 12c0 1.7-.7 3.2-1.8 4.2"/></svg>`
-    })
-    audio.addEventListener("pause", () => {
-        svg.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-music-icon lucide-music"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`
-    })
-</script>
 
 <script>
+
+
+
+
     function openProfile(e) {
         e.stopPropagation();
         document.querySelector(".profile-bar").classList.toggle("active");

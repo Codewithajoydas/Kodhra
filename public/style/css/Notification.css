@@ -15,13 +15,13 @@
   overflow-y: scroll;
   opacity: 0;
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  clip-path: polygon(100% 0, 42% 13%, 34% 66%, 100% 100%);
+  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
   visibility: hidden;
 }
 .notification-bar.active {
   opacity: 1;
   visibility: visible;
-  clip-path: polygon(100% 0, 0 0, 0 100%, 100% 100%);
+  clip-path: polygon(100% 0, 0 0, 0 99%, 100% 100%);
 }
 .notification-bar .notification-lists {
   list-style: none;

@@ -12,8 +12,9 @@
   <link rel="stylesheet" href="/style/css/index.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
-  <script src="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@3.0.0/dist/toaster.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@3.0.0/dist/toaster.min.css">
+
   <!-- META Tags -->
   <meta name="title" content="Home | Kodhra">
   <meta name="description"
@@ -62,13 +63,18 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      width: 100%;
+      width: 100vw;
       position: fixed;
       z-index: 100000;
       top: 0;
       font-size: clamp(30px, 3vw, 40px);
-
+      transition: all 0.5s;
       font-weight: bolder;
+      overflow: hidden;
+    }
+
+    .loader.active {
+      height: 0vw;
     }
 
     .spain {
@@ -112,79 +118,186 @@
   <div class="loader">
     <dotlottie-wc src="gEzG0w1WVY.lottie" style="width: 400px; height: 400px" speed="1" autoplay loop></dotlottie-wc>
   </div>
-  <div class="content">
+  <div class="content" style="opacity: 0; transition: all 0.5s;">
     <%- include("partials/header", {appVersion}) %>
       <div class="container">
         <%- include("partials/sidebar", { navigation: 'home' }) %>
           <main style="height: calc(100vh - 70px);">
-            <div class="page_title">
+            <div class="page_title" onclick="collapse(this)">
+              <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                  <path d="m6 9 6 6 6-6" />
+                </svg></span>
               Overview Section
             </div>
-            <div class="greeting">
-              <img src="\assets\motivation-3d-icon.webp" alt="motivational image">
-              <span>
-                <h1>Hello, <span id="username" style="text-transform: capitalize;">
-                    <%= author %>
-                  </span></h1>
-                <span class="motivation"></span>
-              </span>
-            </div>
-            <div class="count">
-              <div class="totalSnippet" onclick="window.location.assign('/card')">
-                <div class="img">
-                  <img src="\assets\code-snippet-3d-icon.webp" alt="" width="60px">
-                </div>
-                <div>
-                  <span id="totalSnippet">0</span>
-                  <span>Total Snippets</span>
-                </div>
-              </div>
-              <div class="totalFolder" onclick="window.location.assign('/folder')">
-                <div class="img">
-                  <img src="\assets\folder-3d-icon.webp" alt="">
-                </div>
-                <div>
-                  <span id="totalFolder">0</span>
-                  <span>Total Folders</span>
-                </div>
-              </div>
-              <div class="totalTag" onclick="window.location.assign('/tags')">
-                <div class="img">
-                  <img src="\assets\3d-isolated-price-tag.webp" alt="">
-                </div>
-                <div>
-                  <span id="totalTag">0</span>
-                  <span>Total Tags</span>
-                </div>
-              </div>
-              <div class="totalTag" onclick="window.location.assign('/draft')">
-                <div class="img">
-                  <img src="\assets\folder-3d-icon.webp" alt="">
-                </div>
-                <div>
-                  <span id="totalTag" class="draft">0</span>
-                  <span>Total Drafts</span>
-                </div>
-              </div>
-            </div>
-            <div class="reports">
-              <div class="dailywisechart">
+            <section class="overview"
+              style="transition: all .5s ease-in; position: relative; display: flex; justify-content: space-evenly;">
+              <div>
                 <div style="display: flex;justify-content: space-between;align-items: center;">
-                  <span style="font-weight: bolder; padding-bottom: 10px;">Daily Wise Report</span>
-                  <input type="month" style="border: 1px solid var(--accent);padding: 10px;border-radius: 10px;"
-                    aria-label="Select Month" id="datePicker">
+                  <div class="greeting">
+                    <img src="\assets\motivation-3d-icon.webp" alt="motivational image">
+                    <span>
+                      <h1>Hello, <span id="username" style="text-transform: capitalize;">
+                          <%= author %>
+                        </span></h1>
+                      <span class="motivation"></span>
+                    </span>
+                  </div>
+                  <div class="lastActive" style="padding-inline: 10px;">
+                    <p style="font-size: smaller; display: flex; justify-content: start;align-items: center;gap: 5px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-clock-fading-icon lucide-clock-fading">
+                        <path d="M12 2a10 10 0 0 1 7.38 16.75" />
+                        <path d="M12 6v6l4 2" />
+                        <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
+                        <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
+                        <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
+                        <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
+                      </svg>Last Logged In
+                    </p>
+                    <span><span id="lastActive" style="font-weight: bolder; font-size: small;"></span></span>
+                  </div>
                 </div>
-                <canvas id="dailyChart"></canvas>
-              </div>
-              <canvas id="languageChart"></canvas>
-            </div>
+                <div class="count" style="gap: 10px;">
+                  <div class="totalSnippet" onclick="window.location.assign('/card')">
+                    <div class="img">
+                      <img src="\assets\code-snippet-3d-icon.webp" alt="" width="60px">
+                    </div>
+                    <div>
+                      <span id="totalSnippet">0</span>
+                      <span style="white-space: nowrap;">Total Snippets</span>
+                    </div>
+                  </div>
+                  <div class="totalFolder" onclick="window.location.assign('/folder')">
+                    <div class="img">
+                      <img src="\assets\folder-3d-icon.webp" alt="">
+                    </div>
+                    <div>
+                      <span id="totalFolder">0</span>
+                      <span style="white-space: nowrap;">Total Folders</span>
+                    </div>
+                  </div>
+                  <div class="totalTag" onclick="window.location.assign('/tags')">
+                    <div class="img">
+                      <img src="\assets\3d-isolated-price-tag.webp" alt="">
+                    </div>
+                    <div>
+                      <span id="totalTag">0</span>
+                      <span style="white-space: nowrap;">Total Tags</span>
+                    </div>
+                  </div>
+                  <div class="totalTag" onclick="window.location.assign('/draft')">
+                    <div class="img">
+                      <img src="/assets/document-3d-icon.webp" alt="">
+                    </div>
+                    <div>
+                      <span id="totalTag" class="draft">0</span>
+                      <span style="white-space: nowrap;">Total Drafts</span>
+                    </div>
+                  </div>
+                </div>
 
-            <div class="page_title">
+
+                <div class="reports">
+                  <div class="dailywisechart">
+                    <div style="display: flex;justify-content: space-between;align-items: center;">
+                      <span style="font-weight: bolder; padding-bottom: 10px;">Daily Wise Report</span>
+                      <input type="month" style="border: 1px solid var(--accent);padding: 10px;border-radius: 10px;"
+                        aria-label="Select Month" id="datePicker">
+                    </div>
+                    <canvas id="dailyChart"></canvas>
+                  </div>
+                  <canvas id="languageChart" width="100" height="100"></canvas>
+                </div>
+              </div>
+
+              <div style="height: 100%; display: flex;flex-direction: column; gap: 10px; justify-content: start;">
+                <div class="recent_activity" style="background: var(--bg-color);  border-radius: 10px;;">
+                  <div class="headerTtitle"
+                    style=" padding: 10px; display: flex;justify-content: start;align-items: center;gap: 10px;">
+                    <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-history-icon lucide-history">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                        <path d="M12 7v5l4 2" />
+                      </svg></span>
+                    <div class="span">Recent History</div>
+                  </div>
+                  <hr style="margin-block: 5px;">
+                  <div class="list">
+                    <ul class="activity" style="list-style: none; font-size: small;">
+                      <li><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-circle-icon lucide-circle">
+                            <circle cx="12" cy="12" r="10" />
+                          </svg></span> Created a new snippet on <br> 11-11-2022</li>
+                      <li><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-circle-icon lucide-circle">
+                            <circle cx="12" cy="12" r="10" />
+                          </svg></span> Created a new snippet on <br> 11-11-2022</li>
+                      <li><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-circle-icon lucide-circle">
+                            <circle cx="12" cy="12" r="10" />
+                          </svg></span> Created a new snippet on <br> 11-11-2022</li>
+                      <li><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-circle-icon lucide-circle">
+                            <circle cx="12" cy="12" r="10" />
+                          </svg></span> Created a new snippet on <br> 11-11-2022</li>
+                    </ul>
+                    <a href="#" style="font-size: smaller;color: blue;padding: 10px;">See
+                      All</a>
+                  </div>
+                </div>
+                <div class="validated_cards" style="height: fit-content;  padding: 10px;">
+                  <div class="headerTtitle"
+                    style=" padding: 10px; display: flex;justify-content: start;align-items: center;gap: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="lucide lucide-file-text-icon lucide-file-text">
+                      <path
+                        d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
+                      <path d="M14 2v5a1 1 0 0 0 1 1h5" />
+                      <path d="M10 9H8" />
+                      <path d="M16 13H8" />
+                      <path d="M16 17H8" />
+                    </svg>
+                    <div class="span">Duplicate Snippets</div>
+                  </div>
+                  <hr>
+                  <div class="pendingdata" style="display: flex;
+                  justify-content: center;
+                  flex-direction: column;
+                  align-items: center;">
+                    <span>Delete duplicate snippets</span>
+                    <span style="font-size: x-large;" class="vp">450/503</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+
+
+
+
+            <div class="page_title" onclick="collapse(this)">
+              <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                  <path d="m6 9 6 6 6-6" />
+                </svg></span>
               Recent Snippets
             </div>
-            <div id="cards" style="overflow-y: scroll !important;">
-              <%- include("partials/cards") %>
-            </div>
+            <section class="cardsasd">
+              <div id="cards" style="overflow-y: scroll !important;">
+                <%- include("partials/cards") %>
+              </div>
+            </section>
             <div class="move_folder">
               <div class="header_title" style="font-weight: bolder">
                 <div class="span">Move " folderName"</div>
@@ -233,6 +346,17 @@
                 <button class="move_btn" onclick="moveIt()" <%=folders.length===0 ? "disabled" : "" %> > Move </button>
               </div>
             </div>
+            <%- include("partials/fab") %>
+              <div class="dragover-container">
+                <span style="text-align: center;">
+                  <img
+                    src="https://cdn3d.iconscout.com/3d/premium/thumb/drag-and-drop-3d-icon-png-download-12385391.png"
+                    alt="" width="200px">
+                  <br>
+                  <h2>Drop here to upload</h2>
+                  <p>Drag and drop snippets to upload them</p>
+                </span>
+              </div>
           </main>
       </div>
   </div>
@@ -247,7 +371,6 @@
       ">
     <ul id="context_menu_list"></ul>
   </div>
-
 
   <div class="networkInfo" style="display: none;">
     <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -287,39 +410,35 @@
     let dailyChartInstance = null;
 
     window.onload = async () => {
-      document.querySelector(".loader").style.display = "none";
       const res = await fetch("/motivational.json");
       const data = await res.json();
       motivation.textContent = data[Math.floor(Math.random() * data.length)];
-
       const now = new Date();
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, "0");
       datePicker.value = `${year}-${month}`;
-
-
-
       getCounts(year, Number(month));
+      document.querySelector(".loader").classList.add("active");
+      const content = document.querySelector(".content").style.opacity = "1";
     };
 
     async function getCounts(selectedYear, selectedMonth) {
       const res = await fetch("/report");
       const data = await res.json();
-
       document.getElementById("totalSnippet").textContent = data.totalCards;
       document.getElementById("totalFolder").textContent = data.totalFolders;
       document.getElementById("totalTag").textContent = data.totalTags;
-
       dailyCounts = data.dailyCounts;
       const languageReport = data.languageReport;
 
-      const langLabels = languageReport.map(l => l._id);
-      const langData = languageReport.map(l => l.count);
+      const langLabels = languageReport.map(l => l._id).splice(0, 3);
+      const langData = languageReport.map(l => l.count).splice(0, 3);
       const colors = languageReport.map(() => getRandomColor());
 
       const langCtx = document.getElementById("languageChart").getContext("2d");
+
       new Chart(langCtx, {
-        type: "polarArea",
+        type: "bar",
         data: {
           labels: langLabels,
           datasets: [{
@@ -327,17 +446,43 @@
             data: langData,
             backgroundColor: colors,
             borderColor: "rgba(255, 255, 255, 1)",
-            borderWidth: 1
+            borderWidth: 0,
+            borderRadius: 10,
+            borderSkipped: false
           }]
         },
         options: {
-          responsive: true,
           plugins: {
-            legend: { display: false },
-            title: { display: true, text: "Snippets per Language" }
+            legend: {
+              display: false
+            },
+            title: {
+              display: true,
+              text: "Snippets per Language"
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              grid: {
+                azis: "y",
+                display: false,
+                color: "rgba(230,230,230,0.3)"
+              }
+            },
+            y: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                color: "#555",
+                font: { size: 12 }
+              }
+            }
           }
         }
       });
+
 
       renderDailyChart(selectedYear, selectedMonth);
     }
@@ -382,9 +527,10 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: true,
           plugins: {
             legend: { display: false },
-            title: { display: true, text: "Snippets per Day" }
+            title: { display: false, text: "Snippets per Day" }
           },
           scales: {
             y: { beginAtZero: true }
@@ -403,7 +549,137 @@
   </script>
 
 
+  <script>
+    let dragover_container = document.querySelector(".dragover-container");
+    let dragCounter = 0;
 
+    window.addEventListener("dragenter", (e) => {
+      e.preventDefault();
+      dragCounter++;
+      dragover_container.classList.add("active");
+    });
+
+    window.addEventListener("dragleave", (e) => {
+      e.preventDefault();
+      dragCounter--;
+      if (dragCounter === 0) {
+        dragover_container.classList.remove("active");
+      }
+    });
+
+    window.addEventListener("dragover", (e) => e.preventDefault());
+
+    window.addEventListener("drop", async (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      dragover_container.classList.remove("active");
+
+      const file = e.dataTransfer.files[0];
+      const fileExtension = file.name.split(".").pop().trim().toLowerCase();
+
+      const extensionMap = {
+        js: "javascript", jsx: "react", ts: "typescript", tsx: "react-typescript",
+        html: "html", css: "css", scss: "scss", sass: "sass",
+        json: "json", xml: "xml", py: "python", java: "java",
+        c: "c", cpp: "cpp", cs: "csharp", php: "php", rb: "ruby",
+        go: "golang", rs: "rust", swift: "swift", kt: "kotlin",
+        dart: "dart", sql: "sql", md: "markdown", sh: "bash",
+        bat: "batch", ini: "ini", yml: "yaml", yaml: "yaml",
+        vue: "vue", svelte: "svelte", astro: "astro", hbs: "handlebars",
+        handlebars: "handlebars", svg: "svg", txt: "text", env: "dotenv",
+        lock: "lockfile", toml: "toml", dockerfile: "docker"
+      };
+
+      if (fileExtension === "json") {
+        const reader = new FileReader();
+
+        reader.onload = async (event) => {
+          const fileContent = event.target.result;
+
+          const formData = new FormData();
+          formData.append("file", file);
+
+          try {
+            let answer = confirm("Are you sure you want to upload this file?");
+            if (answer) {
+              const res = await fetch("/import-export", {
+                method: "POST",
+                body: formData,
+              });
+              const data = await res.json();
+              if (res.ok) {
+                new Toastmaster({
+                  title: "File uploaded successfully",
+                  message: data.message,
+                  type: "success",
+                  delay: 5000
+                }).showNotification();
+              }
+            }
+          } catch (err) {
+            new Toastmaster({
+              title: "Faild to upload file",
+              message: "Please Upload a valid JSON file and try again.",
+              type: "error",
+              delay: 5000
+            }).showNotification();
+          }
+        };
+
+        reader.readAsText(file);
+      }
+    });
+  </script>
+
+
+  <script>
+    const icon = {
+      success: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-icon lucide-circle"><circle cx="12" cy="12" r="10"/></svg>`,
+      failed: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-frown"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>`,
+      pending: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock9"><path d="M12 6v6H8"/><circle cx="12" cy="12" r="10"/></svg>`
+    };
+
+    const activityEle = document.querySelector(".activity");
+
+    async function getActivity() {
+      try {
+        const res = await fetch("/activity");
+        const data = await res.json();
+
+        // handle both array or object response
+        const activities = Array.isArray(data) ? data : data.data || [];
+
+        activityEle.innerHTML = "";
+
+        if (activities.length === 0) {
+          activityEle.innerHTML = `<p class="empty" style="text-align: center; padding:10px ">No recent activity</p>`;
+          return;
+        }
+
+        activities.splice(0, 5).forEach((element) => {
+          const date = new Date(element.createdAt).toLocaleString();
+          const statusIcon = icon[element.status] || icon.pending;
+
+          const li = document.createElement("li");
+          li.classList.add("activity-item");
+          li.innerHTML = `
+        <span class="activity-icon">${statusIcon}</span>
+        <div class="activity-info">
+          <strong>${element.title}</strong><br/>
+          <small>${date}</small>
+        </div>
+      `;
+          activityEle.appendChild(li);
+        });
+
+      } catch (err) {
+        console.error("Failed to load activities:", err);
+        activityEle.innerHTML = `<li class="error">⚠️ Unable to load activities</li>`;
+      }
+    }
+
+    getActivity();
+  </script>
 
   <script src="\scripts\home.js"></script>
   <script src="\scripts\shortcut.js"></script>
@@ -414,11 +690,54 @@
   <script src="\scripts\isonline.js"></script>
   <script src="\scripts\header.js"></script>
   <script src="\scripts\searchFunction.js"></script>
-
+  <script src="\scripts\collapse.js"></script>
   <script src="\scripts\saveDraft.js"></script>
   <script src="\scripts\getAllDraft.js"></script>
 
 
+  <script>
+    async function getdata() {
+      const res = await fetch("/a", { credentials: "include" });
+      const data = await res.json();
+
+      const date = new Date(data.lastActive);
+      const formatted = date.toLocaleString();
+
+      document.getElementById("lastActive").textContent = formatted;
+      console.log(formatted);
+    }
+
+    getdata();
+    setInterval(async () => {
+      let res = await fetch("/lastactive", { credentials: "include" });
+      let data = await res.json();
+      console.log(data.t)
+      getdata();
+    }, 1000);
+  </script>
+
+
+
+  <script>
+    const vp = document.querySelector(".vp");
+    async function DuplicateCount() {
+      const res = await fetch("/card/validation");
+      const data = await res.json();
+      vp.innerHTML = `<span title="Duplicate Count">${data.dupCount}</span> / <span title="Total Count">${data.totalCount}</span>`;
+    }
+    DuplicateCount()
+  </script>
+
+  <script>
+    const createCursor = document.createElement("div");
+    createCursor.classList.add("cursor");
+    document.body.appendChild(createCursor);
+    const cursor = document.querySelector(".cursor");
+    document.addEventListener("mousemove", (e) => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    });
+  </script>
 </body>
 
 </html>

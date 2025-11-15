@@ -25,6 +25,7 @@ main .settings-panel section label {
 }
 main .settings-panel section label input {
   width: 100%;
+  margin: 5px;
 }
 main .settings-panel section label input[type=checkbox] {
   width: unset;
@@ -40,6 +41,14 @@ input::placeholder {
 
 input[type=color] {
   padding: 0 !important;
+}
+
+input, select, textarea {
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  padding: 10px;
+  background: none;
+  resize: vertical;
 }
 
 /*# sourceMappingURL=settings.css.map */

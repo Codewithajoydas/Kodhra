@@ -73,7 +73,7 @@ function openMenu(card, x, y) {
       }
     }
     const li = document.createElement("li");
-    li.innerHTML = `${icons[name] || ""} ${name}`;
+    li.innerHTML = `${icons[name] || ""} ${name.replace("_", " ")}`;
     contextMenuList.appendChild(li);
 
     if (actions[name]) {
@@ -157,7 +157,7 @@ function openContextMenu(event, clientX = null, clientY = null) {
       }
     }
     const li = document.createElement("li");
-    li.innerHTML = `${icons[name] || ""} ${name}`;
+    li.innerHTML = `${icons[name] || ""} ${name.replace("_", " ")}`;
     contextMenuList.appendChild(li);
     if (actions[name]) {
       li.addEventListener("click", (ev) => {
@@ -328,3 +328,87 @@ move_folder?.addEventListener("click", (e) => {
 function draft_Edit(id, url) {
   window.location.assign(url);
 }
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".open");
+
+  if (!btn) return;
+
+  const code = btn.dataset.code?.trim();
+
+  if (!code) return;
+
+  navigator.clipboard
+    .writeText(code)
+    .then(() => {
+      const text = btn.querySelector("span");
+      text.textContent = "Copied!";
+      btn.style.color = "green";
+      new Toastmaster({
+        title: "Code Copied!",
+        message: "Copied Code Successfully",
+        type: "success",
+        delay: 3000,
+      }).showNotification();
+      setTimeout(() => {
+        btn.style.color = "var(--color)";
+        text.textContent = "Copy Code";
+      }, 1500);
+    })
+    .catch(() => {
+      new Toastmaster({
+        title: "Error!",
+        message: "Failed to copy code",
+        type: "error",
+        delay: 3000,
+      }).showNotification();
+    });
+});
+
+async function sharegist(e) {
+  const cardContent = e.target
+    .closest(".card")
+    .dataset.cardcontent.split(",")
+    .map((item) => item.trim());
+  const filename = "asas";
+  const content = "SDD";
+  const description = "ASSFASDM ASJ ";
+  try {
+    const response = await fetch("/share", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ filename, content, description }),
+      credentials: "include",
+    });
+    console.log(response);
+    if (response.ok) {
+      new Toastmaster({
+        title: "Gist Shared!",
+        message: "Gist shared successfully",
+        type: "success",
+        delay: 3000,
+      }).showNotification();
+    } else {
+      new Toastmaster({
+        title: "Error!",
+        message: "Failed to share gist",
+        type: "error",
+        delay: 3000,
+      }).showNotification();
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// Play sound when click on buttons, links, and inputs
+
+const clickSound = new Audio("assets/sound/computer-mouse-click-352734.mp3");
+clickSound.volume = 0.3;
+clickSound.preload = "auto";
+document.addEventListener("mousedown", (e) => {
+  clickSound.currentTime = 0;
+  clickSound.play();
+});

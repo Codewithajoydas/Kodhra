@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendmail.module.js");
 const { getIO } = require("./socket");
 const sendNotification = require("../utils/sendNotification.module");
+const activity = require("./activity.module");
+const createActivity = require("./activity.module");
 router.get("/", (req, res) => {
   res.clearCookie("token");
   res.render("login");
@@ -17,22 +19,36 @@ router.post("/", async (req, res) => {
   try {
     const checkUser = await User.findOne({ email });
     if (!checkUser) {
-      return res.status(404).json({ message: "User Not Found" });
+      return res.status(404).render("error", {
+        error: "User Not Found Kindly Provide Correct Email And Try Again",
+      });
     }
 
     const comparePass = await bcrypt.compare(password, checkUser.password);
     if (!comparePass) {
-      return res.status(401).json({ message: "Password Not Match" });
+      return res.status(401).render("error", {
+        error:
+          "Password Not Match... Kindly Provide Correct Password And Try Again.",
+      });
     }
 
     const token = jwt.sign({ checkUser }, process.env.SECRET);
 
-    // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+
+    await createActivity({
+      title: "Logged In",
+      author: checkUser._id,
+      activity: "logged_in",
+      entityType: "user",
+      entityId: checkUser._id,
+      status: "success",
+    });
+    
     sendNotification(
       "Login Success",
       "You have successfully logged in, now you can create snippets and folders ",
@@ -41,8 +57,7 @@ router.post("/", async (req, res) => {
     );
     res.redirect("/");
   } catch (error) {
-    console.error("Something went wrong", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.render("error", { error: "Something went wrong please try again" });
   }
 });
 router.get("/check", (req, res) => {

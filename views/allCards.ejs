@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/style/css/index.css">
   <link rel="stylesheet" href="/style/css/chip.css">
   <link rel="stylesheet" href="/style/css/card.css">
+  <!-- <link rel="stylesheet" href="/style/css/tableCards.css"> -->
   <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
   <script src="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.css">
@@ -126,25 +127,39 @@
 
   <div class="content">
     <%- include("partials/header")%>
-     
+
       <div class="container">
         <%- include("partials/sidebar", { navigation: 'card' }) %>
           <main style="height: calc(100vh - 70px);">
             <div class="card-container" style="margin-bottom: 50px;">
               <div class="all-cards">
-                <span class="page_title">Browse by Tags</span>
-                <div class="chips">
-                  <div class="chip active"><span>All</span></div>
-                  <% tags.forEach((tag, i)=> { %>
-                    <div class="chip"><span style="text-transform: capitalize;">
-                        <%= tag %>
-                      </span></div>
-                    <% }) %>
-
-
+                <div style="position: relative;">
+                  <div class="left_arrow" style="position: absolute; left: 0px; display: flex;justify-content: center;
+                  align-items: center; top: 0%; height: 100%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="lucide lucide-chevron-left-icon lucide-chevron-left">
+                      <path d="m15 18-6-6 6-6" />
+                    </svg>
+                  </div>
+                  <div class="chips" style="position: relative;">
+                    <div class="chip active"><span>All</span></div>
+                    <% tags.forEach((tag, i)=> { %>
+                      <div class="chip" tabindex="0"><span style="text-transform: capitalize;">
+                          <%= tag %>
+                        </span></div>
+                      <% }) %>
+                  </div>
+                  <div class="right_arrow" style="position: absolute; right: 0px; justify-content: center;
+                  align-items: center; display: flex; top: 0%;height: 100%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="lucide lucide-chevron-right-icon lucide-chevron-right">
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
+                  </div>
                 </div>
                 <div class="cardContainer-header">
-                  <span class="page_title">All Snippets Created by You</span>
                   <div class="card-options disabled">
                     <div class="cardLen">125</div>
                     <div class="selectAll" onclick="selectAllButton()"><svg xmlns="http://www.w3.org/2000/svg"
@@ -172,15 +187,26 @@
                         <path d="M9 4h6" />
                       </svg></div>
                   </div>
+                  <div class="page_title" data-target="#mySection"
+                    onclick="collapse(document.querySelector('.cardsasd'))">
+                    <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                        <path d="m6 9 6 6 6-6" />
+                      </svg></span>
+                    All Snippet Cards
+                  </div>
                 </div>
-                <div id="cards" style="overflow-y: scroll !important;">
-                  <%- include("partials/cards") %>
-                </div>
-              </div>
-              <div id="sentinelLoader"
-                style=" text-align: center; width: 100%; display: flex; justify-content: center; align-items: center; padding-block: 20px;">
-                <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif" alt="Loading..."
-                  style="width: 10%;">
+                <section class="cardsasd">
+                  <div id="cards" style="overflow-y: scroll !important;">
+                    <%- include("partials/cards") %>
+                  </div>
+                  <div id="sentinelLoader"
+                    style=" text-align: center; width: 100%; display: flex; justify-content: center; align-items: center; padding-block: 20px;">
+                    <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif" alt="Loading..."
+                      style="width: 10%;">
+                  </div>
+                </section>
               </div>
             </div>
             <!-- <%- include("partials/fab")%> -->
@@ -434,6 +460,138 @@
     }
   </script>
 
+  <script>
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".open");
+      if (!btn) return;
+
+      const code = btn.dataset.code?.trim();
+      if (!code) return;
+
+      navigator.clipboard.writeText(code)
+        .then(() => {
+          const text = btn.querySelector("span");
+          text.textContent = "Copied!";
+          btn.style.color = "green";
+          new Toastmaster({
+            title: "Code Copied!",
+            message: "Copied Code Successfully",
+            type: "success",
+            delay: 3000
+          }).showNotification();
+          setTimeout(() => {
+            btn.style.color = "var(--color)";
+            text.textContent = "Copy Code";
+
+          }, 1500);
+        })
+        .catch(() => {
+          new Toastmaster({
+            title: "Error!",
+            message: "Failed to copy code",
+            type: "error",
+            delay: 3000
+          }).showNotification();
+        });
+    });
+  </script>
+
+  <script>
+    document.addEventListener("click", (e) => {
+      console.log(e.target)
+      if (e.target.classList.contains("profileImage")) {
+        console.log(e.target.src)
+      }
+    })
+  </script>
+  <script>
+    const createCursor = document.createElement("div");
+    createCursor.classList.add("cursor");
+    document.body.appendChild(createCursor);
+    const cursor = document.querySelector(".cursor");
+    document.addEventListener("mousemove", (e) => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    });
+  </script>
+  <script src="\scripts\shortcut.js"></script>
+  <script>
+    const slider = document.querySelector(".chips");
+    const left_arrow = document.querySelector(".left_arrow");
+    const right_arrow = document.querySelector(".right_arrow");
+
+    function updateArrows() {
+      const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+      if (slider.scrollLeft <= 0) {
+        left_arrow.style.display = "none";
+        right_arrow.style.display = "flex";
+      } else if (slider.scrollLeft >= maxScroll) {
+        left_arrow.style.display = "flex";
+        right_arrow.style.display = "none";
+      } else {
+        left_arrow.style.display = "flex";
+        right_arrow.style.display = "flex";
+      }
+    }
+
+    updateArrows(); // initial
+
+    // Wheel scroll
+    slider.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      slider.scrollLeft += e.deltaY;
+      updateArrows();
+    });
+
+    // Drag scroll
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener("mousedown", (e) => {
+      isDown = true;
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener("mouseleave", () => isDown = false);
+    slider.addEventListener("mouseup", () => isDown = false);
+
+    slider.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 2;
+      slider.scrollLeft = scrollLeft - walk;
+      updateArrows();
+    });
+
+    // Button scroll
+    left_arrow.addEventListener("click", () => {
+      slider.scrollTo({
+        left: slider.scrollLeft - 300,
+        behavior: "smooth"
+      });
+      setTimeout(updateArrows, 350);
+    });
+
+    right_arrow.addEventListener("click", () => {
+      slider.scrollTo({
+        left: slider.scrollLeft + 300,
+        behavior: "smooth"
+      });
+      setTimeout(updateArrows, 350);
+    });
+  </script>
+  <script>
+    function collapse(titleEl) {
+      titleEl.classList.toggle("collapse");
+      const arrow = document.querySelector(".down");
+      arrow.classList.toggle("active");
+    }
+
+  </script>
 </body>
 
 </html>

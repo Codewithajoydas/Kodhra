@@ -14,10 +14,13 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: all !important;
+  clip-path: polygon(43% 48%, 44% 47%, 44% 48%, 43% 48%);
+  transition: all 0.5s ease;
 }
 .advanced-search.active {
   opacity: 1;
   visibility: visible;
+  clip-path: polygon(100% 100%, 0 100%, 0 0, 100% 0);
 }
 .advanced-search .feildList {
   columns: 2;

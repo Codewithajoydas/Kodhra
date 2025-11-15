@@ -6,20 +6,25 @@ main .searchContainer {
 }
 main .searchContainer label {
   display: flex;
-  flex-direction: column;
   font-weight: 500;
   gap: 0.5rem;
-}
-main .searchContainer label input {
-  padding: 10px;
-  width: 200px;
-  border-radius: 5px;
+  align-items: center;
   border: 1px solid var(--accent);
-  outline: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: text;
 }
-main .searchContainer label input:focus, main .searchContainer label input:hover {
+main .searchContainer label:has(input:focus), main .searchContainer label:hover {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+main .searchContainer label svg {
+  width: 20px;
+  height: 20px;
+}
+main .searchContainer label input {
+  border: none;
+  outline: none;
 }
 main .searchContainer button {
   width: 300px;

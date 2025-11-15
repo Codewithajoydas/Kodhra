@@ -22,7 +22,7 @@ getUnreadCount();
 function updateUnreadCount(count) {
   const numberEl = document.querySelector(".number");
   numberEl.textContent = count > 0 ? count : "";
-  numberEl.style.display = count > 0 ? "block" : "none";
+  numberEl.style.display = count > 0 ? "flex" : "none";
 }
 
 function createNotification(data) {

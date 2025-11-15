@@ -79,6 +79,47 @@ main {
         }
       }
     }
+    .options {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 50px;
+      .visibility,
+      .edit_profile {
+        cursor: pointer;
+        color: var(--color);
+      }
+    }
+  }
+  .follow_user {
+    margin-block: 10px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    gap: 20px;
+    .userProfile{
+      cursor: pointer;
+      min-width: 200px;
+      height: 200px;
+      overflow: hidden;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(0, 0, 0, .2);
+      border-radius: 20px;
+      .user-info{
+        text-align: center;
+      }
+      img{
+        width: 30%;
+        height: 30%;
+        object-fit: cover;
+        border-radius: 50px;
+      }
+    }
   }
   .dashboard {
     margin-top: 30px;
@@ -105,4 +146,20 @@ main {
       }
     }
   }
+}
+
+
+.update_profile{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, .0002);
+  backdrop-filter: blur(200px);
+  min-height: 400px;
+  min-width: 400px;
+  z-index: 1000;
+  border-radius: 20px;
+  padding: 20px;
+
 }

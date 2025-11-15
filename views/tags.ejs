@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="/style/css/card.css">
   <link rel="stylesheet" href="/style/css/folder.css">
   <link rel="stylesheet" href="/style/css/tags.css">
+  <script src="\scripts\shortcut.js"></script>
+
   <script src="/socket.io/socket.io.js"></script>
   <!-- External CDN for image color -->
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
@@ -100,21 +102,7 @@
                 <% }) %>
             </div>
           </main>
-          <div class="toast" data-type="success">
-            <div class="toast-content">
-              <span class="toast-message"> </span>
-              <div class="close">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-octagon-x-icon lucide-octagon-x">
-                  <path d="m15 9-6 6" />
-                  <path
-                    d="M2.586 16.726A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2h6.624a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586z" />
-                  <path d="m9 9 6 6" />
-                </svg>
-              </div>
-            </div>
-          </div>
+          
           <div class="move_folder">
             <div class="header_title" style="font-weight: bolder">
               <div class="span">Move " folderName"</div>

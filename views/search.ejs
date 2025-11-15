@@ -14,9 +14,11 @@
     <link rel="stylesheet" href="/style/css/folder.css">
     <link rel="stylesheet" href="/style/css/searchBox.css">
     <link rel="stylesheet" href="/style/css/toast.css">
+    <script src="\scripts\shortcut.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.css">
     <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
     <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
@@ -87,31 +89,51 @@
         <%- include("partials/header.ejs")%>
             <div class="container">
                 <%- include("partials/sidebar.ejs", { navigation: 'search' })%>
-                    <main style="width: 100%;">
+                    <main style="height: calc(100vh - 70px );">
                         <div class="page_title">
                             Universal Search
                         </div>
                         <div class="searchContainer">
                             <label for="searchBox">
-                                <span>Enter search term</span>
-                                <input type="search" id="searchBox" placeholder="Search...">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-text-search-icon lucide-text-search">
+                                    <path d="M21 5H3" />
+                                    <path d="M10 12H3" />
+                                    <path d="M10 19H3" />
+                                    <circle cx="17" cy="15" r="3" />
+                                    <path d="m21 19-1.9-1.9" />
+                                </svg>
+                                <input type="search" id="searchBox" placeholder="Enter search term">
                             </label>
                             <label for="userId">
-                                <span>Search by user</span>
-                                <input type="search" id="userId" placeholder="User ID">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-user-round-search-icon lucide-user-round-search">
+                                    <circle cx="10" cy="8" r="5" />
+                                    <path d="M2 21a8 8 0 0 1 10.434-7.62" />
+                                    <circle cx="18" cy="18" r="3" />
+                                    <path d="m22 22-1.9-1.9" />
+                                </svg>
+                                <input type="search" id="userId" placeholder="Search by user">
                             </label>
-                            <label for="snippetId">
-                                <span>Search by snippet</span>
-                                <input type="search" id="snippetId" placeholder="Snippet ID">
-                            </label>
-                            <label for="language">
-                                <span>Search by language</span>
-                                <input type="search" id="languagea" placeholder="Language">
+                            <label for="languagea">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-languages-icon lucide-languages">
+                                    <path d="m5 8 6 6" />
+                                    <path d="m4 14 6-6 2-3" />
+                                    <path d="M2 5h12" />
+                                    <path d="M7 2h1" />
+                                    <path d="m22 22-5-10-5 10" />
+                                    <path d="M14 18h6" />
+                                </svg>
+                                <input type="search" id="languagea" placeholder="Search by language">
                             </label>
                             <button disabled style="display: block !important;">Search</button>
                         </div>
-
-                        <div class="searchResults">
+                        <div class="searchResults" style="margin-top: 5px;">
                             <div class="page_title">
                                 Search Results
                             </div>
@@ -131,22 +153,38 @@
             </div>
     </div>
 
-    <script>
-        window.onload = () => {
-            let loader = document.querySelector(".loader");
-            loader.style.display = "none";
-        };
-    </script>
 
     <script>
         let searchBox = document.getElementById("searchBox");
+
+        window.onload = async () => {
+            let loader = document.querySelector(".loader");
+            loader.style.display = "none";
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('query');
+            searchBox.value = query;
+            let res = await fetch("/search/universal/?query=" + query);
+            if (res.ok) {
+                let html = await res.text();
+                let searchResultsContainer = document.querySelector(".searchResultsContainer h2");
+                searchResultsContainer.style.display = "none";
+                if (html.trim()) {
+                    cards.innerHTML = html;
+                }
+
+            }
+
+
+        }
+
+
         let userId = document.getElementById("userId");
         let snippetId = document.getElementById("snippetId");
         let language = document.getElementById("languagea");
         let searchButton = document.querySelector(".searchContainer button");
         let searchContainer = document.querySelector(".searchContainer");
         searchContainer.addEventListener("input", () => {
-            if (searchBox.value?.trim() || userId.value?.trim() || snippetId.value?.trim() || language.value?.trim()) {
+            if (searchBox.value?.trim() || userId.value?.trim()  || language.value?.trim()) {
                 searchButton.disabled = false;
 
             } else {
@@ -155,8 +193,8 @@
         })
         let cards = document.getElementById("cards");
         searchButton.addEventListener("click", async () => {
-            let searchQuery = searchBox.value?.trim() || userId.value?.trim() || snippetId.value?.trim() || language.value?.trim();
-            let res = await fetch("/search/universal/?q=" + searchQuery);
+            let searchQuery = searchBox.value?.trim() || userId.value?.trim()  || language.value?.trim();
+            let res = await fetch("/search/universal/?query=" + searchQuery);
             if (res.ok) {
                 let html = await res.text();
                 let searchResultsContainer = document.querySelector(".searchResultsContainer h2");

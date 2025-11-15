@@ -27,13 +27,6 @@ const path = require("path");
 const cors = require("cors");
 const Folder = require("./models/folder");
 app.use(express.json({ limit: "50mb" }));
-app.use(
-  cors({
-    origin: "http://127.0.0.1:5000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
@@ -55,11 +48,17 @@ const sRouter = require("./routes/setting");
 const moveRouter = require("./routes/move");
 const deleteRouter = require("./routes/delete");
 const imageRouter = require("./routes/getimage");
+const os = require("os");
 const http = require("http");
 const server = http.createServer(app);
 const socket = require("./routes/socket");
 const notificationRouter = require("./routes/notification");
 const sendNotification = require("./utils/sendNotification.module");
+const shareRouter = require("./routes/share");
+const languageRouter = require("./routes/languageWise");
+const expoloreRouter = require("./routes/explore");
+const activityRouter = require("./routes/activity");
+const createActivity = require("./routes/activity.module");
 const io = socket.init(server);
 
 io.on("connection", (socket) => {
@@ -84,12 +83,42 @@ app.use(
     cookie: { maxAge: 5 * 60 * 1000 },
   })
 );
-
 app.use(express.urlencoded({ extended: true }));
+
+
+app.use("/login", router);
+app.use("/signup", signup);
+app.use("/card", authMiddleware, cardRouter);
+app.use("/dlt", authMiddleware, cardRouter);
+app.use("/edit", authMiddleware, cardRouter);
+app.use("/forgotPass", fpRouter);
+app.use("/auth/github/", gitroute);
+app.use("/emailverification", vRouter);
+app.use("/folder", authMiddleware, folderRouter);
+app.use("/search", authMiddleware, searchRouter);
+app.use("/tags", authMiddleware, tagsRouter);
+app.use("/pin", authMiddleware, pinRouter);
+app.use("/fav", authMiddleware, favRouter);
+app.use("/import-export", authMiddleware, ioRouter);
+app.use("/settings", authMiddleware, sRouter);
+app.use("/moveit", authMiddleware, moveRouter);
+app.use("/delete", authMiddleware, deleteRouter);
+app.use("/images", authMiddleware, imageRouter);
+app.use("/notifications", authMiddleware, notificationRouter);
+app.use("/profile", authMiddleware, profileRouter);
+app.use("/auth/google", googleAuthrouter);
+app.use("/payment", authMiddleware, paymentRouter);
+app.use("/share", authMiddleware, shareRouter);
+app.use("/language", authMiddleware, languageRouter);
+app.use("/explore", authMiddleware, expoloreRouter);
+app.use("/activity", authMiddleware, activityRouter);
 
 // HOME ROUTER
 app.get("/", authMiddleware, async (req, res, next) => {
   try {
+    const ip =
+      req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
+    console.log("User IP:", ip);
     const token = req.cookies.token;
     const decode = jwt.verify(token, process.env.SECRET);
     const folders = await Folder.find({
@@ -132,6 +161,14 @@ app.post("/card", async (req, res) => {
       category,
       author: new mongoose.Types.ObjectId(_id),
     });
+    await createActivity({
+      title: "Card Created",
+      author: _id,
+      activity: "created",
+      entityType: "snippet",
+      entityId: createCard._id,
+      status: "success",
+    });
 
     try {
       const findFolder = await Folder.findOne({
@@ -169,28 +206,7 @@ app.get("/draft", authMiddleware, async (req, res) => {
     appVersion,
   });
 });
-app.use("/login", router);
-app.use("/signup", signup);
-app.use("/card", authMiddleware, cardRouter);
-app.use("/dlt", authMiddleware, cardRouter);
-app.use("/edit", authMiddleware, cardRouter);
-app.use("/forgotPass", fpRouter);
-app.use("/auth/github/", gitroute);
-app.use("/emailverification", vRouter);
-app.use("/folder", authMiddleware, folderRouter);
-app.use("/search", authMiddleware, searchRouter);
-app.use("/tags", authMiddleware, tagsRouter);
-app.use("/pin", authMiddleware, pinRouter);
-app.use("/fav", authMiddleware, favRouter);
-app.use("/import-export", authMiddleware, ioRouter);
-app.use("/settings", authMiddleware, sRouter);
-app.use("/moveit", authMiddleware, moveRouter);
-app.use("/delete", authMiddleware, deleteRouter);
-app.use("/images", authMiddleware, imageRouter);
-app.use("/notifications", authMiddleware, notificationRouter);
-app.use("/profile", authMiddleware, profileRouter);
-app.use("/auth/google", googleAuthrouter);
-app.use("/payment", authMiddleware, paymentRouter);
+
 /*
 Demo routes remove it before deployment
 */
@@ -216,12 +232,6 @@ app.get("/democards", async (req, res) => {
   });
 });
 
-app.get("/a", authMiddleware, (req, res) => {
-  const token = req.cookies.token;
-  const decode = jwt.verify(token, process.env.SECRET);
-  const { _id, userName, goodName, email, userImage } = decode.checkUser;
-  res.json({ _id, userName, goodName, email, userImage });
-});
 
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
@@ -274,6 +284,29 @@ app.get("/report", authMiddleware, async (req, res) => {
     languageReport,
   });
 });
+
+app.get("/lastactive",  async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    const decode = jwt.verify(token, process.env.SECRET);
+    const userId = decode.checkUser._id;
+    const lastActiveTime = await User.findByIdAndUpdate(userId, { lastActive: Date.now() }, { new: true });
+    const t = new Date(lastActiveTime.lastActive).toLocaleString();
+    res.json({ success: true, t });
+  } catch (e) {
+    console.log("ERROR:", e);
+    res.status(500).json({ success: false });
+  }
+});
+
+app.get("/a", authMiddleware, (req, res) => {
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const { _id, userName, goodName, email, userImage, lastActive } =
+    decode.checkUser;
+  res.json({ _id, userName, goodName, email, userImage, lastActive });
+});
+
 
 app.use((req, res, next) => {
   res.status(404).render("pageNotFound");

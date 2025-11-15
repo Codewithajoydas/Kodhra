@@ -45,6 +45,24 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    bio: {
+      type: String,
+    },
+    mobile: {
+      type: Number,
+    },
+    zipcode: {
+      type: Number,
+    },
+    visibility: {
+      type: String,
+      enum: ["public", "private"],
+      default: "public",
+    },
+    lastActive: {
+      type: Date,
+      default: Date.now,
+    },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     savedCards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],

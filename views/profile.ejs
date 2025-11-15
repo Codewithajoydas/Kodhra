@@ -16,6 +16,7 @@
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <meta name="id" content="<%= user._id %>">
+  <script src="\scripts\shortcut.js"></script>
 
 </head>
 
@@ -25,19 +26,21 @@
       <div class="container">
         <%- include('partials/sidebar', {navigation: 'account' })%>
           <main>
-            <div class="top-section">
+            <div class="top-section" style="position: relative;">
               <div class="profile-image">
                 <img src="<%= user.userImage %>" alt="profile image of user" id="profileImage" crossOrigin="anonymous"
                   onerror="this.src='https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg'">
               </div>
               <div class="user-info">
-                <div class="user-name">
+                <div class="user-name" style="margin-block: 10px;">
                   <h2 style="margin: 0;">
-                    <%= user.userName %>
+                    <%= user.goodName %>
                   </h2>
-                  <span style="font-size: 15px; text-transform: capitalize; margin: 0;">Full-Stack Developer</span>
+                  <span style="font-size: 15px; text-transform: capitalize; margin: 0;">
+                    <%= user.userName%>
+                  </span>
                 </div>
-                <div class="address" style="margin-block: 5px; text-transform: capitalize;">
+                <div class="address" style="margin-block: 5px; text-transform: capitalize;" style="margin-block: 10px;">
 
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -48,16 +51,10 @@
                   </svg>
                   <%= user.address ?? "Address not found" %>
                 </div>
-                <div class="joined">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-calendar-fold-icon lucide-calendar-fold">
-                    <path d="M8 2v4" />
-                    <path d="M16 2v4" />
-                    <path d="M21 17V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11Z" />
-                    <path d="M3 10h18" />
-                    <path d="M15 22v-4a2 2 0 0 1 2-2h4" />
-                  </svg> Joined in: <%= new Date(user.createdAt).toDateString() %>
+               
+                <div class="bio" style="margin-block: 10px;">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, cupiditate temporibus iusto
+                    hic rerum odit.</p>
                 </div>
                 <div class="btns">
                   <button class="follow" onclick="follow('<%= user._id %>')">Follow</button>
@@ -68,35 +65,71 @@
                 <div class="followers">
                   <span>Followers</span>
                   <span>
-                    <%= user.followers?.length ?? 0%>
+                    <%= user.followers.length ?? 0%>
                   </span>
                 </div>
                 <div class="following">
                   <span>Following</span>
-                  <span><%= user.following?.length ?? 0%></span>
+                  <span>
+                    <%= user.following.length ?? 0%>
+                  </span>
                 </div>
                 <div class="cards">
                   <span>Snippets</span>
-                  <span>0</span>
+                  <span>
+                    <%= cardlen??0%>
+                  </span>
+                </div>
+              </div>
+              <div class="options">
+                <div class="visibility">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-lock-icon lucide-lock">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                </div>
+                <div class="edit_profile">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-user-round-pen-icon lucide-user-round-pen">
+                    <path d="M2 21a8 8 0 0 1 10.821-7.487" />
+                    <path
+                      d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+                    <circle cx="10" cy="8" r="5" />
+                  </svg>
                 </div>
               </div>
             </div>
-            <div class="dashboard">
-              <div class="d-header">
-                <label for="mostLiked">
-                  <input type="radio" name="report" id="mostLiked" checked>
-                  Most Popular
-                </label>
-                <label for="saved">
-                  <input type="radio" name="report" id="saved">
-                  Saved
-                </label>
-                <label for="draft">
-                  <input type="radio" name="report" id="draft">
-                  Draft
-                </label>
+
+            <!-- <div class="update_profile">
+              <div class="page_title">
+                Update Profile
               </div>
-            </div>
+              <div class="profile_img" style="display: flex; justify-content: center;align-items: center; border-radius: 50%; overflow: hidden;">
+                <img src="<%= user.userImage %>" alt="" onerror="this.src = 'https://mdms.pkg3apdcl.com/medows/static/images/Logo1.png'" style="border-radius: 50%;">
+              </div>
+              <form action="">
+                <label for="name">
+                  <span>Name</span>
+                  <input type="text" name="name" id="name">
+                </label>
+                <label for="bio">
+                  <span>Bio</span>
+                  <input type="text" name="bio" id="bio">
+                </label>
+                <label for="address">
+                  <span>Address</span>
+                  <input type="text" name="address" id="address">
+                </label>
+                <label for="zip">
+                  <span>Zip Code</span>
+                  <input type="text" name="zip" id="zip">
+                </label>
+              </form>
+            </div> -->
+
           </main>
       </div>
   </div>
