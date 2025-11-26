@@ -1,6 +1,5 @@
 header {
   display: flex;
-  position: fixed;
   z-index: 10000;
   top: 0;
   left: 0;
@@ -17,7 +16,7 @@ header .logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: 5px;
   font-weight: bolder;
 }
 header .logo svg {
@@ -25,8 +24,7 @@ header .logo svg {
   width: 24px;
   height: 24px;
 }
-header .logo img {
-  width: 40px;
+header .logo svg {
   object-fit: cover;
   margin-left: 10px;
   cursor: pointer;
@@ -34,23 +32,29 @@ header .logo img {
 header .logo .lg:hover {
   text-decoration: underline;
 }
+header .logo .lg svg {
+  width: 40px !important;
+  height: 40px !important;
+  fill: var(--color);
+}
 header nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
 }
 header nav .filter,
 header nav .notification,
 header nav .help,
 header nav .profile,
-header nav .backButton,
+header nav .voiceCommand,
 header nav .music {
   width: 50px;
   cursor: pointer;
   height: 50px;
   transition: all 0.5s ease;
   border-radius: 100px;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,7 +63,7 @@ header nav .filter img,
 header nav .notification img,
 header nav .help img,
 header nav .profile img,
-header nav .backButton img,
+header nav .voiceCommand img,
 header nav .music img {
   border-radius: 100px;
   object-fit: cover;
@@ -68,7 +72,7 @@ header nav .filter:hover,
 header nav .notification:hover,
 header nav .help:hover,
 header nav .profile:hover,
-header nav .backButton:hover,
+header nav .voiceCommand:hover,
 header nav .music:hover {
   background: var(--accent);
 }
@@ -76,7 +80,7 @@ header nav .filter svg,
 header nav .notification svg,
 header nav .help svg,
 header nav .profile svg,
-header nav .backButton svg,
+header nav .voiceCommand svg,
 header nav .music svg {
   width: 23px;
   height: 23px;
@@ -280,6 +284,45 @@ header nav .searchResult .results ul li a:hover:focus {
 header nav .searchResult .results ul li a svg {
   width: 20px;
   height: 20px;
+}
+
+.backButton:hover,
+.sidebar:hover {
+  cursor: pointer;
+  transition: all 0.5s ease;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--accent);
+}
+
+.backButton,
+.sidebar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+.backButton svg,
+.sidebar svg {
+  margin: 0 !important;
+}
+
+.music.active {
+  transform: rotate(0);
+  animation: playing 1s linear infinite;
+}
+
+@keyframes playing {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /*# sourceMappingURL=Header.css.map */

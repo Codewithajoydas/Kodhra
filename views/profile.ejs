@@ -5,12 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile of <%= user.goodName %> | Code Snippet Manager</title>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
   <link rel="stylesheet" href="/style/css/partials/Header.css">
   <link rel="stylesheet" href="/style/css/ad_search.css">
   <link rel="stylesheet" href="/style/css/Notification.css">
   <link rel="stylesheet" href="/style/css/index.css">
   <link rel="stylesheet" href="/style/css/chip.css">
   <link rel="stylesheet" href="/style/css/card.css">
+  <link rel="stylesheet" href="/style/css/loader.css">
   <link rel="stylesheet" href="/style/css/profile.css">
   <link rel="stylesheet" href="/style/css/toast.css">
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
@@ -21,6 +24,7 @@
 </head>
 
 <body data-theme="light">
+  <%- include('partials/loader.ejs') %>
   <div class="content">
     <%- include('partials/header')%>
       <div class="container">

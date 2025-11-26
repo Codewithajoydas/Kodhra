@@ -86,6 +86,13 @@ draftDB.onsuccess = (e) => {
       const cardss = drafts.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
+      if (cardss.length === 0) {
+        cards.innerHTML = `<div class="no-data" style="display:flex; width: 100%; justify-content: center; align-items: center;flex-direction: column; z-index: 9999999999;">
+  <img src="https://cdni.iconscout.com/illustration/premium/thumb/not-found-illustration-svg-download-png-9160601.png" alt="No Data Found..." width="300px">
+  <p style="font-size: 1.5em">No Data Found</p>
+  <p>Create a snippet to get started</p>
+</div>`;
+      }
       cardss.forEach((card) => {
         const cardHTML = `
    <div class="card"

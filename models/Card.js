@@ -30,7 +30,10 @@ const cardSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
     isPinned: {
       type: Boolean,
       default: false,
@@ -44,6 +47,13 @@ const cardSchema = new mongoose.Schema(
       createdAt: { type: Date, default: Date.now },
       updatedAt: { type: Date, default: Date.now },
     },
+    likes: [
+      {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "User",
+        default: [],
+      },
+    ],
   },
   {
     timestamps: true,
@@ -52,4 +62,3 @@ const cardSchema = new mongoose.Schema(
 cardSchema.index({ title: "text", description: "text", content: "text" });
 
 module.exports = mongoose.model("Card", cardSchema);
-

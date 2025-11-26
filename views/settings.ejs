@@ -5,9 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home | Code Snippet Manager</title>
-  <link rel="stylesheet" href="/style/css/index.css" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
+  <link rel="stylesheet" href="/style/css/index.css" />
   <link rel="stylesheet" href="/style/css/partials/Header.css" />
   <link rel="stylesheet" href="/style/css/ad_search.css" />
   <link rel="stylesheet" href="/style/css/Notification.css" />
@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="/style/css/chip.css" />
   <link rel="stylesheet" href="/style/css/card.css" />
   <link rel="stylesheet" href="/style/css/folder.css" />
+  <link rel="stylesheet" href="/style/css/loader.css" />
   <link rel="stylesheet" href="/style/css/toast.css" />
   <link rel="stylesheet" href="/style/css/settings.css" />
   <script src="\scripts\shortcut.js"></script>
@@ -77,324 +78,404 @@
 </head>
 
 <body data-theme="light">
-  <div class="loader">
-    <div style="display: flex; justify-content: center; align-items: end">
-      Loading
-      <div class="spain"></div>
-      <div class="spain"></div>
-      <div class="spain"></div>
-    </div>
-  </div>
-  <div class="content">
-    <%- include("partials/header.ejs") %>
-      <div class="container">
-        <%- include("partials/sidebar.ejs", {navigation: 'settings' })%>
-          <main style="height: calc(100vh - 70px)">
-            <!-- <span style="color: gray; font-weight: bolder"> Settings </span> -->
-        <div class="settings-panel">
-          <!-- GENERAL -->
-          <section>
-            <h3>General</h3>
-            <label>
-              Theme:
-              <select id="theme">
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-                <option value="system">System Default</option>
-              </select>
-            </label>
-        
-            <label>
-              Language:
-              <select id="language">
-                <option value="en">English</option>
-                <option value="hi">Hindi</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-              </select>
-            </label>
-        
-            <label>
-              Startup Page:
-              <select id="startupPage">
-                <option value="dashboard">Dashboard</option>
-                <option value="snippets">My Snippets</option>
-                <option value="favorites">Favorites</option>
-                <option value="ai">AI Assistant</option>
-              </select>
-            </label>
-        
-            <label>
-              Autosave Changes:
-              <input type="checkbox" id="autosave" checked />
-            </label>
-        
-            <label>
-              Autosave Interval (sec):
-              <input type="number" id="autosaveInterval" min="5" max="600" value="30" />
-            </label>
-        
-            <label>
-              Confirm Before Delete:
-              <input type="checkbox" id="confirmDelete" checked />
-            </label>
-        
-            <label>
-              Enable Sound Alerts:
-              <input type="checkbox" id="soundAlerts" />
-            </label>
-          </section>
-        
-          <!-- EDITOR -->
-          <section>
-            <h3>Editor</h3>
-            <label>
-              Font Family:
-              <select id="editorFont">
-                <option value="Fira Code">Fira Code</option>
-                <option value="JetBrains Mono">JetBrains Mono</option>
-                <option value="Cascadia Code">Cascadia Code</option>
-                <option value="Consolas">Consolas</option>
-              </select>
-            </label>
-        
-            <label>
-              Font Size:
-              <input type="range" min="12" max="24" value="16" id="fontSize" />
-            </label>
-        
-            <label>
-              Tab Size:
-              <input type="number" id="tabSize" value="2" min="1" max="8" />
-            </label>
-        
-            <label>
-              Indentation Style:
-              <select id="indentStyle">
-                <option value="spaces">Spaces</option>
-                <option value="tabs">Tabs</option>
-              </select>
-            </label>
-        
-            <label>
-              Line Numbers:
-              <input type="checkbox" id="lineNumbers" checked />
-            </label>
-        
-            <label>
-              Word Wrap:
-              <input type="checkbox" id="wordWrap" checked />
-            </label>
-        
-            <label>
-              Auto Format on Save:
-              <input type="checkbox" id="autoFormat" checked />
-            </label>
-        
-            <label>
-              Highlight Active Line:
-              <input type="checkbox" id="highlightActiveLine" checked />
-            </label>
-        
-            <label>
-              Auto Close Brackets:
-              <input type="checkbox" id="autoBrackets" checked />
-            </label>
-        
-            <label>
-              Code Suggestions (AI):
-              <input type="checkbox" id="aiSuggestions" />
-            </label>
-          </section>
-        
-          <!-- APPEARANCE -->
-          <section>
-            <h3>Appearance</h3>
-            <label>
-              Layout Style:
-              <select id="layout">
-                <option value="grid">Grid</option>
-                <option value="list">List</option>
-                <option value="compact">Compact</option>
-              </select>
-            </label>
-        
-            <label>
-              Accent Color:
-              <input type="color" value="#4f46e5" id="accentColor" />
-            </label>
-        
-            <label>
-              Sidebar Position:
-              <select id="sidebarPosition">
-                <option value="left">Left</option>
-                <option value="right">Right</option>
-              </select>
-            </label>
-        
-            <label>
-              Show Snippet Icons:
-              <input type="checkbox" id="showIcons" checked />
-            </label>
-        
-            <label>
-              Enable Animations:
-              <input type="checkbox" id="animations" checked />
-            </label>
-        
-            <label>
-              Theme Transparency:
-              <input type="range" id="themeOpacity" min="0.5" max="1" step="0.1" value="1" />
-            </label>
-          </section>
-        
-          <!-- SYNC & CLOUD -->
-          <section>
-            <h3>Sync & Cloud</h3>
-            <label>
-              Cloud Sync:
-              <input type="checkbox" id="cloudSync" />
-            </label>
-        
-            <label>
-              Cloud Provider:
-              <select id="cloudProvider">
-                <option value="none">None</option>
-                <option value="github">GitHub Gist</option>
-                <option value="google">Google Drive</option>
-                <option value="dropbox">Dropbox</option>
-              </select>
-            </label>
-        
-            <label>
-              Sync Interval:
-              <select id="syncInterval">
-                <option value="manual">Manual</option>
-                <option value="15">Every 15 min</option>
-                <option value="60">Every hour</option>
-                <option value="1440">Daily</option>
-              </select>
-            </label>
-        
-            <label>
-              Export Snippets:
-              <button id="exportSnippets">Export JSON</button>
-            </label>
-        
-            <label>
-              Import Snippets:
-              <input type="file" id="importSnippets" accept=".json" />
-            </label>
-          </section>
-        
-          <!-- INTEGRATIONS -->
-          <section>
-            <h3>Integrations</h3>
-            <label><input type="checkbox" id="githubIntegration" /> GitHub</label>
-            <label><input type="checkbox" id="gitlabIntegration" /> GitLab</label>
-            <label><input type="checkbox" id="codesandboxIntegration" /> CodeSandbox</label>
-            <label><input type="checkbox" id="stackblitzIntegration" /> StackBlitz</label>
-            <label><input type="checkbox" id="chatgptIntegration" /> ChatGPT Assistant</label>
-            <label><input type="checkbox" id="openaiIntegration" /> OpenAI API</label>
-            <label><input type="checkbox" id="slackIntegration" /> Slack Notifications</label>
-          </section>
-        
-          <!-- ACCOUNT -->
-          <section>
-            <h3>Account</h3>
-            <label>
-              Username:
-              <input type="text" id="username" placeholder="Enter your username" />
-            </label>
-        
-            <label>
-              Email:
-              <input type="email" id="email" placeholder="Enter your email" />
-            </label>
-        
-            <label>
-              Profile Picture:
-              <input type="file" id="avatarUpload" accept="image/*" />
-            </label>
-        
-            <label>
-              Two-Factor Authentication:
-              <input type="checkbox" id="twofa" />
-            </label>
-        
-            <label>
-              Account Sync:
-              <input type="checkbox" id="accountSync" checked />
-            </label>
-          </section>
-        
-          <!-- AI & AUTOMATION -->
-          <section>
-            <h3>AI & Automation</h3>
-            <label><input type="checkbox" id="aiTagging" /> Auto Tag Snippets by Content</label>
-            <label><input type="checkbox" id="aiNaming" /> Suggest Smart Snippet Titles</label>
-            <label><input type="checkbox" id="aiExplainCode" /> Explain Code with AI</label>
-            <label><input type="checkbox" id="aiRefactor" /> Suggest Code Improvements</label>
-            <label><input type="checkbox" id="aiSearch" /> Enable Natural Language Search</label>
-          </section>
-        
-          <!-- PERFORMANCE -->
-          <section>
-            <h3>Performance</h3>
-            <label><input type="checkbox" id="lazyLoad" checked /> Lazy Load Snippets</label>
-            <label><input type="checkbox" id="cacheSnippets" checked /> Cache Snippets Locally</label>
-            <label><input type="checkbox" id="reduceAnimations" /> Reduce Animations</label>
-            <label><input type="checkbox" id="hardwareAcceleration" checked /> Enable Hardware Acceleration</label>
-            <label><input type="checkbox" id="preloadLibraries" /> Preload Common Libraries</label>
-          </section>
-        
-          <!-- PRIVACY & SECURITY -->
-          <section>
-            <h3>Privacy & Security</h3>
-            <label><input type="checkbox" id="privateSnippets" /> Keep Snippets Private</label>
-            <label><input type="checkbox" id="encryptData" /> Encrypt Local Data</label>
-            <label><input type="checkbox" id="secureMode" /> Secure Mode (Disable Clipboard Access)</label>
-            <label><input type="checkbox" id="deleteLogs" /> Auto Delete Activity Logs</label>
-            <label><button id="clearCache">Clear Local Cache</button></label>
-          </section>
-        
-          <!-- DEVELOPER OPTIONS -->
-          <section>
-            <h3>Developer</h3>
-            <label><input type="checkbox" id="devMode" /> Enable Developer Mode</label>
-            <label><input type="checkbox" id="debugLogs" /> Show Debug Logs</label>
-            <label><input type="checkbox" id="betaFeatures" /> Enable Beta Features</label>
-            <label>
-              API Endpoint:
-              <input type="text" id="apiEndpoint" placeholder="https://api.codewithajoydas.live" />
-            </label>
-            <label>
-              Custom CSS:
-              <textarea id="customCss" placeholder="/* Write custom CSS */"></textarea>
-            </label>
-            <label>
-              Custom JS:
-              <textarea id="customJs" placeholder="// Write custom JavaScript"></textarea>
-            </label>
-          </section>
-        
-          <!-- ACCESSIBILITY -->
-          <section>
-            <h3>Accessibility</h3>
-            <label><input type="checkbox" id="screenReader" /> Enable Screen Reader Support</label>
-            <label><input type="checkbox" id="highContrast" /> High Contrast Mode</label>
-            <label><input type="checkbox" id="keyboardShortcuts" checked /> Keyboard Shortcuts</label>
-            <label><input type="checkbox" id="reduceMotion" /> Reduce Motion</label>
-            <label><input type="checkbox" id="colorBlindMode" /> Color-Blind Friendly Palette</label>
-          </section>
-        
-          <!-- SAVE -->
-          <button type="submit" id="saveSettings">Save Settings</button>
-        </div>
+  <%- include("partials/loader.ejs")%>
+    <div class="content">
+      <%- include("partials/header.ejs") %>
+        <div class="container">
+          <%- include("partials/sidebar.ejs", {navigation: 'settings' })%>
+            <main style="height: calc(100vh - 70px)">
+              <div class="setting_panal">
+                <ul>
+                  <li>
+                    <a href="#general">General</a>
+                  </li>
+                  <li>
+                    <a href="#appearance">
+                      Appearance
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="#editor">
+                      Editor
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="#synchronization">
+                      Sync & Backup
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#notification">
+                      Notification
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#privacysecurity">
+                      Privacy & Security
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#export">
+                      Exporting / Importing
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#extensions">
+                      Extensions / Plugins
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#about">
+                      About / App Info
+                    </a>
+                  </li>
+                </ul>
+                <div class="tabs">
+
+                  <!-- GENERAL -->
+                  <section id="general" class="tab">
+
+                    <label>
+                      <div>
+                        <span class="title">App Preferences</span>
+                        <span class="description">Choose how the app behaves on startup and during general usage.</span>
+                      </div>
+                      <select name="uiMode">
+                        <option>Normal Mode</option>
+                        <option>Compact Mode</option>
+                        <option>Minimal Mode</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Default Snippet Language</span>
+                        <span class="description">This language is used when creating new snippets unless changed
+                          manually.</span>
+                      </div>
+                      <input name="defaultLanguage" type="text" placeholder="e.g., javascript">
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Show Sidebar on Startup</span>
+                        <span class="description">Choose whether the sidebar is visible when opening the app.</span>
+                      </div>
+                      <select name="showSidebar">
+                        <option>Yes</option>
+                        <option>No</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Auto-Save Snippets</span>
+                        <span class="description">Automatically save changes made to snippets.</span>
+                      </div>
+                      <select name="autoSaveInterval">
+                        <option>Off</option>
+                        <option>Every 5 seconds</option>
+                        <option>Every 10 seconds</option>
+                        <option>Instant</option>
+                      </select>
+                    </label>
+
+                  </section>
+
+                  <!-- APPEARANCE -->
+                  <section id="appearance" class="tab">
+
+                    <label>
+                      <div>
+                        <span class="title">Theme</span>
+                        <span class="description">Switch between light, dark, or system theme.</span>
+                      </div>
+                      <select name="theme">
+                        <option>Dark</option>
+                        <option>Light</option>
+                        <option>System Default</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Accent Color</span>
+                        <span class="description">Choose the primary accent color used across the UI.</span>
+                      </div>
+                      <input type="color" name="accentColor" style="padding: 0 !important;">
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Font Size</span>
+                        <span class="description">Adjust the UI and editor text size.</span>
+                      </div>
+                      <input type="number" min="10" max="30" value="14" name="fontSize">
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">UI Density</span>
+                        <span class="description">Control spacing of UI elements.</span>
+                      </div>
+                      <select name="uiDensity">
+                        <option>Comfortable</option>
+                        <option>Cozy</option>
+                        <option>Compact</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Sidebar Layout</span>
+                        <span class="description">Customize the appearance of the sidebar.</span>
+                      </div>
+                      <select name="sidebarLayout">
+                        <option>Default</option>
+                        <option>Minimal</option>
+                        <option>Wide</option>
+                      </select>
+                    </label>
+
+                  </section>
+
+                  <!-- EDITOR -->
+                  <section id="editor" class="tab">
+
+                    <label>
+                      <div>
+                        <span class="title">Tab Size</span>
+                        <span class="description">Number of spaces used for indentation.</span>
+                      </div>
+                      <input type="number" min="1" max="8" value="2" name="tabSize">
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Word Wrap</span>
+                        <span class="description">Automatically wrap long lines of code.</span>
+                      </div>
+                      <select name="wordWrap">
+                        <option>On</option>
+                        <option>Off</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Line Numbers</span>
+                        <span class="description">Show or hide line numbers in the editor.</span>
+                      </div>
+                      <select name="lineNumbers">
+                        <option>On</option>
+                        <option>Off</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Syntax Highlighting</span>
+                        <span class="description">Choose a syntax style for code.</span>
+                      </div>
+                      <select name="syntaxStyle">
+                        <option>Default</option>
+                        <option>Monokai</option>
+                        <option>Dracula</option>
+                        <option>Solarized</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Auto Format on Save</span>
+                        <span class="description">Automatically format code when saving a snippet.</span>
+                      </div>
+                      <select name="autoFormat">
+                        <option>Yes</option>
+                        <option>No</option>
+                      </select>
+                    </label>
+
+                  </section>
+
+                  <!-- SYNC -->
+                  <section id="synchronization" class="tab">
+
+                    <label>
+                      <div>
+                        <span class="title">Cloud Sync</span>
+                        <span class="description">Enable syncing snippets across devices.</span>
+                      </div>
+                      <select name="cloudSync">
+                        <option>On</option>
+                        <option>Off</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Auto Sync Frequency</span>
+                        <span class="description">How often your snippets are synced.</span>
+                      </div>
+                      <select name="syncFrequency">
+                        <option>Manual</option>
+                        <option>Every 10 minutes</option>
+                        <option>Hourly</option>
+                        <option>Daily</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Data Encryption</span>
+                        <span class="description">Encrypt data before sending it to the cloud.</span>
+                      </div>
+                      <select name="dataEncryption">
+                        <option>Enabled</option>
+                        <option>Disabled</option>
+                      </select>
+                    </label>
+
+                  </section>
+
+                  <!-- NOTIFICATION -->
+                  <section id="notification" class="tab">
+
+                    <label>
+                      <div>
+                        <span class="title">Desktop Notifications</span>
+                        <span class="description">Receive notifications about updates and changes.</span>
+                      </div>
+                      <select name="desktopNotifications">
+                        <option>On</option>
+                        <option>Off</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Snippet Change Alerts</span>
+                        <span class="description">Notify when snippets are updated or overwritten.</span>
+                      </div>
+                      <select name="snippetAlerts">
+                        <option>On</option>
+                        <option>Off</option>
+                      </select>
+                    </label>
+
+                  </section>
+
+                  <!-- PRIVACY -->
+                  <section id="privacysecurity" class="tab">
+
+                    <label>
+                      <div>
+                        <span class="title">App Lock</span>
+                        <span class="description">Secure your snippets with a PIN.</span>
+                      </div>
+                      <input type="number" name="appLockPin" placeholder="Enter PIN">
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Session Timeout</span>
+                        <span class="description">Automatically lock the app after inactivity.</span>
+                      </div>
+                      <select name="sessionTimeout">
+                        <option>Never</option>
+                        <option>1 minute</option>
+                        <option>5 minutes</option>
+                        <option>30 minutes</option>
+                      </select>
+                    </label>
+
+                  </section>
+
+                  <!-- EXPORT -->
+                  <section id="export" class="tab">
+
+                    <label>
+                      <div>
+                        <span class="title">Export Format</span>
+                        <span class="description">Choose format for exporting snippets.</span>
+                      </div>
+                      <select name="exportFormat">
+                        <option>JSON</option>
+                        <option>Markdown</option>
+                        <option>Plain Text</option>
+                      </select>
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Auto Export Schedule</span>
+                        <span class="description">Automatically export your snippet collection.</span>
+                      </div>
+                      <select name="autoExportSchedule">
+                        <option>Disabled</option>
+                        <option>Daily</option>
+                        <option>Weekly</option>
+                        <option>Monthly</option>
+                      </select>
+                    </label>
+
+                  </section>
+
+                  <!-- EXTENSIONS -->
+                  <section id="extensions" class="tab">
+                    <label>
+                      <div>
+                        <span class="title">Extensions</span>
+                        <span class="description">Manage installed extensions.</span>
+                      </div>
+                      <button>Open Extensions</button>
+                    </label>
+                  </section>
+
+                  <!-- ABOUT -->
+                  <section id="about" class="tab">
+                    <label>
+                      <div>
+                        <span class="title">Version Info</span>
+                        <span class="description">View your current app version and build number.</span>
+                      </div>
+                      <input type="text" readonly value="1.0.0" name="appVersion">
+                    </label>
+                    <br>
+
+                    <label>
+                      <div>
+                        <span class="title">Check for Updates</span>
+                        <span class="description">Check if a new version of the app is available.</span>
+                      </div>
+                      <button>Check Now</button>
+                    </label>
+                  </section>
+
+                </div>
 
 
-          </main>
-          <div id="context_menu" style="
+              </div>
+            </main>
+            <div id="context_menu" style="
                   position: absolute;
                   top: 0;
                   left: 0;
@@ -402,66 +483,78 @@
                   z-index: 1000000;
                   width: 200px;
                 ">
-            <ul id="context_menu_list"></ul>
-          </div>
-          <div class="networkInfo" style="display: none">
-            <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-info-icon lucide-info">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 16v-4" />
-                <path d="M12 8h.01" />
-              </svg></span>
+              <ul id="context_menu_list"></ul>
+            </div>
+            <div class="networkInfo" style="display: none">
+              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-info-icon lucide-info">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 16v-4" />
+                  <path d="M12 8h.01" />
+                </svg></span>
 
-            <span id="networkInfo"></span>
-          </div>
-      </div>
-  </div>
-
-  <script>
-    window.onload = () => {
-      let loader = document.querySelector(".loader");
-      loader.style.display = "none";
-    };
-  </script>
-  <script src="/scripts/ad_search.js"></script>
-  <script src="/scripts/Fab.js"></script>
-  <script src="/scripts/Notification.js"></script>
-  <script src="/scripts/searchFunction.js"></script>
-  <script src="/scripts/context_menu.js"></script>
-  <script src="\scripts\isonline.js"></script>
-  <script src="/scripts/header.js"></script>
+              <span id="networkInfo"></span>
+            </div>
+        </div>
+    </div>
 
 
-  <script>
-    // function saveData(){
-    //   let data = {
-    //     "username": document.getElementById("username").value,
-    //     "password": document.getElementById("password").value,
-    //     "twofa": document.getElementById("twofa").checked,
-    //     "private": document.getElementById("private").checked,
-    //     "layout": document.getElementById("layout").value,
-    //     "accentColor": document.getElementById("accentColor").value,
-    //     "animations": document.getElementById("animations").checked,
-    //     "sidebarPosition": document.getElementById("sidebarPosition").value,
-    //     "loginAlert": document.getElementById("loginAlert").checked,
-    //     "sessionTimeout": document.getElementById("sessionTimeout").value,
-    //     "encrypt": document.getElementById("encrypt").checked,
-    //     "debug": document.getElementById("debug").checked,
-    //     "apiEndpoint": document.getElementById("apiEndpoint").value,
-    //     "beta": document.getElementById("beta").checked,
-    //     "customCss": document.getElementById("customCss").value,
-    //     "customJs": document.getElementById("customJs").value,
-    //   }
-    //   localStorage.setItem("data", JSON.stringify(data));
-    // }
-  
-    document.getElementById("fontSize").addEventListener("change", ()=>{
-      document.body.style.fontSize = document.getElementById("fontSize").value + "px";
-    })
+    <script src="/scripts/ad_search.js"></script>
+    <script src="/scripts/Fab.js"></script>
+    <script src="/scripts/Notification.js"></script>
+    <script src="/scripts/searchFunction.js"></script>
+    <script src="/scripts/context_menu.js"></script>
+    <script src="\scripts\isonline.js"></script>
+    <script src="/scripts/header.js"></script>
 
+    <script>
+      const SETTINGS_KEY = "snippetManagerSettings";
 
-  </script>
+      function collectSettings() {
+        const settings = {};
+        const elements = document.querySelectorAll(".tabs input, .tabs select, .tabs textarea");
+
+        elements.forEach(el => {
+          const key = el.name;
+          if (!key) return;
+          settings[key] = el.type === "checkbox" ? el.checked : el.value;
+        });
+
+        return settings;
+      }
+
+      function saveSettings() {
+        const settings = collectSettings();
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      }
+
+      function loadSettings() {
+        const saved = localStorage.getItem(SETTINGS_KEY);
+        if (!saved) return;
+
+        const settings = JSON.parse(saved);
+
+        Object.keys(settings).forEach(key => {
+          const el = document.querySelector(`[name="${key}"]`);
+          if (!el) return;
+
+          if (el.type === "checkbox") {
+            el.checked = settings[key];
+          } else {
+            el.value = settings[key];
+          }
+        });
+      }
+
+      document.addEventListener("change", (e) => {
+        if (e.target.matches(".tabs input, .tabs select, .tabs textarea")) {
+          saveSettings();
+        }
+      });
+      loadSettings();
+    </script>
+
 
 </body>
 

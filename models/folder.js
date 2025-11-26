@@ -6,6 +6,10 @@ const folderSchema = new mongoose.Schema({
     trim: true,
     default: "My Folder",
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

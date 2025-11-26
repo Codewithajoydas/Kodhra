@@ -25,7 +25,7 @@ main .foldersDiv {
   justify-content: start;
 }
 main .foldersDiv .folder {
-  border: 1px solid rgba(0, 0, 0, 0);
+  border: 2px solid transparent;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,13 +35,15 @@ main .foldersDiv .folder {
   border-radius: 5px;
   margin: 10px;
 }
-main .foldersDiv .folder:hover, main .foldersDiv .folder.active, main .foldersDiv .folder:focus {
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background: var(--bg-color) !important;
+main .foldersDiv .folder svg {
+  cursor: pointer;
 }
-main .foldersDiv .folder .folder {
-  width: 250px !important;
-  background: var(--bg-color) !important;
+main .foldersDiv .folder:has(input:checked) {
+  border: 2px solid rgb(56, 92, 255);
+  background: var(--accent);
+}
+main .foldersDiv .folder:hover, main .foldersDiv .folder.active, main .foldersDiv .folder:focus {
+  border: 2px solid rgb(56, 92, 255);
 }
 main .foldersDiv .folder .folder_name {
   font-weight: bolder;
@@ -51,11 +53,10 @@ main .folder_info {
   position: fixed;
   top: 70px;
   right: 0;
-  background: var(--bg-color) !important;
+  background: rgba(0, 0, 0, 0.0014);
   backdrop-filter: blur(10px);
   width: 300px;
   height: calc(100vh - 70px);
-  z-index: 999999999999;
   padding: 10px;
   overflow-y: scroll;
   box-shadow: -10px -10px 10px rgba(0, 0, 0, 0.13);

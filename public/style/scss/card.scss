@@ -22,7 +22,7 @@ $accent: #2e2e2e21;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 10px;
   .card {
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
     min-width: 400px;
     position: relative;
     margin-block: 5px;
@@ -34,7 +34,7 @@ $accent: #2e2e2e21;
     border: 2px solid rgba(2, 2, 2, 0);
     backdrop-filter: blur(10px) !important;
     &:has(.select-card:checked) {
-      border: 2px solid var(--accent);
+      border: 2px solid rgb(56, 92, 255);
       backdrop-filter: blur(100px);
       object-fit: contain;
     }
@@ -44,7 +44,7 @@ $accent: #2e2e2e21;
       justify-content: space-between;
       align-items: center;
       padding-inline: 10px;
-      .menu_top {
+      .menu_top, .restore {
         svg {
           width: 20px;
         }
@@ -63,19 +63,23 @@ $accent: #2e2e2e21;
     }
     .code {
       background: var(--secondary-bg-color) !important;
+      padding: 3px 10px !important;
       margin: 10px;
-      padding: 10px;
-      padding-top: 3px !important ;
       border: 1px solid var(--accent);
       border-radius: 10px;
-      overflow: hidden;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
+
       display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+
+      overflow: hidden;
       text-overflow: ellipsis;
-      max-height: calc(1.5em * 3);
-      // font-family: "Courier New", Courier, monospace !important;
+      word-break: break-all;
+
+      line-height: 1.2em;
+      font-family: "Courier New", Courier, monospace !important;
     }
+
     .tags {
       display: flex;
       flex-wrap: wrap;
@@ -118,7 +122,7 @@ $accent: #2e2e2e21;
           text-decoration: none;
           background: none !important;
         }
-        &:hover{
+        &:hover {
           border: 1px solid var(--accent) !important;
         }
       }
@@ -164,7 +168,6 @@ $accent: #2e2e2e21;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: row-reverse;
   .card-options {
     display: flex;
     justify-content: center;

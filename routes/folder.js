@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const Folder = require("../models/folder.js");
 const Card = require("../models/Card.js");
 const bson = require("bson");
+const { default: mongoose } = require("mongoose");
 folderRouter.get("/userid/:userId/folderid/:folderId", async (req, res) => {
   const { userId, folderId } = req.params;
   const findFolder = await Folder.findOne({ author: userId, _id: folderId });
@@ -16,25 +17,38 @@ folderRouter.get("/all", async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
   const userId = decode.checkUser._id;
-  const folder = await Folder.find({ author: userId });
+  const folder = await Folder.find({ author: userId, isDeleted: false });
   let folderNames = folder.map((folder) => folder.folderName);
   res.json({ data: folderNames });
 });
 
 folderRouter.post("/create", async (req, res) => {
   const { folderName } = req.body;
-  const token = req.cookies.token;
-  const decode = jwt.verify(token, process.env.SECRET);
-  const userId = decode.checkUser._id;
+
   try {
-    const findFolder = await Folder.findOne({ folderName, author: userId });
-    if (findFolder) {
-      return res.status(400).json({ error: "Folder already exists" });
-    } else {
-      const folder = new Folder({ folderName, author: userId });
-      folder.save();
-      res.json({ data: folder });
+    const token = req.cookies.token;
+    const decode = jwt.verify(token, process.env.SECRET);
+    const userId = decode.checkUser._id;
+
+    const existing = await Folder.find({
+      folderName: new RegExp(`^${folderName}`),
+      author: userId,
+    });
+
+    let finalName = folderName;
+
+    if (existing.length > 0) {
+      finalName = `${folderName}-(${existing.length})`;
     }
+
+    const newFolder = new Folder({
+      folderName: finalName,
+      author: userId,
+    });
+
+    await newFolder.save();
+
+    res.json({ data: newFolder });
   } catch (error) {
     res.json({ error: error.message });
   }
@@ -45,7 +59,10 @@ folderRouter.get("/", async (req, res) => {
   const decode = jwt.verify(token, process.env.SECRET);
   const userId = decode.checkUser._id;
   const image = decode.checkUser.userImage;
-  const folders = await Folder.find({ author: userId });
+  const folders = await Folder.find({
+    author: userId,
+    isDeleted: false,
+  }).populate("author");
   const strg = bson.calculateObjectSize(folders);
   res.render("folder", { folders, image, userId });
 });
@@ -65,7 +82,9 @@ folderRouter.get("/:id", async (req, res) => {
         .json({ error: "Folder not found please provide folder name!" });
     }
     const folders = await Folder.find({ parent: id });
-    const folderName = await Folder.findOne({ _id: id, author: userId }).select("folderName");
+    const folderName = await Folder.findOne({ _id: id, author: userId }).select(
+      "folderName"
+    );
     const getCardId = folder.cards.map((e) => e._id);
     const card = await Card.find({ _id: { $in: getCardId } });
     res.render("folderCards", {
@@ -74,7 +93,7 @@ folderRouter.get("/:id", async (req, res) => {
       image,
       userId,
       author,
-      fName:folderName.folderName,
+      fName: folderName.folderName,
       app_url: process.env.APP_URL,
     });
   } catch (error) {
@@ -90,6 +109,19 @@ folderRouter.delete("/:id", async (req, res) => {
   const folder = await Folder.findByIdAndDelete({ _id: id, author: userId });
 
   res.json({ data: folder });
+});
+
+folderRouter.post("/delete", async (req, res) => {
+  const { selected } = req.body;
+  const ids = selected.map((id) => new mongoose.Types.ObjectId(id));
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+  await Folder.updateMany(
+    { _id: { $in: ids }, author: userId },
+    { $set: { isDeleted: true } }
+  );
+  res.json({ data: "Deleted Successfully" });
 });
 
 folderRouter.put("/:id", async (req, res) => {
@@ -139,6 +171,25 @@ folderRouter.put("/:id", async (req, res) => {
     { new: true }
   );
   res.json({ data: folder });
+});
+
+folderRouter.get("/download", async (req, res) => {
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+  const { selected } = req.body;
+  try {
+    const ids = selected.map((id) => new mongoose.Types.ObjectId(id));
+    const folders = await Folder.find({ _id: { $in: ids }, author: userId });
+    if (folders.length === 0) {
+      return res.status(404).render("error", {
+        error: "Folder not found",
+      });
+    }
+    
+  } catch (error) {
+    res.render("error", { error: "Something went wrong, please try again." });
+  }
 });
 
 folderRouter.put("/move/:id", async (req, res) => {

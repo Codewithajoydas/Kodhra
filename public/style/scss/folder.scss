@@ -23,17 +23,19 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(270px, 300px));
     justify-content: start;
     .folder {
+      svg {
+        cursor: pointer;
+      }
+      border: 2px solid transparent;
+      &:has(input:checked) {
+        border: 2px solid rgb(56, 92, 255);
+        background: var(--accent);
+      }
       &:hover,
       &.active,
       &:focus {
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        background: var(--bg-color) !important;
+        border: 2px solid rgb(56, 92, 255);
       }
-      .folder {
-        width: 250px !important;
-        background: var(--bg-color) !important;
-      }
-      border: 1px solid rgba(0, 0, 0, 0);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -52,11 +54,10 @@ main {
     position: fixed;
     top: 70px;
     right: 0;
-    background: var(--bg-color) !important;
+    background: rgba(0, 0, 0, 0.0014);
     backdrop-filter: blur(10px);
     width: 300px;
     height: calc(100vh - 70px);
-    z-index: 999999999999;
     padding: 10px;
     overflow-y: scroll;
     box-shadow: -10px -10px 10px rgba(0, 0, 0, 0.13);

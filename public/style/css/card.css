@@ -24,7 +24,7 @@ body[data-theme=light] {
 }
 #cards .card,
 #cards1 .card {
-  transition: all 0.5s ease;
+  transition: all 0.2s ease;
   min-width: 400px;
   position: relative;
   margin-block: 5px;
@@ -38,7 +38,7 @@ body[data-theme=light] {
 }
 #cards .card:has(.select-card:checked),
 #cards1 .card:has(.select-card:checked) {
-  border: 2px solid var(--accent);
+  border: 2px solid rgb(56, 92, 255);
   backdrop-filter: blur(100px);
   object-fit: contain;
 }
@@ -50,12 +50,14 @@ body[data-theme=light] {
   align-items: center;
   padding-inline: 10px;
 }
-#cards .card .header-info .menu_top,
-#cards1 .card .header-info .menu_top {
+#cards .card .header-info .menu_top, #cards .card .header-info .restore,
+#cards1 .card .header-info .menu_top,
+#cards1 .card .header-info .restore {
   cursor: pointer;
 }
-#cards .card .header-info .menu_top svg,
-#cards1 .card .header-info .menu_top svg {
+#cards .card .header-info .menu_top svg, #cards .card .header-info .restore svg,
+#cards1 .card .header-info .menu_top svg,
+#cards1 .card .header-info .restore svg {
   width: 20px;
 }
 #cards .card .header-info .title p,
@@ -73,17 +75,18 @@ body[data-theme=light] {
 #cards .card .code,
 #cards1 .card .code {
   background: var(--secondary-bg-color) !important;
+  padding: 3px 10px !important;
   margin: 10px;
-  padding: 10px;
-  padding-top: 3px !important;
   border: 1px solid var(--accent);
   border-radius: 10px;
-  overflow: hidden;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
   display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 4.5em;
+  word-break: break-all;
+  line-height: 1.2em;
+  font-family: "Courier New", Courier, monospace !important;
 }
 #cards .card .tags,
 #cards1 .card .tags {
@@ -184,7 +187,6 @@ body[data-theme=light] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: row-reverse;
 }
 .cardContainer-header .card-options {
   display: flex;

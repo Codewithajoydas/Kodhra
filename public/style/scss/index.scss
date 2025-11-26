@@ -6,22 +6,40 @@ body[data-theme="dark"] {
   --color: #fff;
   background: var(--bg-color);
   color: var(--color);
-  --accent: #242424;
+}
+
+:root {
+  --accent: #24242494;
 }
 
 body[data-theme="light"] {
   --bg-color: #ffffff;
   --secondary-bg-color: #f1f1f1;
   --color: #000000;
-  --accent: #24242417;
   background: var(--bg-color);
   color: var(--color);
 }
 $accent: #2e2e2e21;
-.loader {
-  background-color: var(--bg-color) !important;
-  z-index: 9999999999999999999999999999999999999999999999999999999999999999999 !important;
+
+@media screen and (prefers-color-scheme: dark) {
+  body {
+    --bg-color: rgb(0, 0, 0);
+    --secondary-bg-color: #131212;
+    --color: #fff;
+    background: var(--bg-color);
+    color: var(--color);
+  }
 }
+@media screen and (prefers-color-scheme: light) {
+  body {
+    --bg-color: #ffffff;
+    --secondary-bg-color: #f1f1f1;
+    --color: #000000;
+    background: var(--bg-color);
+    color: var(--color);
+  }
+}
+
 .card {
   background: var(--bg-color);
   color: var(--color);
@@ -93,10 +111,9 @@ $accent: #2e2e2e21;
       overflow-y: hidden;
       display: flex;
       justify-content: space-between;
-      margin-top: 70px;
+      // margin-top: 70px;
       background: var(--secondary-bg-color);
       aside {
-        
         z-index: 2 !important;
         hr {
           border: none;
@@ -122,7 +139,7 @@ $accent: #2e2e2e21;
           list-style: none;
           padding: 0;
           margin: 0;
-          
+
           li {
             position: relative;
             margin: 10px 20px;
@@ -199,6 +216,42 @@ $accent: #2e2e2e21;
               svg {
                 width: 20px;
                 height: 20px;
+              }
+            }
+          }
+          .payment_btn {
+            width: 100% !important;
+            border-radius: 15px !important;
+            padding: 15px !important;
+            transition: background 0.7s ease-in-out;
+            // font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            // background: linear-gradient(40deg, rgba(137, 46, 255, 0.31));
+            color: var(--color);
+            outline: none !important;
+            border: 2px solid var(--accent) !important;
+            // box-shadow: 0 0 200px 5px rgba(137, 46, 255, 0.31);
+            // font-weight: bolder;
+            font-family: $mulish;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 45px;
+            font-size: 17px;
+            transition: all 0.2s ease-in-out;
+            gap: 20px;
+            img {
+              padding: 0 !important;
+              margin: 0 !important;
+              filter: invert(0);
+            }
+            &:hover {
+              background: var(--color);
+              backdrop-filter: blur(100px);
+              color: var(--bg-color);
+              border: 2px solid transparent;
+              transform: rotateX(360deg);
+              img {
+                filter: invert(1);
               }
             }
           }
@@ -1074,7 +1127,9 @@ main > * {
   z-index: 999999999999999999999 !important;
 }
 
-.sub_menu > div {
+.sub_menu .fav,
+.sub_menu .pin,
+.sub_menu .gist_upload {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1089,7 +1144,8 @@ main > * {
     background: var(--accent);
   }
 }
-.menu_top {
+.menu_top,
+.restore {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1098,6 +1154,7 @@ main > * {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  transition: all 0.5s ease;
   &:hover,
   &:focus,
   &:active {
@@ -1105,6 +1162,9 @@ main > * {
   }
 }
 
+.restore:hover {
+  transform: rotate(-360deg);
+}
 input:-webkit-autofill {
   box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset !important;
   -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset !important;
@@ -1168,7 +1228,7 @@ section {
     font-size: small;
     border: 0px solid var(--accent);
     // box-shadow: 0 0px 10px var(--accent) ;
-    top: -570%;
+    top: -490%;
     left: -300%;
     list-style: none;
     background: rgba(0, 0, 0, 0.014);
@@ -1281,21 +1341,8 @@ hr {
     svg {
       width: 16px;
       height: 16px;
-      fill: var(--color);
     }
-    &:has(li)::after {
-      content: "";
-      width: 1px;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      left: 6.6%;
-      background: var(--color);
-      border-radius: 100px;
-    }
+
     li {
       display: flex;
       justify-content: start;
@@ -1333,3 +1380,80 @@ hr {
   box-shadow: 0px 0px 257px 200px rgba(137, 46, 255, 0.31);
 }
 
+.networkInfo {
+  z-index: 100000000000000;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+*:focus {
+  outline: 1px solid var(--accent);
+}
+
+.see_all {
+  transition: all 0.2s ease;
+  margin-block: 10px;
+  &:hover {
+    outline: 2px dashed gray !important;
+    cursor: pointer;
+    outline-offset: 1px;
+  }
+}
+
+input {
+  accent-color: var(--color) !important;
+}
+.recent_history_model {
+  position: fixed;
+  top: 70px;
+  right: 0px;
+  width: 350px;
+  height: calc(100vh - 70px);
+  background: rgba(0, 0, 0, 0.014);
+  backdrop-filter: blur(10px);
+  z-index: 99;
+  border-radius: 10px 0 0 10px;
+  box-shadow: 4px 10px 10px rgba(0, 0, 0, 0.315);
+  padding: 10px;
+  .recent_histoy_header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    margin-block: 5px;
+    & > span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+#delete_dup {
+  color: red;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.tooltip {
+  background: var(--accent);
+  backdrop-filter: blur(10px);
+  color: var(--color);
+  padding: 5px;
+  border-radius: 5px;
+  width: auto;
+  display: flex;
+  white-space: nowrap;
+  // opacity: 0.5 ;
+  justify-content: center;
+  align-items: center;
+  max-height: 25px;
+  margin: 5px;
+  font-size: x-small;
+}

@@ -1,52 +1,84 @@
 main {
-  .settings-panel {
-    columns: 2;
-    section {
-      display: flex;
-      flex-direction: column;
-      break-inside: avoid;
-      gap: 10px;
-      margin-block: 10px;
-      h3 {
-        color: gray;
-        font-size: 15px;
-      }
-      input,
-      textarea,
-      select {
-        width: 100%;
-        border: none;
-        border: 1px solid gray;
-        padding: 10px;
-      }
-      label {
-        width: 400px;
-        input {
-          width: 100%;
-          margin: 5px;
+  display: flex;
+  align-items: center;
+  .setting_panal {
+    height: 80vh;
+    overflow-y: auto;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    ul {
+      width: 300px;
+      border-right: 1px solid var(--accent);
+      li {
+        a {
+          padding: 10px;
+          margin-inline: 10px;
+          list-style: none;
+          padding: 10px 20px;
+          cursor: pointer;
+          &:hover {
+            background: var(--accent);
+            border-radius: 10px;
+          }
         }
-        input[type="checkbox"] {
-          width: unset;
+      }
+    }
+    .tabs {
+      & ::-webkit-scrollbar {
+        display: none;
+      }
+      padding-inline: 10px;
+      height: 80vh;
+      overflow-y: auto;
+      width: 100%;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      .tab {
+        scroll-snap-align: start;
+        height: 100%;
+        overflow-y: auto;
+        & > span {
+          font-size: smaller;
+        }
+        label {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          .title {
+            font-size: smaller;
+            display: block;
+          }
+          .description {
+            font-size: x-small;
+            display: block;
+            color: #555;
+          }
+          select,
+          input {
+            width: 40%;
+            min-width: 200px;
+            border: 1px solid var(--accent);
+            outline: none;
+            background: var(--accent);
+            color: var(--color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+          }
+          button {
+            width: 40%;
+            min-width: 200px;
+            border: 1px solid var(--accent);
+            outline: none;
+            background: var(--color);
+            color: var(--bg-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+          }
         }
       }
     }
   }
-}
-
-input {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-input::placeholder {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-input[type="color"] {
-  padding: 0 !important;
-}
-
-input, select, textarea{
-  border: 1px solid var(--accent);
-  border-radius: 5px;
-  padding: 10px;
-  background: none;
-  resize: vertical;
 }

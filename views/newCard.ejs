@@ -14,10 +14,12 @@
   <link rel="stylesheet" href="/style/css/folder.css">
   <link rel="stylesheet" href="/style/css/createSnippet.css">
   <link rel="stylesheet" href="/style/css/toast.css">
+  <link rel="stylesheet" href="/style/css/loader.css">
+
 
   <script src="/socket.io/socket.io.js"></script>
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/theme/eclipse.min.css">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" />
@@ -72,75 +74,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
 
-  <style>
-    .loader {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100%;
-      position: fixed;
-      background: white;
-      z-index: 100000;
-      top: 0;
-      font-size: clamp(30px, 3vw, 40px);
-
-      font-weight: bolder;
-    }
-
-    .spain {
-      width: 0.5em;
-      height: 0.5em;
-      background: #000000;
-      border-radius: 50%;
-      margin: 5px;
-      animation: spin 0.6s ease-in-out infinite;
-    }
-
-    .spain:nth-child(1) {
-      animation-delay: 0.1s;
-    }
-
-    .spain:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .spain:nth-child(3) {
-      animation-delay: 0.3s;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
-
-      100% {
-        transform: translateY(0);
-      }
-    }
-
-    .CodeMirror.active {
-      height: 100vh;
-    }
-  </style>
+  
   <script src="https://unpkg.com/@barba/core"></script>
   <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
   <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
 </head>
 
 <body data-theme="light">
-  <div class="loader">
-    <div style="display: flex; justify-content: center; align-items: end">
-      Loading
-      <div class="spain"></div>
-      <div class="spain"></div>
-      <div class="spain"></div>
-    </div>
-  </div>
+<%- include("partials/loader.ejs") %>
   <div class="content">
     <%- include("partials/header")%>
       <div class="container">

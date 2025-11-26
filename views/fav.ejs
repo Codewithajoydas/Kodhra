@@ -11,67 +11,19 @@
   <link rel="stylesheet" href="/style/css/index.css">
   <link rel="stylesheet" href="/style/css/chip.css">
   <link rel="stylesheet" href="/style/css/card.css">
+  <link rel="stylesheet" href="/style/css/loader.css">
   <link rel="stylesheet" href="/style/css/folder.css">
   <link rel="stylesheet" href="/style/css/toast.css">
   <script src="\scripts\shortcut.js"></script>
 
   <script src="/socket.io/socket.io.js"></script>
 
-  <link rel="shortcut icon" href="/assets/logo.png" type="image/png" />
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
   <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
   <link rel="preload" href="/gEzG0w1WVY.lottie" as="fetch" crossorigin="anonymous" />
-  <style>
-    .loader {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100%;
-      position: fixed;
-      background: white;
-      z-index: 100000;
-      top: 0;
-      font-size: clamp(30px, 3vw, 40px);
-
-      font-weight: bolder;
-    }
-
-    .spain {
-      width: 0.5em;
-      height: 0.5em;
-      background: #000000;
-      border-radius: 50%;
-      margin: 5px;
-      animation: spin 0.6s ease-in-out infinite;
-    }
-
-    .spain:nth-child(1) {
-      animation-delay: 0.1s;
-    }
-
-    .spain:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .spain:nth-child(3) {
-      animation-delay: 0.3s;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
-
-      100% {
-        transform: translateY(0);
-      }
-    }
-  </style>
+  
   <script src="https://unpkg.com/@barba/core"></script>
   <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
   <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
@@ -79,15 +31,12 @@
 </head>
 
 <body data-theme="light">
-  <div class="loader">
-    <dotlottie-wc src="gEzG0w1WVY.lottie" style="width: 400px; height: 400px" speed="1" autoplay loop></dotlottie-wc>
-
-  </div>
+ <%- include("partials/loader.ejs") %>
   <div class="content">
     <%- include("partials/header.ejs")%>
       <div class="container">
         <%- include("partials/sidebar.ejs", { navigation: 'fav' })%>
-          <main style="width: 100%;">
+          <main style="width: 100%; height: calc(100vh - 70px);">
             <div class="cardContainer-header">
               <span class="page_title">All Favorite Snippets</span>
               <div class="card-options disabled">
@@ -119,15 +68,22 @@
               </div>
             </div>
 
-            <div id="cards">
-              <%- include("partials/cards") %>
-            </div>
-            <div id="sentinal" style="text-align: center; margin-block:10px; color: red;">
-              <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif" alt="Loading..."
-                style="width: 10%;">
-            </div>
+             <div id="cards">
+                           <% if (card.length === 0) { %>
+                            <%- include("partials/no-data.ejs") %>
+                            
+                            <% } else { %>
+                                <%- include("partials/cards") %>
+                            <% } %>
+                        </div>
+                      <% if(card.length!==0){%>
+                        <div id="sentinal" style="text-align: center; margin-block:10px; color: red;">
+                            <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif"
+                                alt="Loading..." style="width: 10%;">
+                        </div>
+                        <%}%>
 
-            <!-- <%- include("partials/fab")%> -->
+            <%- include("partials/fab")%>
           </main>
           <div class="notification-bar">
             <h3>Notifications</h3>
@@ -138,22 +94,7 @@
             <ul id="context_menu_list"></ul>
           </div>
 
-          <div class="toast" data-type="success">
-            <div class="toast-content">
-              <span class="toast-message"> </span>
-              <div class="close">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-octagon-x-icon lucide-octagon-x">
-                  <path d="m15 9-6 6" />
-                  <path
-                    d="M2.586 16.726A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2h6.624a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586z" />
-                  <path d="m9 9 6 6" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
+          
           <div class="notification-bar">
             <h3>Notifications</h3>
             <ul class="notification-lists">
@@ -284,30 +225,11 @@
               <button class="move_btn" onclick="moveIt()" <%=folders.length===0 ? "disabled" : "" %> > Move </button>
             </div>
           </div>
-          <div class="toast" data-type="success">
-            <div class="toast-content">
-              <span class="toast-message"> </span>
-              <div class="close">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-octagon-x-icon lucide-octagon-x">
-                  <path d="m15 9-6 6" />
-                  <path
-                    d="M2.586 16.726A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2h6.624a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586z" />
-                  <path d="m9 9 6 6" />
-                </svg>
-              </div>
-            </div>
-          </div>
+          
       </div>
   </div>
 
-  <script>
-    window.onload = () => {
-      let loader = document.querySelector(".loader");
-      loader.style.display = "none";
-    };
-  </script>
+
 
   <script src="/scripts/ad_search.js"></script>
   <script src="/scripts/Fab.js"></script>

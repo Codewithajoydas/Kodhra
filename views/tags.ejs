@@ -5,6 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tags | Code Snippet Manager</title>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
   <link rel="stylesheet" href="/style/css/partials/Header.css">
   <link rel="stylesheet" href="/style/css/ad_search.css">
   <link rel="stylesheet" href="/style/css/Notification.css">
@@ -12,6 +14,7 @@
   <link rel="stylesheet" href="/style/css/chip.css">
   <link rel="stylesheet" href="/style/css/card.css">
   <link rel="stylesheet" href="/style/css/folder.css">
+  <link rel="stylesheet" href="/style/css/loader.css">
   <link rel="stylesheet" href="/style/css/tags.css">
   <script src="\scripts\shortcut.js"></script>
 
@@ -20,57 +23,7 @@
   <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
   <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
   <link rel="preload" href="/gEzG0w1WVY.lottie" as="fetch" crossorigin="anonymous" />
-  <style>
-    .loader {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100%;
-      position: fixed;
-      background: white;
-      z-index: 100000;
-      top: 0;
-      font-size: clamp(30px, 3vw, 40px);
-
-      font-weight: bolder;
-    }
-
-    .spain {
-      width: 0.5em;
-      height: 0.5em;
-      background: #000000;
-      border-radius: 50%;
-      margin: 5px;
-      animation: spin 0.6s ease-in-out infinite;
-    }
-
-    .spain:nth-child(1) {
-      animation-delay: 0.1s;
-    }
-
-    .spain:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .spain:nth-child(3) {
-      animation-delay: 0.3s;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
-
-      100% {
-        transform: translateY(0);
-      }
-    }
-  </style>
+  
   <script src="https://unpkg.com/@barba/core"></script>
   <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
   <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
@@ -78,9 +31,7 @@
 </head>
 
 <body data-theme="light">
-  <div class="loader">
-    <dotlottie-wc src="gEzG0w1WVY.lottie" style="width: 400px; height: 400px" speed="1" autoplay loop></dotlottie-wc>
-  </div>
+  <%- include('partials/loader.ejs')%>
   </div>
   <div class="content">
     <%- include('partials/header')%>

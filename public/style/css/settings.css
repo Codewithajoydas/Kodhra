@@ -1,54 +1,84 @@
-main .settings-panel {
-  columns: 2;
+main {
+  display: flex;
+  align-items: center;
 }
-main .settings-panel section {
+main .setting_panal {
+  height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+main .setting_panal ul {
+  width: 300px;
+  border-right: 1px solid var(--accent);
+}
+main .setting_panal ul li a {
+  padding: 10px;
+  margin-inline: 10px;
+  list-style: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+main .setting_panal ul li a:hover {
+  background: var(--accent);
+  border-radius: 10px;
+}
+main .setting_panal .tabs {
+  padding-inline: 10px;
+  height: 80vh;
+  overflow-y: auto;
+  width: 100%;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+main .setting_panal .tabs ::-webkit-scrollbar {
+  display: none;
+}
+main .setting_panal .tabs .tab {
+  scroll-snap-align: start;
+  height: 100%;
+  overflow-y: auto;
+}
+main .setting_panal .tabs .tab > span {
+  font-size: smaller;
+}
+main .setting_panal .tabs .tab label {
   display: flex;
   flex-direction: column;
-  break-inside: avoid;
   gap: 10px;
-  margin-block: 10px;
 }
-main .settings-panel section h3 {
-  color: gray;
-  font-size: 15px;
+main .setting_panal .tabs .tab label .title {
+  font-size: smaller;
+  display: block;
 }
-main .settings-panel section input,
-main .settings-panel section textarea,
-main .settings-panel section select {
-  width: 100%;
-  border: none;
-  border: 1px solid gray;
-  padding: 10px;
+main .setting_panal .tabs .tab label .description {
+  font-size: x-small;
+  display: block;
+  color: #555;
 }
-main .settings-panel section label {
-  width: 400px;
-}
-main .settings-panel section label input {
-  width: 100%;
-  margin: 5px;
-}
-main .settings-panel section label input[type=checkbox] {
-  width: unset;
-}
-
-input {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-input::placeholder {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-input[type=color] {
-  padding: 0 !important;
-}
-
-input, select, textarea {
+main .setting_panal .tabs .tab label select,
+main .setting_panal .tabs .tab label input {
+  width: 40%;
+  min-width: 200px;
   border: 1px solid var(--accent);
+  outline: none;
+  background: var(--accent);
+  color: var(--color);
+  padding: 10px 20px;
   border-radius: 5px;
-  padding: 10px;
-  background: none;
-  resize: vertical;
+  cursor: pointer;
+}
+main .setting_panal .tabs .tab label button {
+  width: 40%;
+  min-width: 200px;
+  border: 1px solid var(--accent);
+  outline: none;
+  background: var(--color);
+  color: var(--bg-color);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=settings.css.map */

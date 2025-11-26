@@ -53,7 +53,7 @@ const actions = {
 const contextMenu = document.getElementById("context_menu");
 const contextMenuList = document.getElementById("context_menu_list");
 
-contextMenu.addEventListener("contextmenu", (e) => e.preventDefault());
+window.addEventListener("contextmenu", (e) => e.preventDefault());
 
 window.addEventListener("click", () => {
   contextMenu.style.display = "none";
@@ -134,12 +134,33 @@ function pin(id, type) {
     .catch(console.error);
 }
 
-function shareFolder(id, userId) {
-  const link = `${window.location.origin}/folder/${userId}/${id}`;
-  navigator.clipboard
-    .writeText(link)
-    .then(() => alert("Copied to clipboard: " + link))
-    .catch(console.error);
+async function shareFolder(id, userId) {
+  try {
+    const res = await fetch(`/generate_cdn/${id}`, {
+      method: "POST",
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (res.ok) {
+      navigator.clipboard.writeText(
+        `${window.location.origin}/generate_cdn/${data.link._id}`
+      );
+      new Toastmaster({
+        title: "Success",
+        message: "Shared successfully",
+        type: "success",
+        delay: 5000,
+      }).showNotification();
+    }
+  } catch (err) {
+    new Toastmaster({
+      title: "Error",
+      message: "Failed to share",
+      type: "error",
+      delay: 5000,
+    });
+    console.error(err);
+  }
 }
 
 function openContextMenu(event, clientX = null, clientY = null) {
@@ -184,42 +205,89 @@ window.addEventListener("click", () => {
 });
 
 async function favIt(ele, id) {
-  let res = await fetch(`/card/fav/${id}`, {
-    method: "put",
-  });
-  if (res.ok) {
-    let svg = ele.querySelector("svg");
-    svg.classList.toggle("active");
-  }
-  res.json().then((data) => {});
-}
-async function pinIt(ele, id) {
-  let res = await fetch(`/card/pin/${id}`, {
-    method: "put",
-  });
-  if (res.ok) {
-    let svg = ele.querySelector("svg");
-    svg.classList.toggle("active");
-  }
-  res.json().then((data) => {
-    if (data.message == "pinned") {
+  try {
+    let res = await fetch(`/card/fav/${id}`, {
+      method: "put",
+    });
+    if (res.ok) {
+      let svg = ele.querySelector("svg");
+      svg.classList.toggle("active");
+    }
+    const data = await res.json();
+    if (data.message === "favorited") {
       new Toastmaster({
         title: "Success",
-        message: "Card pinned successfully",
+        message: "Card Favorited Successfully",
         type: "success",
         delay: 5000,
       }).showNotification();
-      console.log(data.message);
+    } else if (data.message === "unfavorited") {
+      new Toastmaster({
+        title: "Success",
+        message: "Card Unfavorited Successfully",
+        type: "success",
+        delay: 5000,
+      }).showNotification();
     } else {
       new Toastmaster({
+        title: "Error",
+        message: "Restore The Card First.",
+        type: "error",
+        delay: 5000,
+      }).showNotification();
+    }
+  } catch (err) {
+    new Toastmaster({
+      title: "Error",
+      message: "Failed to Favorite.",
+      type: "error",
+      delay: 5000,
+    }).showNotification();
+  }
+}
+
+async function pinIt(ele, id) {
+  try {
+    let res = await fetch(`/card/pin/${id}`, {
+      method: "put",
+    });
+    if (res.ok) {
+      let svg = ele.querySelector("svg");
+      svg.classList.toggle("active");
+    }
+
+    const data = await res.json();
+    if (data.message === "pinned") {
+      new Toastmaster({
         title: "Success",
-        message: "Card unpinned successfully",
+        message: "Card Pinned Successfully",
         type: "success",
         delay: 5000,
       }).showNotification();
-      console.log(data.message);
+    } else if (data.message === "unpinned") {
+      new Toastmaster({
+        title: "Success",
+        message: "Card Unpinned Successfully",
+        type: "success",
+        delay: 5000,
+      }).showNotification();
+    } else {
+      new Toastmaster({
+        title: "Error",
+        message: "Restore The Card First.",
+        type: "error",
+        delay: 5000,
+      }).showNotification();
     }
-  });
+  } catch (error) {
+    console.error(error);
+    new Toastmaster({
+      title: "Error",
+      message: "Failed to pin card",
+      type: "error",
+      delay: 5000,
+    });
+  }
 }
 
 function editCard(id) {
@@ -365,50 +433,62 @@ document.addEventListener("click", (e) => {
     });
 });
 
-async function sharegist(e) {
-  const cardContent = e.target
-    .closest(".card")
-    .dataset.cardcontent.split(",")
-    .map((item) => item.trim());
-  const filename = "asas";
-  const content = "SDD";
-  const description = "ASSFASDM ASJ ";
+async function copy_cdn_link(e) {
+  const id = e.target.closest(".card").dataset.id;
+
   try {
-    const response = await fetch("/share", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ filename, content, description }),
+    const res = await fetch(`/generate_cdn/${id}`, {
+      method: "POST",
       credentials: "include",
     });
-    console.log(response);
-    if (response.ok) {
+    const data = await res.json();
+    if (res.ok) {
+      navigator.clipboard.writeText(
+        `${window.location.origin}/generate_cdn/${data.link._id}`
+      );
       new Toastmaster({
-        title: "Gist Shared!",
-        message: "Gist shared successfully",
+        title: "Success",
+        message: "Link Copied Successfully",
         type: "success",
-        delay: 3000,
-      }).showNotification();
-    } else {
-      new Toastmaster({
-        title: "Error!",
-        message: "Failed to share gist",
-        type: "error",
-        delay: 3000,
+        delay: 5000,
       }).showNotification();
     }
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    new Toastmaster({
+      title: "Error",
+      message: "Failed to copy link",
+      type: "error",
+      delay: 5000,
+    });
+    console.error(err);
   }
 }
 
 // Play sound when click on buttons, links, and inputs
 
-const clickSound = new Audio("assets/sound/computer-mouse-click-352734.mp3");
-clickSound.volume = 0.3;
-clickSound.preload = "auto";
-document.addEventListener("mousedown", (e) => {
-  clickSound.currentTime = 0;
-  clickSound.play();
+// const clickSound = new Audio("assets/sound/computer-mouse-click-352734.mp3");
+// clickSound.volume = 0.3;
+// clickSound.preload = "auto";
+// document.addEventListener("mousedown", (e) => {
+//   clickSound.currentTime = 0;
+//   clickSound.play();
+// });
+
+const elements = document.querySelectorAll("[tabindex='0']");
+
+elements.forEach((el) => {
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      el.click();
+    }
+  });
+});
+
+const createCursor = document.createElement("div");
+createCursor.classList.add("cursor");
+document.body.appendChild(createCursor);
+const cursor = document.querySelector(".cursor");
+document.addEventListener("mousemove", (e) => {
+  cursor.style.left = `${e.clientX}px`;
+  cursor.style.top = `${e.clientY}px`;
 });

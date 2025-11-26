@@ -1,6 +1,7 @@
 <header style="z-index: 100">
     <span class="logo">
-        <div class="backButton" title="Back" onclick="history.back()" tabindex="0" style="display: none;">
+        <div class="backButton" data-sound="true" title="Back" onclick="history.back()" tabindex="0"
+            style="display: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-arrow-left-icon lucide-arrow-left">
@@ -8,7 +9,7 @@
                 <path d="M19 12H5" />
             </svg>
         </div>
-        <div class="sidebar" title="Menu" tabindex="0">
+        <div class="sidebar" tabindex="0" data-sound="true" data-tooltip="Toggle Menu">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-menu-icon lucide-menu" onclick="toggleMenu()">
@@ -17,15 +18,35 @@
                 <path d="M4 19h16" />
             </svg>
         </div>
-        <span class="lg" style="display: flex; justify-content: center;align-items: center; gap: 10px;" onmouseover=""
+        <span class="lg" style="display: flex; justify-content: center;align-items: center; gap: 5px;" onmouseover=""
             onclick="window.location.assign('/')">
-            <img src="\assets\wordmark.png" alt="code snippet manager" />
+            <svg viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M74.5 294.5V86L76.5 83L78.5 80L81 78L84.5 76.5H178.5L182.5 78L185.5 81L188 86.5V189.5L81.5 297.5H76.5L74.5 294.5Z"
+                    fill="black" />
+                <path
+                    d="M333 81L151.5 262.5L150 264.5V267.5L151.5 273.5L325.5 446.5L328 448L330 449.5H444H446.5L448.5 447.5V444L447.5 442L446 439.5L282 273.5L280 268V264L282 260L286 256L290 252.5L457 85.5L457.5 82.5V79.5L456 77.5H451.5H340L337 78.5L333 81Z"
+                    fill="black" />
+                <path
+                    d="M187.5 342.5L188 441L186.5 444L184.5 447L183 448L180 449H82.5L80.5 448L78.5 447L77 445L76.5 443L75 441V344.5L77 341.5L79 339L80.5 338L84.5 336H176H179.5L181.5 337L184 339L187.5 342.5Z"
+                    fill="black" />
+                <path
+                    d="M74.5 294.5V86L76.5 83L78.5 80L81 78L84.5 76.5H178.5L182.5 78L185.5 81L188 86.5V189.5L81.5 297.5H76.5L74.5 294.5Z"
+                    stroke="black" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                    d="M333 81L151.5 262.5L150 264.5V267.5L151.5 273.5L325.5 446.5L328 448L330 449.5H444H446.5L448.5 447.5V444L447.5 442L446 439.5L282 273.5L280 268V264L282 260L286 256L290 252.5L457 85.5L457.5 82.5V79.5L456 77.5H451.5H340L337 78.5L333 81Z"
+                    stroke="black" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                    d="M187.5 342.5L188 441L186.5 444L184.5 447L183 448L180 449H82.5L80.5 448L78.5 447L77 445L76.5 443L75 441V344.5L77 341.5L79 339L80.5 338L84.5 336H176H179.5L181.5 337L184 339L187.5 342.5Z"
+                    stroke="black" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
             <span><span style="white-space: nowrap; font-size: larger;">Kodhra</span>
             </span>
         </span>
     </span>
     <nav>
-        <div class="searchResult" data-tooltip="Search">
+        <div class="searchResult">
             <label class="search" for="search" style="cursor: text">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -51,7 +72,16 @@
                 </ul>
             </div>
         </div>
-        <div class="filter" id="filter" data-tooltip="Filter" tabindex="0">
+        <div class="voiceCommand" tabindex="0" data-sound="true" data-tooltip="Voice Command">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-mic-icon lucide-mic">
+                <path d="M12 19v3" />
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                <rect x="9" y="2" width="6" height="13" rx="3" />
+            </svg>
+        </div>
+        <div class="filter" id="filter" data-tooltip="Advanced Filter" tabindex="0" data-sound="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-sliders-horizontal-icon lucide-sliders-horizontal">
@@ -66,7 +96,7 @@
                 <path d="M8 12H3" />
             </svg>
         </div>
-        <div class="notification" data-tooltip="Notifications" tabindex="0">
+        <div class="notification" data-tooltip="Notifications" tabindex="0" data-sound="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-bell-icon lucide-bell">
@@ -76,7 +106,8 @@
             </svg>
             <span class="number"></span>
         </div>
-        <a class="help" href="/csm-info-page.html" data-tooltip="Help" tabindex="0" aria-label="Know more about Kodhra">
+        <a class="help" href="/csm-info-page.html" data-tooltip="Information" tabindex="0"
+            aria-label="Know more about Kodhra" data-sound="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-info-icon lucide-info">
@@ -85,8 +116,8 @@
                 <path d="M12 8h.01" />
             </svg>
         </a>
-        <audio src="https://lofi.stream.laut.fm/lofi" id="audio"></audio>
-        <div class="music">
+        <audio src="https://lofi.stream.laut.fm/lofi" id="audio" data-sound="true"></audio>
+        <div class="music" tabindex="0" data-tooltip="Background Music">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-music-icon lucide-music">
@@ -95,8 +126,8 @@
                 <circle cx="18" cy="16" r="3" />
             </svg>
         </div>
-        <div class="profile" tabindex="0" onclick="openProfile(event)">
-            <img src="<%= image %>" alt="profile image of user"
+        <div class="profile" tabindex="0" onclick="openProfile(event)" data-sound="true">
+            <img src="<%= image %>" alt="profile image of user" data-tooltip="Profile"
                 onerror="this.src='https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg'" />
             <div class="profile-bar">
                 <div class="header">
@@ -322,6 +353,12 @@
 </div>
 
 
+<div class="lisenting"
+    style="width: 200px;height: 200px;display: none;justify-content: center;padding: 10px;align-items: center;flex-direction: column; position: fixed;top: 50%; left: 50%;transform: translate(-50%, -50%);z-index: 10000000; background: rgba(128, 128, 128, 0.002);color: var(--color) !important; border-radius: 10px; padding: 10px; gap: 10px;backdrop-filter: blur(10px); box-shadow: 0 0 10px var(--accent);border:1px solid var(--accent)">
+    <div class="span"><img src="https://assets-v2.lottiefiles.com/a/5d08c948-7bc2-11ee-a43f-8b18c98dfd70/SEACCePDVk.gif"
+            alt="Logo of code snippet manager" width="100px"></div>
+    <h3>Listening...</h3>
+</div>
 
 
 
@@ -332,6 +369,7 @@
 
     function openProfile(e) {
         e.stopPropagation();
+        let tooltip = document.querySelector(".tooltip");
         document.querySelector(".profile-bar").classList.toggle("active");
     }
     let profile_bar = document.querySelector(".profile-bar");
@@ -350,18 +388,15 @@
 
     function applyTheme(theme) {
         if (theme === "auto") {
-            // Detect current system theme
             const systemTheme = getSystemTheme();
             document.body.setAttribute("data-theme", systemTheme);
         } else {
             document.body.setAttribute("data-theme", theme);
         }
 
-        // Update checked radio
         const input = document.querySelector(`input[value="${theme}"]`);
         if (input) input.checked = true;
 
-        // Store only user’s choice, not resolved system theme
         localStorage.setItem("theme", theme);
     }
 
@@ -369,7 +404,6 @@
         return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     }
 
-    // Handle manual theme change
     themes.forEach((ele) => {
         ele.addEventListener("change", (e) => {
             if (e.target.checked) {
@@ -379,13 +413,11 @@
         });
     });
 
-    // Apply saved or system theme on page load
     window.addEventListener("DOMContentLoaded", () => {
         const savedTheme = localStorage.getItem("theme") || "auto";
         applyTheme(savedTheme);
     });
 
-    // Respond to system theme change — only if auto mode is active
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme === "auto") {
@@ -467,7 +499,7 @@
                             });
                             observer_a.observe(sentinal_a);
                         } else {
-                            observer_a.disconnect(); // stop when no more data
+                            observer_a.disconnect();
                         }
                     } else {
                         console.error("Failed to fetch next page:", res.status);
@@ -479,4 +511,59 @@
 
         observer_a.observe(sentinal_a);
     });
+
+    document.querySelector(".music").addEventListener("click", () => {
+        const audio = document.getElementById("audio");
+        if (audio.paused) {
+            audio.play();
+            document.querySelector(".music").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-disc3-icon lucide-disc-3"><circle cx="12" cy="12" r="10"/><path d="M6 12c0-1.7.7-3.2 1.8-4.2"/><circle cx="12" cy="12" r="2"/><path d="M18 12c0 1.7-.7 3.2-1.8 4.2"/></svg>`
+            document.querySelector(".music").classList.add("active");
+        } else {
+            audio.pause();
+            document.querySelector(".music").classList.remove("active");
+            document.querySelector(".music").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play-icon lucide-play"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg>`
+        }
+    })
+</script>
+
+<script>
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    let transcript = "";
+    const searchInputa = document.getElementById("search");
+    const listeningBox = document.querySelector(".lisenting");
+    const voiceBtn = document.querySelector(".voiceCommand");
+
+    recognition.onresult = (event) => {
+        transcript = event.results[0][0].transcript.trim();
+    };
+
+    voiceBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        listeningBox.style.display = "flex";
+        transcript = "";
+        recognition.start();
+    });
+
+    recognition.onend = () => {
+        listeningBox.style.display = "none";
+        searchInputa.value = transcript || "";
+        searchInputa.dispatchEvent(new Event("input"));
+    };
+
+    document.addEventListener("click", (e) => {
+        if (!listeningBox.contains(e.target) && !voiceBtn.contains(e.target)) {
+            recognition.stop();
+            listeningBox.style.display = "none";
+        }
+    });
+
+    recognition.onerror = (e) => {
+        console.log("Speech error:", e.error);
+        listeningBox.style.display = "none";
+    };
 </script>

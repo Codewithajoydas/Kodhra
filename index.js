@@ -6,6 +6,7 @@
  */
 const express = require("express");
 const app = express();
+
 const dotenv = require("dotenv");
 const { default: mongoose } = require("mongoose");
 dotenv.config();
@@ -59,6 +60,9 @@ const languageRouter = require("./routes/languageWise");
 const expoloreRouter = require("./routes/explore");
 const activityRouter = require("./routes/activity");
 const createActivity = require("./routes/activity.module");
+const recyclebinRouter = require("./routes/recycle");
+const findFavPinned = require("./utils/findFavPin.module");
+const cdnRouter = require("./routes/create_cdn_links");
 const io = socket.init(server);
 
 io.on("connection", (socket) => {
@@ -84,7 +88,6 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true }));
-
 
 app.use("/login", router);
 app.use("/signup", signup);
@@ -112,24 +115,29 @@ app.use("/share", authMiddleware, shareRouter);
 app.use("/language", authMiddleware, languageRouter);
 app.use("/explore", authMiddleware, expoloreRouter);
 app.use("/activity", authMiddleware, activityRouter);
+app.use("/recyclebin", authMiddleware, recyclebinRouter);
+app.use("/generate_cdn", authMiddleware, cdnRouter);
 
 // HOME ROUTER
 app.get("/", authMiddleware, async (req, res, next) => {
   try {
-    const ip =
-      req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
-    console.log("User IP:", ip);
     const token = req.cookies.token;
     const decode = jwt.verify(token, process.env.SECRET);
     const folders = await Folder.find({
       author: decode.checkUser._id,
+      isDeleted: false,
       parent: null,
-    });
-    const card = await Card.find({ author: decode.checkUser._id })
+    })
+      .populate("author")
+      .limit(5);
+    const cards = await Card.find({
+      author: decode.checkUser._id,
+      isDeleted: false,
+    })
       .sort({ createdAt: -1 })
       .limit(10)
       .populate("author", "userName userImage");
-
+    const card = await findFavPinned(cards, decode.checkUser._id);
     res.render("index", {
       image: decode.checkUser?.userImage || decode.user?.avatar,
       card,
@@ -219,19 +227,18 @@ app.get("/democards", async (req, res) => {
     parent: null,
   });
 
-  const cards = await Card.find({ author: decode.checkUser._id })
+  const card = await Card.find({ author: decode.checkUser._id })
     .sort({ createdAt: -1 })
     .limit(15);
 
   res.render("demo", {
     image: decode.checkUser?.userImage || decode.user?.avatar,
-    cards,
+    card,
     author: decode.checkUser.userName,
     userId: decode.checkUser._id,
     folders,
   });
 });
-
 
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
@@ -243,13 +250,21 @@ app.get("/report", authMiddleware, async (req, res) => {
   const decode = jwt.verify(token, process.env.SECRET);
   const { _id } = decode.checkUser;
   if (!_id) return res.status(401).json({ error: "Unauthorized" });
-  const totalCards = await Card.countDocuments({ author: _id });
-  const totalFolders = await Folder.countDocuments({ author: _id });
+  const totalCards = await Card.countDocuments({
+    author: _id,
+    isDeleted: false,
+  });
+  const totalFolders = await Folder.countDocuments({
+    author: _id,
+    isDeleted: false,
+  });
   const totalTags = (await Card.distinct("tags", { author: _id })).length;
   let dailyCounts = [];
   try {
     dailyCounts = await Card.aggregate([
-      { $match: { author: new mongoose.Types.ObjectId(_id) } },
+      {
+        $match: { author: new mongoose.Types.ObjectId(_id), isDeleted: false },
+      },
       {
         $group: {
           _id: {
@@ -266,7 +281,7 @@ app.get("/report", authMiddleware, async (req, res) => {
     console.error("Error fetching daily counts:", error);
   }
   const languageReport = await Card.aggregate([
-    { $match: { author: new mongoose.Types.ObjectId(_id) } },
+    { $match: { author: new mongoose.Types.ObjectId(_id), isDeleted: false } },
     {
       $group: {
         _id: "$category",
@@ -285,12 +300,16 @@ app.get("/report", authMiddleware, async (req, res) => {
   });
 });
 
-app.get("/lastactive",  async (req, res) => {
+app.get("/lastactive", async (req, res) => {
   try {
     const token = req.cookies.token;
     const decode = jwt.verify(token, process.env.SECRET);
     const userId = decode.checkUser._id;
-    const lastActiveTime = await User.findByIdAndUpdate(userId, { lastActive: Date.now() }, { new: true });
+    const lastActiveTime = await User.findByIdAndUpdate(
+      userId,
+      { lastActive: Date.now() },
+      { new: true }
+    );
     const t = new Date(lastActiveTime.lastActive).toLocaleString();
     res.json({ success: true, t });
   } catch (e) {
@@ -307,10 +326,27 @@ app.get("/a", authMiddleware, (req, res) => {
   res.json({ _id, userName, goodName, email, userImage, lastActive });
 });
 
+app.get("/location", async (req, res) => {
+  const ip =
+    req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
+
+  const geo = await fetch(`https://ipapi.co/${ip}/json/`);
+  const location = await geo.json();
+
+  res.send(location);
+});
 
 app.use((req, res, next) => {
   res.status(404).render("pageNotFound");
 });
+
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).render("error", {
+    error: "Internal Server Error, try again later or contact support",
+  });
+});
+
 server.listen(process.env.PORT, async () => {});
 
 process.on("uncaughtException", (err) => {

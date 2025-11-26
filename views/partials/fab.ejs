@@ -1,5 +1,5 @@
-<div class="quick_action">
-    <span class="qc_icon">
+<div class="quick_action" >
+    <span class="qc_icon" data-tooltip="Quick Actions">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="lucide lucide-plus-icon lucide-plus">
@@ -35,16 +35,7 @@
                     <path d="M12 12v6" />
                     <path d="m15 15-3-3-3 3" />
                 </svg></span><span>Import Snippet</span></li>
-        <li><span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-database-backup-icon lucide-database-backup">
-                    <ellipse cx="12" cy="5" rx="9" ry="3" />
-                    <path d="M3 12a9 3 0 0 0 5 2.69" />
-                    <path d="M21 9.3V5" />
-                    <path d="M3 5v14a9 3 0 0 0 6.47 2.88" />
-                    <path d="M12 12v4h4" />
-                    <path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16" />
-                </svg></span><span>Backup</span></li>
+        
         <li><span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-recycle-icon lucide-recycle">
@@ -80,10 +71,12 @@
 <script>
     document.querySelector(".qc_icon").addEventListener("click", () => {
         document.querySelector(".acctions").classList.toggle("active")
+        document.body.classList.toggle("active")
     })
-
+    
     document.addEventListener("click", (e) => {
         if (e.target.closest(".acctions") || e.target.closest(".qc_icon")) return
+        document.body.classList.remove("active")
         document.querySelector(".acctions").classList.remove("active")
     })
 

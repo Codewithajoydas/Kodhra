@@ -122,9 +122,26 @@
             </a>
             <kbd>alt + r</kbd>
         </li>
+        <li>
+            <a href="/recyclebin" class="<%- navigation === 'recyclebin' ? 'active' : '' %>" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-recycle-icon lucide-recycle">
+                    <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5" />
+                    <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12" />
+                    <path d="m14 16-3 3 3 3" />
+                    <path d="M8.293 13.596 7.196 9.5 3.1 10.598" />
+                    <path
+                        d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843" />
+                    <path d="m13.378 9.633 4.096 1.098 1.097-4.096" />
+                </svg>
+                Recycle Bin
+            </a>
+            <kbd>alt + b</kbd>
+        </li>
 
         <!-- Creation Shortcuts -->
-            <hr>
+        <hr>
 
         <li>
             <span>Creation Shortcuts</span>
@@ -162,12 +179,12 @@
         </li>
 
         <!-- Search & Explore -->
-            <hr>
+        <hr>
 
-         <li>
+        <li>
             <span>Search & Explore</span>
 
-         </li>
+        </li>
         <li>
             <a href="/search" class="<%- navigation === 'search' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -201,12 +218,12 @@
         </li>
 
         <!-- Settings & Tools -->
-            <hr>
+        <hr>
 
-         <li>
+        <li>
             <span>Settings & Tools</span>
 
-         </li>
+        </li>
         <li>
             <a href="/import-export" class="<%- navigation === 'import-export' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -261,9 +278,9 @@
 
         <!-- Auth -->
         <hr>
-         <li>
+        <li>
             <span>Auth</span>
-         </li>
+        </li>
         <li>
             <a href="/login" class="<%- navigation === 'login' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -295,30 +312,33 @@
         <li>
             <hr>
             <span>Payment Options</span>
-            <button
-                style="width: 100%; border-radius: 30px 5px 30px 5px !important; padding: 15px !important; background: #000000; color: white; outline: none !important; border: 1px solid white;font-weight: bolder; display: flex;justify-content: center;align-items: center; height: 50px; transition: all .2s ease-in-out; gap: 5px;"
-                class="payment-button" onclick="payNow()">
+            <button class="payment_btn" class="payment-button" onclick="payNow()">
+                <img src="\assets\upload.png" alt="" width="25px" height="25px"
+                    style="padding: 0 !important; margin:0 !important;">
                 Upgrade Plan
-                <img src="https://images.icon-icons.com/3609/PNG/512/climate_forecast_weather_rain_storm_thunderstorm_thunder_icon_226629.png"
-                    alt="" width="30px" height="30px" style="padding: 0 !important; margin:0 !important;">
             </button>
         </li>
     </ul>
     <div id="create-folder-modal">
-        <div class="page_title">
-            Create Folder
-        </div>
-        <label for="folderName" id="createFolder">
-            <span>Folder Name:</span>
-            <input type="text" name="folderName" id="folderName" placeholder="Folder Name" autocomplete="off"
-                list="folderNames">
-            <datalist id="folderNames">
 
-            </datalist>
+        <label for="folderName" id="createFolder">
+            <div style="display: flex; justify-content: start;align-items: center;gap: 10px;">
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#F7B31B"
+                        stroke="currentColor" stroke-width=".1" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-folder-icon lucide-folder">
+                        <path
+                            d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                    </svg>
+                </span>
+                <span>Folder Name:</span>
+            </div>
+            <input type="text" name="folderName" id="folderName" placeholder="Enter Folder Name" autocomplete="off"
+                required>
+
         </label>
         <button id="createFolderButton">Create</button>
         <button id="close" style="margin-left:10px; border: none; background: red; width: 40%;">Close</button>
-        <span class="info" style="display: inline-block; text-align: center; margin-block:10px; width: 100%;"></span>
     </div>
     <div class="toast"></div>
 </aside>
@@ -327,39 +347,28 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-    function showToast(msg, type, duration = 10000) {
-        let toast = document.querySelector(".toast");
-        toast.textContent = msg;
-        toast.classList.remove("success", "error");
-        toast.classList.add(type);
-        toast.style.display = "block";
-        let timeout = setTimeout(() => {
-            toast.style.display = "none";
-            clearTimeout(timeout);
-        }, duration);
-    }
+    const folderName = document.getElementById("folderName");
 
-    async function folderNames() {
-        let res = await fetch("/folder/all");
-        let data = await res.json();
-        return data.data;
-    }
+
     document.getElementById("close").addEventListener("click", (e) => {
         const createFolderModal = document.getElementById('create-folder-modal');
+        folderName.value = ""
         createFolderModal.classList.remove("active")
     })
     function openCreateFolderModal(e) {
-        const info = document.querySelector(".info");
-        info.innerHTML = "";
         e.preventDefault();
         e.stopPropagation();
         const createFolderModal = document.getElementById('create-folder-modal');
         createFolderModal.classList.toggle("active")
+        requestAnimationFrame(() => {
+            folderName.focus();
+        });
     }
     const createFolderModal = document.getElementById('create-folder-modal');
     window.addEventListener("click", (e) => {
         if (!createFolderModal.contains(e.target)) {
             createFolderModal.classList.remove("active")
+            folderName.value = ""
         }
     });
     let createFolderButton = document.getElementById("createFolderButton");
@@ -368,15 +377,14 @@
         const folderName = document.getElementById("folderName").value;
         if (!folderName) {
             console.info("Please enter a folder name")
-            showToast("Please enter a folder name", "error", 10000)
+            new Toastmaster({
+                title: "Feild Empty",
+                message: "Please enter a folder name",
+                type: "info",
+                delay: 3000
+            }).showNotification();
             return;
         };
-        let allfolderNames = await folderNames();
-        if (allfolderNames.includes(folderName)) {
-            showToast("Folder name already exists", "error", 10000)
-            return;
-        }
-        const info = document.querySelector(".info");
         try {
             let res = await fetch("/folder/create", {
                 method: "POST",
@@ -386,11 +394,21 @@
                 body: JSON.stringify({ folderName: folderName })
             })
             if (res.ok) {
-                showToast("Folder Created Successfully", "success", 3000)
+                new Toastmaster({
+                    title: "Success",
+                    message: "Folder created successfully",
+                    type: "success",
+                    delay: 3000
+                }).showNotification()
                 createFolderModal.classList.remove("active")
             } else {
                 let data = await res.json();
-                showToast("Error in creating folder", "error", 3000)
+                new Toastmaster({
+                    title: "Error",
+                    message: "Folder Not Created..",
+                    type: "error",
+                    delay: 3000
+                }).showNotification()
             }
         } catch (error) {
             console.log(error.message)

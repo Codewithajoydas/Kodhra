@@ -1,6 +1,5 @@
 header {
   display: flex;
-  position: fixed;
   z-index: 10000;
   top: 0;
   left: 0;
@@ -17,15 +16,15 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 5px;
     font-weight: bolder;
     svg {
       cursor: pointer;
       width: 24px;
       height: 24px;
     }
-    img {
-      width: 40px;
+    svg {
+      // width: 40px;
       object-fit: cover;
       margin-left: 10px;
       cursor: pointer;
@@ -34,24 +33,30 @@ header {
       &:hover {
         text-decoration: underline;
       }
+      svg {
+        width: 40px !important;
+        height: 40px !important;
+        fill: var(--color);
+      }
     }
   }
   nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
     .filter,
     .notification,
     .help,
     .profile,
-    .backButton,
+    .voiceCommand,
     .music {
       width: 50px;
       cursor: pointer;
       height: 50px;
       transition: all 0.5s ease;
       border-radius: 100px;
+      border-radius: 50%;
       img {
         border-radius: 100px;
         object-fit: cover;
@@ -278,3 +283,44 @@ header {
     }
   }
 }
+
+.backButton:hover,
+.sidebar:hover {
+  cursor: pointer;
+  transition: all 0.5s ease;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--accent);
+}
+
+.backButton,
+.sidebar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  svg {
+    margin: 0 !important;
+  }
+}
+
+.music.active {
+  transform: rotate(0);
+  animation: playing 1s linear infinite;
+}
+
+@keyframes playing {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+

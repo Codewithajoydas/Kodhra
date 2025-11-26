@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const findFavPinned = require("../utils/findFavPin.module");
 const User = require("../models/User");
 const createActivity = require("./activity.module");
+const { getIO } = require("./socket");
 cardRouter.get("/", async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
@@ -16,14 +17,16 @@ cardRouter.get("/", async (req, res) => {
   const limit = parseInt(req.query.limit) || 30;
   const skip = (page - 1) * limit;
   const cards = await cardSchema
-    .find({ author: _id })
+    .find({ author: _id, isDeleted: false })
     .populate("author", "userName userImage")
     .skip(skip)
     .limit(limit)
     .sort({ createdAt: -1 });
   let card = await findFavPinned(cards, _id);
 
-  const len = await cardSchema.find({ author: _id }).countDocuments();
+  const len = await cardSchema
+    .find({ author: _id, isDeleted: false })
+    .countDocuments();
   const tags = await cardSchema.distinct("tags");
   const folders = await Folder.find({
     author: decode.checkUser._id,
@@ -44,18 +47,22 @@ cardRouter.get("/validation", async (req, res) => {
     const token = req.cookies.token;
     const decode = jwt.verify(token, process.env.SECRET);
     const userId = decode.checkUser._id;
-    const totalCount = await Card.find({ author: userId }).countDocuments();
+
+    const totalCount = await Card.countDocuments({
+      author: userId,
+      isDeleted: false,
+    });
+
     const duplicates = await Card.aggregate([
       {
-        $match: { author: new mongoose.Types.ObjectId(userId) },
+        $match: {
+          author: new mongoose.Types.ObjectId(userId),
+          isDeleted: false,
+        },
       },
       {
         $group: {
-          _id: {
-            title: "$title",
-            description: "$description",
-            content: "$content",
-          },
+          _id: { content: "$content" },
           count: { $sum: 1 },
         },
       },
@@ -63,13 +70,27 @@ cardRouter.get("/validation", async (req, res) => {
         $match: { count: { $gt: 1 } },
       },
     ]);
-    const dupCount = duplicates.length;
-    res.json({ dupCount, totalCount });
+
+    const dupGroups = duplicates.length;
+
+    const duplicatesToDelete = duplicates.reduce((sum, group) => {
+      return sum + (group.count - 1);
+    }, 0);
+
+    const uniqueRemaining = totalCount - duplicatesToDelete;
+
+    return res.json({
+      totalCount,
+      duplicateGroups: dupGroups,
+      duplicatesToDelete,
+      uniqueRemaining,
+    });
   } catch (error) {
     console.error("Validation route error:", error);
     res.status(500).json({ message: "Server Error", error });
   }
 });
+
 
 cardRouter.get("/create", async (req, res) => {
   const token = req.cookies.token;
@@ -98,6 +119,7 @@ cardRouter.get("/json", async (req, res) => {
     if (search) {
       query = {
         $or: [
+          { isDeleted: false },
           { title: { $regex: search, $options: "i" } },
           { description: { $regex: search, $options: "i" } },
           { content: { $regex: search, $options: "i" } },
@@ -127,16 +149,22 @@ cardRouter.get("/json", async (req, res) => {
 
 cardRouter.delete("/:id", async (req, res) => {
   const id = req.params.id;
+
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: "Invalid Card ID" });
     }
 
-    const deletedCard = await cardSchema.findByIdAndDelete(id);
+    const deletedCard = await cardSchema.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true }
+    );
 
     if (!deletedCard) {
       return res.status(404).json({ error: "Card not found" });
     }
+
     await createActivity({
       title: "Card Deleted",
       author: deletedCard.author,
@@ -145,16 +173,24 @@ cardRouter.delete("/:id", async (req, res) => {
       entityType: "snippet",
       status: "success",
     });
-    res.status(200).json({ message: "Card Deleted Successfully" });
+
+    return res.status(200).json({ message: "Card Deleted Successfully" });
   } catch (error) {
-    res.status(500).json({ error: "An unexpected error occurred" });
-    await createActivity({
-      title: "Card Delete Failed",
-      author: deletedCard.author,
-      activity: "deleted",
-      entityType: "snippet",
-      status: "failure",
-    });
+    console.error("Delete error:", error);
+
+    try {
+      await createActivity({
+        title: "Card Delete Failed",
+        author: req.user?._id || null,
+        activity: "deleted",
+        entityType: "snippet",
+        status: "failure",
+      });
+    } catch (logErr) {
+      console.error("Activity log failed:", logErr);
+    }
+
+    return res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -166,7 +202,7 @@ cardRouter.get("/:id", async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
   const { _id, userName, userImage } = decode.checkUser;
-  const card = await cardSchema.findOne({ _id: id });
+  const card = await cardSchema.findOne({ _id: id, isDeleted: false });
   res.render("editCard", { card, image: userImage, userName });
 });
 
@@ -196,13 +232,59 @@ cardRouter.put("/:id", async (req, res) => {
   res.json({ editcard });
 });
 
+cardRouter.put("/restore/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Invalid Card ID" });
+  }
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const { _id, userName, userImage } = decode.checkUser;
+  try {
+    const card = await cardSchema.find({ _id });
+    const editcard = await cardSchema.findByIdAndUpdate(
+      id,
+      { isDeleted: false },
+      { new: true }
+    );
+    await createActivity({
+      title: "Card Restored",
+      author: editcard.author,
+      activity: "restored",
+      entityId: editcard._id,
+      entityType: "snippet",
+      status: "success",
+    });
+    res.json({ editcard });
+  } catch (error) {
+    try {
+      await createActivity({
+        title: "Card Restore Failed",
+        author: req.user?._id || null,
+        activity: "restored",
+        entityType: "snippet",
+        status: "failure",
+      });
+    } catch (logErr) {
+      console.error("Activity log failed:", logErr);
+    }
+    return res.status(500).json({ error: "An unexpected error occurred" });
+  }
+});
+
 cardRouter.put("/pin/:id", async (req, res) => {
   try {
     const cardId = req.params.id;
     const token = req.cookies.token;
     const decode = jwt.verify(token, process.env.SECRET);
     const userId = decode.checkUser._id;
-
+    const checkCard = await cardSchema.findOne({
+      _id: new mongoose.Types.ObjectId(cardId),
+      isDeleted: true,
+    });
+    if (checkCard) {
+      return res.status(404).json({ error: "Card not found" });
+    }
     if (!mongoose.Types.ObjectId.isValid(cardId)) {
       return res.status(400).json({ error: "Invalid Card ID" });
     }
@@ -258,6 +340,14 @@ cardRouter.put("/fav/:id", async (req, res) => {
       return res.status(400).json({ error: "Invalid Card ID" });
     }
 
+    const checkCard = await cardSchema.findOne({
+      _id: new mongoose.Types.ObjectId(cardId),
+      isDeleted: true,
+    });
+    if (checkCard) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
@@ -265,6 +355,11 @@ cardRouter.put("/fav/:id", async (req, res) => {
 
     if (isFavorite) {
       user.favoriteCards.pull(cardId); // remove
+      await cardSchema.findByIdAndUpdate(
+        cardId,
+        { $pull: { likes: user._id } },
+        { new: true }
+      );
       await createActivity({
         title: "Card Unfavorited",
         author: user._id,
@@ -273,8 +368,14 @@ cardRouter.put("/fav/:id", async (req, res) => {
         entityType: "snippet",
         status: "success",
       });
+
     } else {
-      user.favoriteCards.push(cardId); // add
+      user.favoriteCards.push(cardId); 
+      await cardSchema.findByIdAndUpdate(
+        cardId,
+        { $push: { likes: user._id } },
+        { new: true }
+      );
       await createActivity({
         title: "Card Favorited",
         author: user._id,
@@ -289,7 +390,7 @@ cardRouter.put("/fav/:id", async (req, res) => {
 
     res.json({
       success: true,
-      message: `Card ${isFavorite ? "removed from" : "added to"} favorites`,
+      message: `${isFavorite ? "unfavorited" : "favorited"}`,
       favoriteCards: user.favoriteCards,
     });
   } catch (err) {
@@ -304,17 +405,23 @@ cardRouter.post("/delete", (req, res) => {
   const decode = jwt.verify(token, process.env.SECRET);
   const { _id } = decode.checkUser;
   try {
-    cardSchema.deleteMany({ author: _id, _id: { $in: getData } }).then(() => {
-      createActivity({
-        title: "Card Deleted",
-        author: req.body.author,
-        activity: "deleted",
-        entityId: getData,
-        entityType: "snippet",
-        status: "success",
+    cardSchema
+      .updateMany(
+        { author: _id, _id: { $in: getData } },
+        { isDeleted: true },
+        { new: true }
+      )
+      .then(() => {
+        createActivity({
+          title: "Card Deleted",
+          author: req.body.author,
+          activity: "deleted",
+          entityId: getData,
+          entityType: "snippet",
+          status: "success",
+        });
+        res.json({ message: "Card deleted successfully" });
       });
-      res.json({ message: "Card deleted successfully" });
-    });
   } catch (err) {
     res.json({ Error: "Something went wrong" });
   }
