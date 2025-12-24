@@ -28,7 +28,7 @@ window.addEventListener("keydown", (e) => {
   } else if (e.altKey && e.key === "n") {
     e.preventDefault();
     window.location.href = "/create";
-  } else if (e.shiftKey && e.key.toLowerCase() === "f") {
+  } else if (e.shiftKey && e.altKey && e.key.toLowerCase() === "f") {
     e.preventDefault();
     document.getElementById("create-folder-modal").classList.add("active");
   } else if (e.altKey && e.key === "u") {

@@ -19,8 +19,7 @@
 
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
-    <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+  
     <script src="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@3.0.0/dist/toaster.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@3.0.0/dist/toaster.min.css">
 
@@ -34,57 +33,120 @@
                 <div class="container">
                     <%- include("partials/sidebar.ejs", { navigation: 'recyclebin' })%>
                         <main style="width: 100%; height: calc(100vh - 70px);">
-                            <div class="cardContainer-header">
-                                <span class="page_title">All Deleted Snippets</span>
-                                <div class="card-options disabled">
-                                    <div class="cardLen">0</div>
-                                    <div class="selectAll" onclick="selectAllButton()"><svg
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-grid2x2-check-icon lucide-grid-2x2-check">
-                                            <path
-                                                d="M12 3v17a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H3" />
-                                            <path d="m16 19 2 2 4-4" />
-                                        </svg></div>
-                                    <div class="deleteAll" onclick="deleteCards()"><svg
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-trash-icon lucide-trash">
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                                            <path d="M3 6h18" />
-                                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                        </svg></div>
+                            <% if(card.length !==0 || folders.length !==0){%>
+                                <% if(folders.length !==0){%>
+                                    <div class="page_title" onclick="collapse(this)">
+                                        <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                                                <path d="m6 9 6 6 6-6" />
+                                            </svg></span>
+                                        Deleted Folders
+                                    </div>
+                                    <section style="width: 100%;">
+                                        <div id="folders"
+                                            style="overflow-y: scroll !important; display: flex;flex-wrap: wrap;gap: 10px;margin: 10px;justify-content: center; padding-block:10px ;">
+                                            <% folderData.forEach((folder, i)=> { %>
+                                                <div class="folder" tabindex="0" data-id="<%= folder._id %>"
+                                                    data-name="<%= folder.folderName %>" data-contextmenu="true"
+                                                    data-menus="delete,  move, share, rename"
+                                                    data-cardName="<%= folder.folderName %>" data-mtype="folder"
+                                                    data-cardauthor="<%= folder.author._id %>"
+                                                    data-userId="<%= userId %>"
+                                                    style="flex: 1;min-width: 300px; max-width: 210px;display: flex;align-items: center;gap: 10px; padding: 10px;background: var(--bg-color);border-radius: 10px;justify-content: space-between; box-shadow: var(--box-shadow);">
+                                                    <div
+                                                        style="display: flex;justify-content: center;align-items: center;gap: 10px;">
+                                                        <span><svg xmlns="http://www.w3.org/2000/svg" width="30"
+                                                                height="30" viewBox="0 0 24 24" fill="#F7B31B"
+                                                                stroke="currentColor" stroke-width=".1"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="lucide lucide-folder-icon lucide-folder">
+                                                                <path
+                                                                    d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                                                            </svg></span><span
+                                                            style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px;">
+                                                            <%= folder.folderName%>
+                                                        </span>
+                                                    </div>
+                                                    <div style="display: flex;align-items: center;gap: 10px;">
+                                                        <% if(folder.isDeleted){%>
+                                                            <div class="restore" style="--accent: #60df3abd"
+                                                                data-tooltip="Restore">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                    height="20" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw">
+                                                                    <path
+                                                                        d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                                                    <path d="M3 3v5h5" />
+                                                                </svg>
+                                                            </div>
+                                                            <% } %>
+                                                                <div class="menu_top" data-menu-id="<%= folder._id %>"
+                                                                    data-id="<%= folder._id %>"
+                                                                    data-menus="delete, move, share, rename"
+                                                                    onclick="openContextMenu(event)"
+                                                                    data-userId="<%= userId %>"
+                                                                    data-cardauthor="<%= folder.author._id %>"
+                                                                    data-cardName="<%= folder.folderName %>"
+                                                                    data-mtype="folder" data-contextMenu="true"
+                                                                    tabindex="0">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                        height="20" viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical">
+                                                                        <circle cx="12" cy="12" r="1" />
+                                                                        <circle cx="12" cy="5" r="1" />
+                                                                        <circle cx="12" cy="19" r="1" />
+                                                                    </svg>
+                                                                </div>
+                                                    </div>
+                                                </div>
+                                                <% })%>
+                                        </div>
+                                    </section>
+                                    <%}%>
 
-                                    <div class="download" onclick="downloadCard()"><svg
-                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-arrow-big-down-dash-icon lucide-arrow-big-down-dash">
-                                            <path
-                                                d="M15 11a1 1 0 0 0 1 1h2.939a1 1 0 0 1 .75 1.811l-6.835 6.836a1.207 1.207 0 0 1-1.707 0L4.31 13.81a1 1 0 0 1 .75-1.811H8a1 1 0 0 0 1-1V9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1z" />
-                                            <path d="M9 4h6" />
-                                        </svg></div>
-                                </div>
-                            </div>
+                                        <% if(card.length!==0){%>
+                                            <div class="page_title" onclick="collapse(this)">
+                                                <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                        height="20" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                                                        <path d="m6 9 6 6 6-6" />
+                                                    </svg></span>
+                                                Deleted Snippets
+                                            </div>
+                                            <section>
+                                                <div id="cards">
+                                                    <% if (card.length===0) { %>
+                                                        <%- include("partials/no-data.ejs") %>
 
-                            <div id="cards">
-                                <% if (card.length===0) { %>
-                                    <%- include("partials/no-data.ejs") %>
+                                                            <% } else { %>
+                                                                <%- include("partials/cards") %>
+                                                                    <% } %>
+                                                </div>
+                                                <% if(card.length!==0){%>
+                                                    <div id="sentinal"
+                                                        style="text-align: center; margin-block:10px; color: red;">
+                                                        <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif"
+                                                            alt="Loading..." style="width: 10%;">
+                                                    </div>
+                                                    <%}%>
+                                            </section>
+                                            <%}%>
+                                                <%}else{%>
+                                                    <div class="nodata"
+                                                        style="height: calc(100vh - 100px);display: flex;justify-content: center;align-items: center;">
+                                                        <%- include("partials/no-data.ejs") %>
+                                                    </div>
+                                                    <%}%>
 
-                                        <% } else { %>
-                                            <%- include("partials/cards") %>
-                                                <% } %>
-                            </div>
-                            <% if(card.length!==0){%>
-                                <div id="sentinal" style="text-align: center; margin-block:10px; color: red;">
-                                    <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif"
-                                        alt="Loading..." style="width: 10%;">
-                                </div>
-                                <%}%>
-
-                                    <%- include("partials/fab")%>
+                                                        <%- include("partials/fab")%>
                         </main>
                         <div class="notification-bar">
                             <h3>Notifications</h3>
@@ -173,12 +235,7 @@
                 </div>
         </div>
 
-        <script>
-            window.onload = () => {
-                let loader = document.querySelector(".loader");
-                loader.style.display = "none";
-            };
-        </script>
+
 
         <script src="/scripts/ad_search.js"></script>
         <script src="/scripts/Fab.js"></script>
@@ -339,6 +396,7 @@
 
         </script>
         <script src="\scripts\shortcut.js"></script>
+        <script src="\scripts\collapse.js"></script>
 
 
 
@@ -348,7 +406,8 @@
                 try {
                     if (e.target.closest(".restore")) {
                         const id = e.target.closest("[data-id]").dataset.id;
-                        fetch(`/card/restore/${id}`, { method: "PUT" }).then(res => location.reload());
+                        const mtype = e.target.closest("[data-mtype]").dataset.mtype;
+                        fetch(`/recyclebin/${mtype}/${id}`, { method: "PUT" }).then(res => location.reload());
                     }
                 } catch (error) {
                     console.log(error)

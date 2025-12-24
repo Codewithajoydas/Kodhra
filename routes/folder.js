@@ -7,6 +7,8 @@ const Folder = require("../models/folder.js");
 const Card = require("../models/Card.js");
 const bson = require("bson");
 const { default: mongoose } = require("mongoose");
+const archiver = require("archiver");
+
 folderRouter.get("/userid/:userId/folderid/:folderId", async (req, res) => {
   const { userId, folderId } = req.params;
   const findFolder = await Folder.findOne({ author: userId, _id: folderId });
@@ -81,12 +83,12 @@ folderRouter.get("/:id", async (req, res) => {
         .status(404)
         .json({ error: "Folder not found please provide folder name!" });
     }
-    const folders = await Folder.find({ parent: id });
+    const folders = await Folder.find({ parent: id }).populate("author");
     const folderName = await Folder.findOne({ _id: id, author: userId }).select(
       "folderName"
     );
     const getCardId = folder.cards.map((e) => e._id);
-    const card = await Card.find({ _id: { $in: getCardId } });
+    const card = await Card.find({ _id: { $in: getCardId } }).populate("author");
     res.render("folderCards", {
       card,
       folders,
@@ -173,22 +175,66 @@ folderRouter.put("/:id", async (req, res) => {
   res.json({ data: folder });
 });
 
-folderRouter.get("/download", async (req, res) => {
-  const token = req.cookies.token;
-  const decode = jwt.verify(token, process.env.SECRET);
-  const userId = decode.checkUser._id;
-  const { selected } = req.body;
+async function addFolderToZip(archive, folder, userId) {
+  const path = `${folder.fullPath}/`;
+  archive.append(
+    JSON.stringify(
+      {
+        folderName: folder.folderName,
+        cards: folder.cards,
+        parent: folder.parent,
+      },
+      null,
+      2
+    ),
+    { name: `${path}data.json` }
+  );
+
+  const childFolders = await Folder.find({
+    parent: folder._id,
+    author: userId,
+  });
+  for (const child of childFolders) {
+    child.fullPath = `${folder.fullPath}/${child.folderName}`;
+    await addFolderToZip(archive, child, userId);
+  }
+}
+
+folderRouter.post("/download", async (req, res) => {
   try {
-    const ids = selected.map((id) => new mongoose.Types.ObjectId(id));
-    const folders = await Folder.find({ _id: { $in: ids }, author: userId });
-    if (folders.length === 0) {
-      return res.status(404).render("error", {
-        error: "Folder not found",
-      });
+    const token = req.cookies.token;
+    const decode = jwt.verify(token, process.env.SECRET);
+    const userId = decode.checkUser._id;
+    const { selected } = req.body;
+
+    if (!selected || selected.length === 0) {
+      return res.status(400).json({ error: "No folder selected" });
     }
-    
-  } catch (error) {
-    res.render("error", { error: "Something went wrong, please try again." });
+
+    const rootFolders = await Folder.find({
+      _id: { $in: selected },
+      author: userId,
+    });
+
+    if (rootFolders.length === 0) {
+      return res.status(404).json({ error: "Folder not found" });
+    }
+
+    res.setHeader("Content-Type", "application/zip");
+    res.setHeader("Content-Disposition", "attachment; filename=folders.zip");
+
+    const archive = archiver("zip", { zlib: { level: 9 } });
+    archive.pipe(res);
+
+    for (const folder of rootFolders) {
+      folder.fullPath = folder.folderName;
+      await addFolderToZip(archive, folder, userId);
+    }
+
+    await archive.finalize();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 

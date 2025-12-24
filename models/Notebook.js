@@ -17,6 +17,10 @@ const notebookSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isDeleted: {
+      type: String,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -6,6 +6,7 @@
  */
 const express = require("express");
 const app = express();
+app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 const dotenv = require("dotenv");
 const { default: mongoose } = require("mongoose");
@@ -28,7 +29,6 @@ const path = require("path");
 const cors = require("cors");
 const Folder = require("./models/folder");
 app.use(express.json({ limit: "50mb" }));
-
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 app.set("view engine", "ejs");
@@ -63,8 +63,12 @@ const createActivity = require("./routes/activity.module");
 const recyclebinRouter = require("./routes/recycle");
 const findFavPinned = require("./utils/findFavPin.module");
 const cdnRouter = require("./routes/create_cdn_links");
+const { BSON } = require("bson");
+const accesskeyRouter = require("./routes/generate_access_key");
+const notebookRouter = require("./routes/notebook");
+const downloadRouter = require("./routes/download");
+const followuser = require("./routes/getuserstofollow")
 const io = socket.init(server);
-
 io.on("connection", (socket) => {
   socket.on("register", (userId) => {
     socket.join(userId);
@@ -74,10 +78,8 @@ io.on("connection", (socket) => {
     console.log("User disconnected");
   });
 });
-
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 app.use(express.json());
-
 app.use(
   session({
     store: new RedisStore({ client }),
@@ -88,7 +90,6 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true }));
-
 app.use("/login", router);
 app.use("/signup", signup);
 app.use("/card", authMiddleware, cardRouter);
@@ -117,7 +118,10 @@ app.use("/explore", authMiddleware, expoloreRouter);
 app.use("/activity", authMiddleware, activityRouter);
 app.use("/recyclebin", authMiddleware, recyclebinRouter);
 app.use("/generate_cdn", authMiddleware, cdnRouter);
-
+app.use("/token", authMiddleware, accesskeyRouter);
+app.use("/notebook", authMiddleware, notebookRouter);
+app.use("/folders", authMiddleware, downloadRouter);
+app.use("/f", authMiddleware, followuser);
 // HOME ROUTER
 app.get("/", authMiddleware, async (req, res, next) => {
   try {
@@ -151,10 +155,17 @@ app.get("/", authMiddleware, async (req, res, next) => {
     next(err);
   }
 });
-
 app.post("/card", async (req, res) => {
-  const { title, description, content, tags, category, folderName } = req.body;
-
+  const {
+    title,
+    description,
+    content,
+    tags,
+    category,
+    folderName,
+    visibility,
+    readmefile
+  } = req.body;
   try {
     const token = req.cookies.token;
     const decode = jwt.verify(token, process.env.SECRET);
@@ -167,6 +178,8 @@ app.post("/card", async (req, res) => {
       content,
       tags,
       category,
+      visibility,
+      readmefile,
       author: new mongoose.Types.ObjectId(_id),
     });
     await createActivity({
@@ -177,7 +190,6 @@ app.post("/card", async (req, res) => {
       entityId: createCard._id,
       status: "success",
     });
-
     try {
       const findFolder = await Folder.findOne({
         author: _id,
@@ -196,7 +208,6 @@ app.post("/card", async (req, res) => {
     } catch (error) {
       res.json({ error });
     }
-
     res.json({ createCard });
   } catch (err) {
     console.error(err);
@@ -226,7 +237,6 @@ app.get("/democards", async (req, res) => {
     author: decode.checkUser._id,
     parent: null,
   });
-
   const card = await Card.find({ author: decode.checkUser._id })
     .sort({ createdAt: -1 })
     .limit(15);
@@ -239,12 +249,10 @@ app.get("/democards", async (req, res) => {
     folders,
   });
 });
-
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
   res.redirect("/");
 });
-
 app.get("/report", authMiddleware, async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
@@ -299,7 +307,6 @@ app.get("/report", authMiddleware, async (req, res) => {
     languageReport,
   });
 });
-
 app.get("/lastactive", async (req, res) => {
   try {
     const token = req.cookies.token;
@@ -317,13 +324,171 @@ app.get("/lastactive", async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
-
-app.get("/a", authMiddleware, (req, res) => {
+app.get("/a", authMiddleware, async (req, res) => {
   const token = req.cookies.token;
   const decode = jwt.verify(token, process.env.SECRET);
   const { _id, userName, goodName, email, userImage, lastActive } =
     decode.checkUser;
-  res.json({ _id, userName, goodName, email, userImage, lastActive });
+  const data = await User.findById(_id);
+  const links = data.links;
+  res.json({ _id, userName, goodName, email, userImage, lastActive, links });
+});
+app.get("/popularcards", async (req, res) => {
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+
+  res.render("");
+});
+
+app.get("/followers/:id", async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    const decode = jwt.verify(token, process.env.SECRET);
+    if (!token)
+      return res.status(401).json({ status: false, message: "Unauthorized" });
+    const { _id, userName, email, userImage } = decode.checkUser;
+    const userInfo = await User.findById(_id);
+    const targetUser = req.params.id;
+    const user = await User.findById(targetUser || _id);
+    if (!user)
+      return res.status(404).json({ status: false, message: "User not found" });
+    const target = await User.findById(targetUser);
+    if (!target)
+      return res.status(404).json({ status: false, message: "User not found" });
+    const followers = await User.find({
+      _id: { $in: target.followers },
+    }).populate("followers");
+    res.render("followers", {
+      followers,
+      user,
+      userInfo,
+      image: userImage,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .render("error", { error: "Server Error, Please try again" });
+  }
+});
+app.get("/following/:id", async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    const decode = jwt.verify(token, process.env.SECRET);
+    if (!token)
+      return res.status(401).json({ status: false, message: "Unauthorized" });
+    const { _id, userName, email, userImage } = decode.checkUser;
+    const userInfo = await User.findById(_id);
+    const targetUser = req.params.id;
+    const user = await User.findById(targetUser || _id);
+    if (!user)
+      return res.status(404).json({ status: false, message: "User not found" });
+    const target = await User.findById(targetUser);
+    if (!target)
+      return res.status(404).json({ status: false, message: "User not found" });
+    const following = await User.find({
+      _id: { $in: target.following },
+    }).populate("following");
+    res.render("following", {
+      following,
+      user,
+      userInfo,
+      image: userImage,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .render("error", { error: "Server Error, Please try again" });
+  }
+});
+
+app.get("/cards/user/:user", async (req, res) => {
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+
+  const user_id = req.params.user; // profile user
+  const viewer_id = decode.checkUser._id; // logged-in user
+  console.log(`User Id Is: ${user_id}`);
+  console.log(`Viewer Id Is: ${viewer_id}`);
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 30;
+  const skip = (page - 1) * limit;
+
+  const cards = await Card.find({
+    author: new mongoose.Types.ObjectId(user_id),
+    isDeleted: false,
+  })
+    .populate("author", "userName userImage")
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 });
+
+  let card = await findFavPinned(cards, viewer_id);
+
+  const len = await Card.find({
+    author: user_id,
+    isDeleted: false,
+  }).countDocuments();
+
+  const tags = await Card.distinct("tags");
+  const folders = await Folder.find({
+    author: user_id,
+    isDeleted: false,
+  });
+
+  res.render("allCards", {
+    card,
+    image: decode.checkUser.userImage,
+    author: decode.checkUser.userName,
+    userId: viewer_id,
+    len,
+    folders,
+    tags,
+  });
+});
+
+app.get("/fav/user/:user", async (req, res) => {
+  const token = req.cookies.token;
+  const user_id = req.params.user;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const { _id: userId, userImage: image, userName } = decode.checkUser;
+
+  try {
+    const user = await User.findById(user_id).populate({
+      path: "favoriteCards",
+      populate: { path: "author", select: "userName userImage _id" },
+      options: { limit: 10 },
+    });
+    const card = await findFavPinned(user.favoriteCards, user_id);
+    const folders = await Folder.find({ author: userId, isDeleted: false });
+
+    res.render("fav", {
+      card: card,
+      image,
+      author: userName,
+      userId,
+      folders,
+    });
+  } catch (error) {
+    console.error("Error fetching favorites:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/folder/user/:user", async (req, res) => {
+  const token = req.cookies.token;
+  const user_id = req.params.user;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+  const image = decode.checkUser.userImage;
+  const folders = await Folder.find({
+    author: user_id,
+    isDeleted: false,
+  }).populate("author");
+  const strg = BSON.calculateObjectSize(folders);
+  res.render("folder", { folders, image, userId });
 });
 
 app.get("/location", async (req, res) => {
@@ -335,7 +500,6 @@ app.get("/location", async (req, res) => {
 
   res.send(location);
 });
-
 app.use((req, res, next) => {
   res.status(404).render("pageNotFound");
 });
@@ -346,16 +510,19 @@ app.use((error, req, res, next) => {
     error: "Internal Server Error, try again later or contact support",
   });
 });
+server.listen(3000, () => {
+  console.log("Server started on port 3000");
+});
 
-server.listen(process.env.PORT, async () => {});
+
+
 
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
   process.exit(1);
 });
-
 let rs = JSON.parse(
   fs.readFileSync(path.join(__dirname, "package.json"), "utf-8")
 );
-
 global.appVersion = rs.version;
+

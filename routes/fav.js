@@ -17,7 +17,7 @@ favRouter.get("/", async (req, res) => {
       options: { limit: 10 },
     });
     const card = await findFavPinned(user.favoriteCards, userId);
-    const folders = await Folder.find({ author: userId });
+    const folders = await Folder.find({ author: userId, isDeleted: false });
 
     res.render("fav", {
       card: card,

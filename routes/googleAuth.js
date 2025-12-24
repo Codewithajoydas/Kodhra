@@ -4,6 +4,7 @@ const querystring = require("querystring");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const { cloudinary_js_config } = require("../config/cloudinary.config");
 dotenv.config();
 googleAuthrouter.get("/", (req, res) => {
   const params = querystring.stringify({
@@ -46,6 +47,8 @@ googleAuthrouter.get("/callback", async (req, res) => {
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const userInfo = JSON.parse(Buffer.from(base64, "base64").toString("utf8"));
     const { sub, email, name, picture } = userInfo;
+
+    const userImg = await cloudinary_js_config.uploader.upload(picture);
     const user = await User.findOne({ email });
     const userName = user.email.split("@")[0];
     if (!user) {
@@ -54,7 +57,7 @@ googleAuthrouter.get("/callback", async (req, res) => {
         goodName: name,
         email,
         providerId: sub,
-        userImage: picture,
+        userImage: userImg.secure_url,
         provider: "google",
       });
       let token = jwt.sign({ checkUser: newUser }, process.env.SECRET);

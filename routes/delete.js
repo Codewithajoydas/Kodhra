@@ -8,6 +8,7 @@ const Card = require("../models/Card.js");
 const createActivity = require("./activity.module.js");
 const User = require("../models/User.js");
 const { default: mongoose } = require("mongoose");
+const Notebook = require("../models/Notebook.js");
 deleteRouter.delete("/folder/:id", async (req, res) => {
   const { id } = req.params;
   const token = req.cookies.token;
@@ -51,6 +52,48 @@ deleteRouter.delete("/card/:id", async (req, res) => {
     status: "success",
   });
   res.json({ data: folder });
+});
+deleteRouter.delete("/notebook/:id", async (req, res) => {
+  const { id } = req.params;
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+  const notebook = await Notebook.findByIdAndUpdate(
+    { _id: id, author: userId },
+    { $set: { isDeleted: true } },
+    { new: true }
+  );
+  await createActivity({
+    title: "Notebook Deleted",
+    author: notebook.author,
+    activity: "deleted",
+    entityId: notebook._id,
+    entityType: "other",
+    status: "success",
+  });
+  res.json({ data: notebook });
+});
+
+deleteRouter.delete("/link/:id", async (req, res) => {
+  const { id } = req.params;
+  const token = req.cookies.token;
+  const decode = jwt.verify(token, process.env.SECRET);
+  const userId = decode.checkUser._id;
+  const link = await user.findByIdAndUpdate(
+    userId,
+    {
+      $pull: { links: { _id: id } },
+    },
+    { new: true }
+  );
+  await createActivity({
+    title: "Card Deleted",
+    activity: "deleted",
+    author: userId,
+    entityType: "snippet",
+    status: "success",
+  });
+  res.json({ data: link });
 });
 
 deleteRouter.get("/duplicates", async (req, res) => {

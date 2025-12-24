@@ -13,7 +13,6 @@
         clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
         transform: rotateX(10deg);
     }
-
 </style>
 
 <div class="loader_container">
@@ -45,7 +44,7 @@
 </div>
 
 <script>
-   const quotes = [
+    const quotes = [
         "Preparing your workspace…",
         "Setting things up for you…",
         "Loading your tools…",
@@ -82,10 +81,7 @@
     window.addEventListener("load", () => {
         const loader = document.querySelector(".loader_container");
         loader.classList.add("hide");
-
-        setTimeout(() => {
-            loader.style.display = "none";
-        }, 500);
+        loader.style.display = "none";
     });
 
 </script>

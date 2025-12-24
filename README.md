@@ -54,12 +54,14 @@ Kodhra provides a modern interface and backend to manage your personal or team-b
 ## Tech Stack
 
 **Frontend:**
+
 - HTML, CSS, JavaScript (Vanilla)
 - CodeMirror / Monaco Editor (for syntax highlighting)
 - Tailwind CSS or SCSS for styling
 - Fetch API / Axios for client-server communication
 
 **Backend:**
+
 - Node.js
 - Express.js
 - MongoDB with Mongoose
@@ -67,6 +69,7 @@ Kodhra provides a modern interface and backend to manage your personal or team-b
 - bcrypt for password hashing
 
 **Other Tools:**
+
 - dotenv for environment configuration
 - nodemon for local development
 - cookie-parser for token management
@@ -78,6 +81,7 @@ Kodhra provides a modern interface and backend to manage your personal or team-b
 ### Prerequisites
 
 Ensure you have the following installed:
+
 - Node.js (v18 or later)
 - MongoDB (local or Atlas)
 - Git
@@ -85,8 +89,11 @@ Ensure you have the following installed:
 ### Steps
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/codewithajoydas/kodhra.git
+
+   ```
 
 2. Navigate to the project directory:
 
@@ -118,11 +125,11 @@ Ensure you have the following installed:
 
 ## Usage
 
-* Register or login to your account.
-* Create new code snippets with title, description, tags, and code content.
-* Categorize snippets using custom tags or predefined categories.
-* Search snippets by keyword, language, or date created.
-* Copy snippets directly to your clipboard for reuse in projects.
+- Register or login to your account.
+- Create new code snippets with title, description, tags, and code content.
+- Categorize snippets using custom tags or predefined categories.
+- Search snippets by keyword, language, or date created.
+- Copy snippets directly to your clipboard for reuse in projects.
 
 ---
 
@@ -153,15 +160,15 @@ kodhra/
 
 ## API Endpoints
 
-| Method | Endpoint           | Description                 |
-| ------ | ------------------ | --------------------------- |
-| POST   | `/auth/signup`     | Register a new user         |
-| POST   | `/auth/login`      | Login user and return token |
-| GET    | `/card`            | Get all snippets            |
-| POST   | `/card       `     | Create a new snippet        |
-| PUT    | `/card/:id`        | Update existing snippet     |
-| DELETE | `/card/:id`        | Delete a snippet            |
-| GET    | `/card/:id`        | Get a specific snippet      |
+| Method | Endpoint       | Description                 |
+| ------ | -------------- | --------------------------- |
+| POST   | `/auth/signup` | Register a new user         |
+| POST   | `/auth/login`  | Login user and return token |
+| GET    | `/card`        | Get all snippets            |
+| POST   | `/card       ` | Create a new snippet        |
+| PUT    | `/card/:id`    | Update existing snippet     |
+| DELETE | `/card/:id`    | Delete a snippet            |
+| GET    | `/card/:id`    | Get a specific snippet      |
 
 ---
 
@@ -191,25 +198,23 @@ NODE_ENV=development
 
 ## Screenshots
 
-* Dashboard View
+- Dashboard View
   <img width="1365" height="633" alt="image" src="https://github.com/user-attachments/assets/0bc37a10-b0de-48d0-bf75-ca421b7f50db" />
-  
-* Snippet Editor
-* <img width="1365" height="635" alt="image" src="https://github.com/user-attachments/assets/6f6ed48b-3731-4d49-9f6c-a46db5cd5bee" />
+- Snippet Editor
+- <img width="1365" height="635" alt="image" src="https://github.com/user-attachments/assets/6f6ed48b-3731-4d49-9f6c-a46db5cd5bee" />
 
-* Snippets Results
-* <img width="1365" height="636" alt="image" src="https://github.com/user-attachments/assets/36b7e9a2-46e2-434f-88c1-3b12f073b4d3" />
-
+- Snippets Results
+- <img width="1365" height="636" alt="image" src="https://github.com/user-attachments/assets/36b7e9a2-46e2-434f-88c1-3b12f073b4d3" />
 
 ---
 
 ## Future Plans
 
-* Add AI-powered snippet suggestions.
-* Implement syntax-based search.
-* Introduce user collaboration and sharing features.
-* Support for multiple code editors (VSCode-like experience).
-* Offline support with IndexedDB or LocalForage.
+- Add AI-powered snippet suggestions.
+- Implement syntax-based search.
+- Introduce user collaboration and sharing features.
+- Support for multiple code editors (VSCode-like experience).
+- Offline support with IndexedDB or LocalForage.
 
 ---
 
@@ -240,3 +245,9 @@ See the [LICENSE](./LICENSE) file for details.
 Passionate about clean, structured, and purposeful code.
 
 ```
+
+
+
+
+
+ 

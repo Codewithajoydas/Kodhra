@@ -59,6 +59,32 @@ const UserSchema = new mongoose.Schema(
       enum: ["public", "private"],
       default: "public",
     },
+    accesskey: {
+      type: String,
+    },
+    links: {
+      type: [
+        {
+          url: { type: String, required: true, trim: true },
+          platform: {
+            type: String,
+            required: true,
+            enum: [
+              "github",
+              "linkedin",
+              "x",
+              "facebook",
+              "instagram",
+              "youtube",
+              "tiktok",
+              "website",
+            ],
+          },
+        },
+      ],
+      default: [],
+    },
+    blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     lastActive: {
       type: Date,
       default: Date.now,

@@ -10,6 +10,7 @@ module.exports = {
     if (!io) {
       throw new Error("Socket.io not initialized!");
     }
+    console.log("ℹ️ Socket.io initialized");
     return io;
   },
 };

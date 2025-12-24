@@ -1,4 +1,4 @@
-<header style="z-index: 100">
+<header style="z-index: 999999">
     <span class="logo">
         <div class="backButton" data-sound="true" title="Back" onclick="history.back()" tabindex="0"
             style="display: none;">
@@ -61,12 +61,13 @@
                   color: rgb(65, 65, 65);
                   padding: 5px;
                   border-radius: 5px;
+                  font-size: smaller !important;
                   box-shadow: 2px 2px 0px rgba(128, 128, 128, 0.582);
                 ">ctrl+k</kbd>
             </label>
             <div class="results" id="results"
-                style="z-index: 99999999999999999999; min-height: 50vh; overflow-y: scroll;">
-                <ul id="results-list" style="z-index: 99999999999999999999; overflow-y: scroll; height: 50vh;">
+                style="z-index: 99999999999999999999; height: fit-content !important; overflow-y: scroll;">
+                <ul id="results-list" style="z-index: 99999999999999999999; overflow-y: scroll; height: fit-content">
                     <li class="sentinal_a">
                     </li>
                 </ul>
@@ -81,7 +82,7 @@
                 <rect x="9" y="2" width="6" height="13" rx="3" />
             </svg>
         </div>
-        <div class="filter" id="filter" data-tooltip="Advanced Filter" tabindex="0" data-sound="true">
+        <!-- <div class="filter" id="filter" data-tooltip="Advanced Filter" tabindex="0" data-sound="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-sliders-horizontal-icon lucide-sliders-horizontal">
@@ -95,7 +96,7 @@
                 <path d="M8 10v4" />
                 <path d="M8 12H3" />
             </svg>
-        </div>
+        </div> -->
         <div class="notification" data-tooltip="Notifications" tabindex="0" data-sound="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -218,11 +219,11 @@
                             </svg> Logout</a>
                     </li>
                 </ul>
-                <hr>
+                <!-- <hr>
                 <div class="page_titlea" style="font-size: smaller; color: var(--color); margin-block: 10px;">
                     Theme Select
-                </div>
-                <div class="theme">
+                </div> -->
+                <!-- <div class="theme">
                     <label for="dark" tabindex="0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -266,7 +267,7 @@
                         </svg>
                         <input type="radio" name="theme" id="default" value="auto">
                     </label>
-                </div>
+                </div> -->
             </div>
         </div>
     </nav>
@@ -279,6 +280,8 @@
             <path d="M10 18h4" />
         </svg>
     </div>
+
+    <!---
     <div class="advanced-search">
         <h3>Advanced Search</h3>
         <div class="feildList">
@@ -286,10 +289,10 @@
                 <span>Title:</span>
                 <input type="text" name="title" id="title" placeholder="Title" />
             </label>
-            <!-- <label for="code"><span>Code:</span> <input type="text" name="code" id="code" placeholder="Code"></label> -->
+             <label for="code"><span>Code:</span> <input type="text" name="code" id="code" placeholder="Code"></label>
             <label for="description">
                 <span>Description:</span>
-                <textarea type="text" name="description" id="description" placeholder="Description" rows="5"></textarea>
+                <textarea type="text" name="description" id="description" placeholder="Description" rows="2"></textarea>
             </label>
             <label for="language">
                 <span>Language:</span>
@@ -336,13 +339,17 @@
                 <input type="text" name="folder" id="folder" placeholder="Folder" />
             </label>
             <label for="date">
-                <span>Date:</span>
-                <input type="date" name="date" id="date" placeholder="Date" />
+                <span>From Date:</span>
+                <input type="date" name="fromdate" id="fromdate" placeholder="Date" />
+            </label>
+            <label for="date">
+                <span>End Date:</span>
+                <input type="date" name="enddate" id="enddate" placeholder="Date" />
             </label>
         </div>
         <button id="searchBtn" onclick="advance_search()">Search</button>
 
-    </div>
+    </div> -->
 
 </header>
 
@@ -383,7 +390,7 @@
     })
 </script>
 
-<script>
+<!-- <script>
     const themes = document.querySelectorAll("input[name='theme']");
 
     function applyTheme(theme) {
@@ -424,7 +431,7 @@
             applyTheme("auto");
         }
     });
-</script>
+</script> -->
 
 <script>
     async function getUserDetails() {

@@ -1,58 +1,10 @@
 [
   {
-    "title": "Clear Screen",
-    "description": "Clears the terminal window.",
-    "content": "cls",
-    "language": "cmd",
+    "title": "Title of the snippet",
+    "description": "Description of the snippet",
+    "content": "Code of the snippet",
+    "language": "javascript",
     "tags": ["cmd", "basics"],
-    "category": "JavaScript"
-  },
-  {
-    "title": "JavaScript Info",
-    "description": "Display detailed JavaScript information.",
-    "content": "JavaScriptinfo",
-    "language": "cmd",
-    "tags": ["cmd", "JavaScript"],
-    "category": "JavaScript"
-  },
-  {
-    "title": "IP Address",
-    "description": "Show network adapter configuration.",
-    "content": "ipconfig",
-    "language": "cmd",
-    "tags": ["cmd", "network"],
-    "category": "Bash"
-  },
-  {
-    "title": "Kill Task",
-    "description": "Force kill a task by name.",
-    "content": "taskkill /IM notepad.exe /F",
-    "language": "cmd",
-    "tags": ["cmd", "process"],
-    "category": "cmd"
-  },
-  {
-    "title": "Ping Website",
-    "description": "Test connectivity with Google.",
-    "content": "ping google.com",
-    "language": "cmd",
-    "tags": ["cmd", "network"],
-    "category": "Networking"
-  },
-  {
-    "title": "Flush DNS",
-    "description": "Clear DNS resolver cache.",
-    "content": "ipconfig /flushdns",
-    "language": "cmd",
-    "tags": ["cmd", "network"],
-    "category": "Networking"
-  },
-  {
-    "title": "Shutdown Timer",
-    "description": "Shutdown PC after 1 minute.",
-    "content": "shutdown /s /t 60",
-    "language": "cmd",
-    "tags": ["cmd", "JavaScript"],
     "category": "JavaScript"
   }
 ]

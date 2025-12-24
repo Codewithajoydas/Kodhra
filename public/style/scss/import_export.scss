@@ -1,34 +1,80 @@
+@import "variables";
+
 main {
-  .import {
+  .upload {
+    width: 80%;
+    margin: 10px;
+    height: 400px;
     display: flex;
-    justify-content: center;
-    align-content: center;
-    gap: 40px;
-    .upload,
-    .download {
-      border: 0.5px solid gray;
-      padding: 100px;
+    background: var(--bg-color);
+    box-shadow: var(--box-shadow);
+    border-radius: 10px;
+    flex-direction: column;
+    gap: 10px;
+    .upload-header {
+      padding: 20px;
+      width: 100%;
+    }
+    .upload-box {
+      position: relative;
       display: flex;
-      flex: 1;
-      background: linear-gradient(40deg, rgba(65, 65, 65, 0.144), #f1f1ff 70%);
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      gap: 20px;
-      font-weight: 500;
+      border: 2px dashed var(--accent);
       border-radius: 10px;
-      button {
-        border: unset;
-        background: black;
-        padding: 20px 30px;
-        color: white;
-        border-radius: 10px;
+      height: 70%;
+      margin-inline: 10px;
+      &.drag-active {
+        background: rgba(55, 108, 207, 0.079);
+        border: 2px dashed rgb(64, 74, 219);
+        cursor: pointer;
+        box-shadow: 0px 0px 10px var(--accent);
       }
-      a{
-        color: blue;
-        font-size: smaller;
-        &:hover{
-            text-decoration: underline;
+      padding: 10px;
+
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 90%;
+        img {
+          width: 130px;
+        }
+      }
+    }
+  }
+  .export-container {
+    box-shadow: var(--box-shadow);
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    .export-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      label {
+        &>span{
+          display: flex;
+          justify-content: start;
+          align-items: center;
+          gap: 5px;
+          font-size: small;
+          svg{
+            width: 16px;
+            height: 16px;
+          }
+        }
+        margin-top: 10px;
+        break-inside: avoid;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        input {
+          padding: 10px;
+          border-radius: 5px;
+          border: 1px solid var(--accent);
         }
       }
     }

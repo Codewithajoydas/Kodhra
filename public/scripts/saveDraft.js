@@ -17,6 +17,7 @@ getUserDetails().then((a) => {
 
 const draftDB = indexedDB.open("draftDB", 1);
 let db;
+let currentObjectId = null;
 
 draftDB.onupgradeneeded = function () {
   db = draftDB.result;
@@ -34,23 +35,67 @@ draftDB.onsuccess = (e) => {
     const desEl = document.getElementById("des")?.value ?? "";
     const catEl = document.getElementById("category")?.value ?? "";
     const tagEl = document.getElementById("tags")?.value?.split(",") ?? [];
-    const codeEL = editor?.getValue() ?? "Nothing Available...";
-    const request = store.add({
-      title: titleEl,
-      folder: folderEl,
-      description: desEl,
-      category: catEl,
-      tags: tagEl,
-      code: codeEL,
-      content: codeEL,
-      author: JSON.parse(
-        atob(unescape(encodeURIComponent(localStorage.getItem("data"))))
-      ),
-      createdAt: new Date().toLocaleString(),
-    });
-    request.onsuccess = () => console.log("Draft saved successfully");
-    request.onerror = () => console.log("Error saving draft");
+    const codeEL = editor?.getValue() ?? "";
+    if (!codeEL) return;
+
+    if (currentObjectId) {
+      const request = store.put({
+        id: currentObjectId,
+        title: titleEl,
+        folder: folderEl,
+        description: desEl,
+        category: catEl,
+        tags: tagEl,
+        code: codeEL,
+        content: codeEL,
+        author: JSON.parse(
+          atob(unescape(encodeURIComponent(localStorage.getItem("data"))))
+        ),
+      });
+      request.onsuccess = () => console.log("Draft saved successfully");
+      request.onerror = () => console.log("Error saving draft");
+      return;
+    } else {
+      const request = store.add({
+        title: titleEl,
+        folder: folderEl,
+        description: desEl,
+        category: catEl,
+        tags: tagEl,
+        code: codeEL,
+        content: codeEL,
+        author: JSON.parse(
+          atob(unescape(encodeURIComponent(localStorage.getItem("data"))))
+        ),
+        createdAt: new Date().toLocaleString(),
+      });
+
+      request.onsuccess = () => {
+        currentObjectId = request.result;
+        console.log("Draft saved successfully");
+      };
+      request.onerror = () => console.log("Error saving draft");
+    }
   };
+  async function getSaveInterval() {
+    const res = await fetch("/settings/list", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "content-Type": "application/json",
+      },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const intervalTime = data.autoSaveInterval;
+      if (intervalTime) {
+        setInterval(() => {
+          saveDraft(db);
+        }, parseInt(intervalTime) * 1000);
+      }
+    }
+  }
+  getSaveInterval();
   window.onbeforeunload = () => {
     if (db) saveDraft(db);
   };
@@ -88,8 +133,7 @@ draftDB.onsuccess = (e) => {
       );
       if (cardss.length === 0) {
         cards.innerHTML = `<div class="no-data" style="display:flex; width: 100%; justify-content: center; align-items: center;flex-direction: column; z-index: 9999999999;">
-  <img src="https://cdni.iconscout.com/illustration/premium/thumb/not-found-illustration-svg-download-png-9160601.png" alt="No Data Found..." width="300px">
-  <p style="font-size: 1.5em">No Data Found</p>
+  <p style="font-size: 1.5em; font-weight: bold;">No Data Found</p>
   <p>Create a snippet to get started</p>
 </div>`;
       }
@@ -216,7 +260,7 @@ draftDB.onsuccess = (e) => {
     </div>
 </div>`;
         if (cards) {
-          cards.innerHTML += cardHTML;
+          cards.innerHTML = cardHTML;
         }
       });
     };

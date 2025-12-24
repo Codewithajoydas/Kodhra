@@ -44,11 +44,12 @@
             flex-direction: column;
             gap: 10px;
             transition: 0.3s;
+            box-shadow: var(--box-shadow) !important;
         }
 
         .languageCard:hover {
             cursor: pointer;
-            transform: scale(1.1);
+            transform: translateY(-10px) scale(1.01);
         }
 
         .languageName {
@@ -56,9 +57,7 @@
             font-size: 20px;
         }
     </style>
-    <script src="https://unpkg.com/@barba/core"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
-    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+
 </head>
 
 <body data-theme="light">
@@ -68,61 +67,76 @@
             <div class="container">
                 <%- include("partials/sidebar.ejs", { navigation: 'lan' })%>
                     <main style="height: calc(100vh - 70px)">
-                        <div class="lan_cards">
-                            <% cards.forEach(language=> {%>
-                                <div class="languageCard"
-                                    onclick="window.location.assign('/search/json?q=<%= language._id %>')">
-                                    <div class="banner">
-                                        <img height="100" width="100"
-                                            src="https://cdn.simpleicons.org/<%= 
-                                                                                                            language._id === 'JavaScript' ? 'javascript' :
-  language._id === 'CSS' ? 'css' :
-  language._id === 'HTML' ? 'html5' :
-  language._id === 'C' ? 'c' :
-  language._id === 'C++' ? 'cplusplus' :
-  language._id === 'C#' ? 'csharp' :
-  language._id === 'Java' ? 'java' :
-  language._id === 'TypeScript' ? 'typescript' :
-  language._id === 'Python' ? 'python' :
-  language._id === 'Ruby' ? 'ruby' :
-  language._id === 'PHP' ? 'php' :
-  language._id === 'Go' ? 'go' :
-  language._id === 'Rust' ? 'rust' :
-  language._id === 'Swift' ? 'swift' :
-  language._id === 'Kotlin' ? 'kotlin' :
-  language._id === 'Objective-C' ? 'objectivec' :
-  language._id === 'Scala' ? 'scala' :
-  language._id === 'Perl' ? 'perl' :
-  language._id === 'R' ? 'r' :
-  language._id === 'Dart' ? 'dart' :
-  language._id === 'Haskell' ? 'haskell' :
-  language._id === 'Lua' ? 'lua' :
-  language._id === 'Elixir' ? 'elixir' :
-  language._id === 'Clojure' ? 'clojure' :
-  language._id === 'Shell' ? 'gnubash' :
-  language._id === 'PowerShell' ? 'powershell' :
-  language._id === 'SQL' ? 'mysql' :
-  language._id === 'GraphQL' ? 'graphql' :
-  language._id === 'MATLAB' ? 'mathworks' :
-  language._id === 'Assembly' ? 'assemblyscript' :
-  language._id === 'Fortran' ? 'fortran' :
-  language._id === 'COBOL' ? 'cobol' :
-  language._id === 'Erlang' ? 'erlang' :
-  language._id === 'VB.NET' ? 'vbnet' :
-                                                                                                            language._id.toLowerCase().replace(/[+#.\s()]/g, '')%>"
-                                            alt="<%= language %> icon"
-                                            onerror="this.src = 'https://cdn-icons-png.flaticon.com/512/1049/1049443.png'" />
+                        <% if(cards.length !== 0){%>
+                            <div class="page_title" onclick="collapse(this)">
+                                <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                                        <path d="m6 9 6 6 6-6" />
+                                    </svg></span>
+                                Language Section
+                            </div>
+                            <div class="lan_cards">
+                                <% cards.forEach(language=> {%>
+                                    <div class="languageCard"
+                                        onclick="window.location.assign('/search/json?q=<%= language._id %>')">
+                                        <div class="banner">
+                                            <img height="100" width="100" loading="lazy"
+                                                src="https://cdn.simpleicons.org/<%= 
+                                                                                                                language._id === 'JavaScript' ? 'javascript' :
+      language._id === 'CSS' ? 'css' :
+      language._id === 'HTML' ? 'html5' :
+      language._id === 'C' ? 'c' :
+      language._id === 'C++' ? 'cplusplus' :
+      language._id === 'C#' ? 'csharp' :
+      language._id === 'Java' ? 'java' :
+      language._id === 'TypeScript' ? 'typescript' :
+      language._id === 'Python' ? 'python' :
+      language._id === 'Ruby' ? 'ruby' :
+      language._id === 'PHP' ? 'php' :
+      language._id === 'Go' ? 'go' :
+      language._id === 'Rust' ? 'rust' :
+      language._id === 'Swift' ? 'swift' :
+      language._id === 'Kotlin' ? 'kotlin' :
+      language._id === 'Objective-C' ? 'objectivec' :
+      language._id === 'Scala' ? 'scala' :
+      language._id === 'Perl' ? 'perl' :
+      language._id === 'R' ? 'r' :
+      language._id === 'Dart' ? 'dart' :
+      language._id === 'Haskell' ? 'haskell' :
+      language._id === 'Lua' ? 'lua' :
+      language._id === 'Elixir' ? 'elixir' :
+      language._id === 'Clojure' ? 'clojure' :
+      language._id === 'Shell' ? 'gnubash' :
+      language._id === 'PowerShell' ? 'powershell' :
+      language._id === 'SQL' ? 'mysql' :
+      language._id === 'GraphQL' ? 'graphql' :
+      language._id === 'MATLAB' ? 'mathworks' :
+      language._id === 'Assembly' ? 'assemblyscript' :
+      language._id === 'Fortran' ? 'fortran' :
+      language._id === 'COBOL' ? 'cobol' :
+      language._id === 'Erlang' ? 'erlang' :
+      language._id === 'VB.NET' ? 'vbnet' :
+                                                                                                                language._id.toLowerCase().replace(/[+#.\s()]/g, '')%>"
+                                                alt="<%= language %> icon"
+                                                onerror="this.src = 'https://cdn-icons-png.flaticon.com/512/1049/1049443.png'" />
+                                        </div>
+                                        <p class="languageName">
+                                            <%= language._id %>
+                                        </p>
+                                        <span style="font-size: smaller !important;display: inline-block !important;">
+                                            <%= language.count %>
+                                                Snippets
+                                        </span>
                                     </div>
-                                    <p class="languageName">
-                                        <%= language._id %>
-                                    </p>
-                                    <span style="font-size: smaller !important;display: inline-block !important;">
-                                        <%= language.count %>
-                                            Snippets
-                                    </span>
-                                </div>
-                                <% }) %>
-                        </div>
+                                    <% }) %>
+                            </div>
+                        <%} else{%>
+                            <div class="nodata" style="display: flex; justify-content: center; align-items: center;height: calc(100vh - 100px);">
+                                <%- include("partials/no-data.ejs")%>
+                            </div>
+                        <%}%>
+                        <%- include("partials/fab.ejs")%>
                     </main>
 
                     <div id="context_menu" style="
@@ -158,6 +172,7 @@
     <script src="/scripts/context_menu.js"></script>
     <script src="\scripts\isonline.js"></script>
     <script src="/scripts/header.js"></script>
+    <script src="/scripts/collapse.js"></script>
 </body>
 
 </html>

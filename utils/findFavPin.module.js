@@ -14,7 +14,7 @@ async function findFavPinned(cardIds = [], userId) {
   const pinnedCards = new Set(user.pinnedCards.map((id) => id.toString()));
 
   const result = cardIds.map((card) => ({
-    ...card._doc,
+    ...card._doc ?? card,
     author: card.author,
     isFavorite: favoriteCards.has(card._id.toString()),
     isPinned: pinnedCards.has(card._id.toString()),

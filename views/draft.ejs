@@ -15,151 +15,83 @@
     <link rel="stylesheet" href="/style/css/folder.css">
     <link rel="stylesheet" href="/style/css/toast.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
+    <link rel="shortcut icon" href="/assets/logo.webp" type="image/png" />
     <script src="/socket.io/socket.io.js"></script>
 
-    <script src="https://unpkg.com/colorthief/dist/color-thief.umd.js"></script>
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
-    <link rel="preload" href="/gEzG0w1WVY.lottie" as="fetch" crossorigin="anonymous" />
-   
-    <script src="https://unpkg.com/@barba/core"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
-    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
 
 </head>
 
 <body data-theme="light">
-   <%- include("partials/loader.ejs") %>
-    <div class="content">
-        <%- include("partials/header.ejs")%>
-            <div class="container">
-                <%- include("partials/sidebar.ejs", { navigation: 'draft' })%>
-                    <main style="width: 100%; height: calc(100vh - 70px);">
-                        <div class="cardContainer-header">
-                            <span class="page_title">All Draft Snippets</span>
+    <%- include("partials/loader.ejs") %>
+        <div class="content">
+            <%- include("partials/header.ejs")%>
+                <div class="container">
+                    <%- include("partials/sidebar.ejs", { navigation: 'draft' })%>
+                        <main style="width: 100%; height: calc(100vh - 70px);">
+                                <div class="page_title" onclick="collapse(this)">
+                                    <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                                            <path d="m6 9 6 6 6-6" />
+                                        </svg></span>
+                                    All Drafts
+                                </div>
+
+                            <div id="cards1">
+                                <%- include("partials/no-data.ejs")%>
+                            </div>
+                         
+
+                            <%- include("partials/fab")%>
+                        </main>
+                        <div class="notification-bar">
+                            <h3>Notifications</h3>
+                            <ul class="notification-lists">
+                            </ul>
+                        </div>
+                        <div id="context_menu"
+                            style="position: absolute;top: 0;left: 0;display: none;z-index: 1000000;width: 200px;">
+                            <ul id="context_menu_list"></ul>
                         </div>
 
-                        <div id="cards1">
+
+
+                        <div class="notification-bar">
+                            <h3>Notifications</h3>
+                            <ul class="notification-lists">
+                            </ul>
                         </div>
-                        <div id="sentinal" style="text-align: center; margin-block:10px; color: red;">
-                            <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif"
-                                alt="Loading..." style="width: 10%;">
+
+
+
+                        <div class="networkInfo" style="display: none;">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-info-icon lucide-info">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 16v-4" />
+                                    <path d="M12 8h.01" />
+                                </svg></span>
+
+                            <span id="networkInfo"></span>
                         </div>
 
-                        <%- include("partials/fab")%>
-                    </main>
-                    <div class="notification-bar">
-                        <h3>Notifications</h3>
-                        <ul class="notification-lists">
-                        </ul>
-                    </div>
-                    <div id="context_menu"
-                        style="position: absolute;top: 0;left: 0;display: none;z-index: 1000000;width: 200px;">
-                        <ul id="context_menu_list"></ul>
-                    </div>
+                </div>
+        </div>
 
-                 
+  
 
-                    <div class="notification-bar">
-                        <h3>Notifications</h3>
-                        <ul class="notification-lists">
-                        </ul>
-                    </div>
-
-                  
-
-                    <div class="networkInfo" style="display: none;">
-                        <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-info-icon lucide-info">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M12 16v-4" />
-                                <path d="M12 8h.01" />
-                            </svg></span>
-
-                        <span id="networkInfo"></span>
-                    </div>
-                    
-            </div>
-    </div>
-
-    <script>
-        window.onload = () => {
-            let loader = document.querySelector(".loader");
-            loader.style.display = "none";
-        };
-    </script>
-
-    <script src="/scripts/ad_search.js"></script>
-    <script src="/scripts/Fab.js"></script>
-    <script src="/scripts/Notification.js"></script>
-    <script src="/scripts/searchFunction.js"></script>
-    <script src="\scripts\isonline.js"></script>
-    <script src="/scripts/header.js"></script>
-
-    <script>
-        let cardsContainer = document.getElementById("cards1");
-        let sentinalv2 = document.getElementById("sentinal");
-        let currentPage = 1;
-        const observerA = new IntersectionObserver(async (entries) => {
-            for (let entry of entries) {
-                if (entry.isIntersecting) {
-                    currentPage++;
-                    const res = await fetch(`/pin/json?page=${currentPage}`);
-                    if (res.ok) {
-                        const html = await res.text();
-                        if (html.trim()) {
-                            cardsContainer.insertAdjacentHTML("beforeend", html);
-                        } else {
-                            sentinalv2.textContent = "...";
-                            observerA.unobserve(sentinalv2);
-                        }
-                    }
-                }
-            }
-        }, {
-            threshold: 0
-        });
-        observerA.observe(sentinalv2);
-    </script>
-
-
-    <script>
-        const containera = document.querySelector("#cards1");
-        containera.addEventListener("change", () => {
-            updateSelectedCards();
-        });
-
-        const onDocumentChange = (mutationsList, observer) => {
-            for (const mutation of mutationsList) {
-                if (mutation.type === 'childList') {
-                } else if (mutation.type === 'attributes') {
-                }
-            }
-        };
-
-        const config = {
-            attributes: true,
-            childList: true,
-            subtree: true
-        };
-
-        const observers = new MutationObserver(onDocumentChange);
-
-        if (containera) {
-            observers.observe(containera, config);
-        }
-        let selectedCardsSet = new Set();
-
-
-
-
-
-
-    </script>
-    <script src="/scripts/saveDraft.js"></script>
-    <script src="/scripts/context_menu.js"></script>
-<script src="\scripts\shortcut.js"></script>
+        <script src="/scripts/ad_search.js"></script>
+        <script src="/scripts/Fab.js"></script>
+        <script src="/scripts/Notification.js"></script>
+        <script src="/scripts/searchFunction.js"></script>
+        <script src="\scripts\isonline.js"></script>
+        <script src="/scripts/header.js"></script>
+        <script src="/scripts/collapse.js"></script>
+        <script src="/scripts/Tooltips.js"></script>
+        <script src="/scripts/saveDraft.js"></script>
+        <script src="/scripts/context_menu.js"></script>
+        <script src="\scripts\shortcut.js"></script>
 
 </body>
 

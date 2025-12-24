@@ -3,7 +3,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.014);
+  background: var(--bg-color);
   backdrop-filter: blur(10px);
   min-width: 300px;
   border: 1px solid var(--accent);
@@ -52,5 +52,7 @@
   }
   #searchBtn {
     width: 60%;
+    background: var(--color);
+    color: var(--bg-color);
   }
 }

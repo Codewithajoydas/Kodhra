@@ -55,160 +55,170 @@
         <div class="container">
           <%- include("partials/sidebar.ejs", {navigation: 'folder' })%>
             <main style="height: calc(100vh - 70px );">
-              <div onclick="collapse(this)" class="cardContainer-header"
-                style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                  <div class="page_title">
-                    <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down">
-                        <path d="m6 9 6 6 6-6" />
-                      </svg></span>
-                    Folder Section
+              <% if(folders.length !==0) {%>
+                <div onclick="collapse(this)" class="cardContainer-header"
+                  style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <div class="page_title">
+                      <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                          <path d="m6 9 6 6 6-6" />
+                        </svg></span>
+                      Folder Section
+                    </div>
+                  </div>
+                  <div class="card-options disabled">
+                    <div class="cardLen">125</div>
+                    <div class="selectAll" onclick="selectAllButton(event)"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-grid2x2-check-icon lucide-grid-2x2-check">
+                        <path
+                          d="M12 3v17a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H3" />
+                        <path d="m16 19 2 2 4-4" />
+                      </svg></div>
+                    <div class="deleteAll" onclick="deleteCards(event)"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash">
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                        <path d="M3 6h18" />
+                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      </svg></div>
+
+                    <div class="download" onclick="downloadCard(event)"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-arrow-big-down-dash-icon lucide-arrow-big-down-dash">
+                        <path
+                          d="M15 11a1 1 0 0 0 1 1h2.939a1 1 0 0 1 .75 1.811l-6.835 6.836a1.207 1.207 0 0 1-1.707 0L4.31 13.81a1 1 0 0 1 .75-1.811H8a1 1 0 0 0 1-1V9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1z" />
+                        <path d="M9 4h6" />
+                      </svg></div>
                   </div>
                 </div>
-                <div class="card-options disabled">
-                  <div class="cardLen">125</div>
-                  <div class="selectAll" onclick="selectAllButton(event)"><svg xmlns="http://www.w3.org/2000/svg"
-                      width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round"
-                      class="lucide lucide-grid2x2-check-icon lucide-grid-2x2-check">
-                      <path
-                        d="M12 3v17a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H3" />
-                      <path d="m16 19 2 2 4-4" />
-                    </svg></div>
-                  <div class="deleteAll" onclick="deleteCards(event)"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-                      height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash">
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                      <path d="M3 6h18" />
-                      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                    </svg></div>
+                <div class="foldersDiv" style="justify-content: center;">
+                  <% folders.forEach((folder, i)=> { %>
+                    <div class="folder" data-name="<%= folder.folderName %>" data-id="<%= folder._id %>"
+                      data-createat="<%= folder.createdAt %>" data-updateat="<%= folder.updatedAt %>"
+                      data-menus="delete, rename, move, share" data-cardauthor="<%= folder.author._id %>"
+                      data-userId="<%= userId %>" data-mtype="folder" data-cardname="<%= folder.folderName %>"
+                      data-contextMenu="true" data-url="/folder/<%= folder._id %>"
+                      ondblclick="window.open('/folder/<%= folder._id %>', '_blank')"
+                      data-items="<%= folder.cards.length %>" tabindex="0">
+                      <label for="select-<%= folder._id%>" class="checkbox" data-id="<%= folder._id %>">
+                        <div class="folder_icon">
+                          <% if (folder.cards.length>= 1) { %>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"
+                              fill="#F7B31B" stroke="currentColor" stroke-width=".1" stroke-linecap="round"
+                              stroke-linejoin="round" class="lucide lucide-folder-icon lucide-folder">
+                              <path
+                                d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                            </svg>
+                            <% } else { %>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"
+                                fill="#F7B31B" stroke="currentColor" stroke-width=".1" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-folder-open-icon lucide-folder-open">
+                                <path
+                                  d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
+                              </svg>
+                              <% } %>
+                        </div>
+                        <input type="checkbox" name="select-<%= folder._id%>" id="select-<%= folder._id%>"
+                          class="select" hidden>
+                      </label>
+                      <div class="folder_name" style="text-align: center;">
 
-                  <div class="download" onclick="downloadCard(event)"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-                      height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round"
-                      class="lucide lucide-arrow-big-down-dash-icon lucide-arrow-big-down-dash">
-                      <path
-                        d="M15 11a1 1 0 0 0 1 1h2.939a1 1 0 0 1 .75 1.811l-6.835 6.836a1.207 1.207 0 0 1-1.707 0L4.31 13.81a1 1 0 0 1 .75-1.811H8a1 1 0 0 0 1-1V9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1z" />
-                      <path d="M9 4h6" />
-                    </svg></div>
+                        <div style="
+                      display: -webkit-box;
+                      -webkit-line-clamp: 1;
+                      -webkit-box-orient: vertical;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      max-width: 200px; 
+                    ">
+                          <%= folder.folderName %>
+                        </div>
+                        <span style="font-size: small; color: gray;">
+                          Item Count <%= folder.cards.length %>
+                        </span>
+                      </div>
+                    </div>
+                    <%})%>
                 </div>
-              </div>
-              <div class="foldersDiv" style="justify-content: center;">
-                <% folders.forEach((folder, i)=> { %>
-                  <div class="folder" data-name="<%= folder.folderName %>" data-id="<%= folder._id %>"
-                    data-createat="<%= folder.createdAt %>" data-updateat="<%= folder.updatedAt %>"
-                    data-menus="delete, rename, move, share" data-cardauthor="<%= folder.author._id %>"
-                    data-userId="<%= userId %>" data-mtype="folder" data-cardname="<%= folder.folderName %>"
-                    data-contextMenu="true" data-url="/folder/<%= folder._id %>"
-                    ondblclick="window.open('/folder/<%= folder._id %>', '_blank')"
-                    data-items="<%= folder.cards.length %>" tabindex="0">
-                    <label for="select-<%= folder._id%>" class="checkbox" data-id="<%= folder._id %>">
-                      <div class="folder_icon">
-                        <% if (folder.cards.length>= 1) { %>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"
+                <%}else{%>
+                  <div class="nodata" style="display: flex;justify-content: center;align-items: center;height: calc(100vh - 100px);">
+                    <%- include("partials/no-data.ejs") %>
+                  </div>
+                <%}%>
+
+
+                  <div class="folder_info details-pane" aria-label="Folder details"
+                    style="width: 320px; padding: 16px; box-shadow: 0 0 0 1px rgba(0,0,0,0.04); background: var(--accent, #fff);">
+                    <div class="pane-header"
+                      style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;">
+                      <div style="display:flex;align-items:center;gap:10px;">
+                        <div class="folder_icon" style="width:48px;height:48px;flex:0 0 48px;">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
                             fill="#F7B31B" stroke="currentColor" stroke-width=".1" stroke-linecap="round"
                             stroke-linejoin="round" class="lucide lucide-folder-icon lucide-folder">
                             <path
                               d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
                           </svg>
-                          <% } else { %>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"
-                              fill="#F7B31B" stroke="currentColor" stroke-width=".1" stroke-linecap="round"
-                              stroke-linejoin="round" class="lucide lucide-folder-open-icon lucide-folder-open">
-                              <path
-                                d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />
-                            </svg>
-                            <% } %>
+                        </div>
+                        <div>
+                          <div class="folder_title" style="font-weight:700;line-height:1;" title="Folder Name">
+                            <span id="details-name">Folder Name</span>
+                          </div>
+                          <div style="font-size:12px;color:gray;margin-top:4px;" id="details-location">/path/to/folder
+                          </div>
+                        </div>
                       </div>
-                      <input type="checkbox" name="select-<%= folder._id%>" id="select-<%= folder._id%>" class="select"
-                        hidden>
-                    </label>
-                    <div class="folder_name" style="text-align: center;">
+                    </div>
+                    <section class="pane-body" style="gap:14px;">
+                      <div class="preview"
+                        style="display:flex;flex-direction:column;align-items:center;margin-bottom: 15px;">
+                        <!-- <img id="details-thumb" src="/assets/fillFolder.png" alt="Folder preview" width="80" height="80"> -->
+                        <svg id="details-thumb" xmlns="http://www.w3.org/2000/svg" width="70" height="70"
+                          viewBox="0 0 24 24" fill="#F7B31B" stroke="currentColor" stroke-width=".1"
+                          stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-folder-icon lucide-folder">
+                          <path
+                            d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                        </svg>
 
-                      <div style="
-                    display: -webkit-box;
-                    -webkit-line-clamp: 1;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    max-width: 200px; 
-                  ">
-                        <%= folder.folderName %>
+                        <small style="color:gray;text-align:center;" id="details-items">0 items • 0 KB</small>
                       </div>
-                      <span style="font-size: small; color: gray;">
-                        Item Count <%= folder.cards.length %>
-                      </span>
-                    </div>
-                  </div>
-                  <%})%>
-              </div>
-
-              <div class="folder_info details-pane" aria-label="Folder details"
-                style="width: 320px; padding: 16px; box-shadow: 0 0 0 1px rgba(0,0,0,0.04); background: var(--accent, #fff);">
-                <div class="pane-header"
-                  style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;">
-                  <div style="display:flex;align-items:center;gap:10px;">
-                    <div class="folder_icon" style="width:48px;height:48px;flex:0 0 48px;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#F7B31B"
-                        stroke="currentColor" stroke-width=".1" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-folder-icon lucide-folder">
-                        <path
-                          d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div class="folder_title" style="font-weight:700;line-height:1;" title="Folder Name">
-                        <span id="details-name">Folder Name</span>
+                      <div class="meta" style="flex:1;">
+                        <dl
+                          style="display:grid;grid-template-columns:110px 1fr;row-gap:8px;column-gap:12px;font-size:13px;color:#111;">
+                          <dt style="color:gray;font-weight:600;">Type</dt>
+                          <dd id="details-type" style="margin:0; color:var(--color);">Folder</dd>
+                          <dt style="color:gray;font-weight:600;">Location</dt>
+                          <dd id="details-path"
+                            style="margin:0; color:var(--color);;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                            /path/to/folder</dd>
+                          <dt style="color:gray;font-weight:600;">Items</dt>
+                          <dd id="details-count" style="margin:0; color:var(--color);">0</dd>
+                          <dt style="color:gray;font-weight:600;">Size</dt>
+                          <dd id="details-size" style="margin:0; color:var(--color);">0 KB</dd>
+                          <dt style="color:gray;font-weight:600;">Created</dt>
+                          <dd id="details-created" style="margin:0; color:var(--color);">—</dd>
+                          <dt style="color:gray;font-weight:600;">Modified</dt>
+                          <dd id="details-modified" style="margin:0; color:var(--color);">—</dd>
+                        </dl>
                       </div>
-                      <div style="font-size:12px;color:gray;margin-top:4px;" id="details-location">/path/to/folder</div>
-                    </div>
-                  </div>
-                </div>
-                <section class="pane-body" style="gap:14px;">
-                  <div class="preview"
-                    style="display:flex;flex-direction:column;align-items:center;margin-bottom: 15px;">
-                    <!-- <img id="details-thumb" src="/assets/fillFolder.png" alt="Folder preview" width="80" height="80"> -->
-                    <svg id="details-thumb" xmlns="http://www.w3.org/2000/svg" width="70" height="70"
-                      viewBox="0 0 24 24" fill="#F7B31B" stroke="currentColor" stroke-width=".1" stroke-linecap="round"
-                      stroke-linejoin="round" class="lucide lucide-folder-icon lucide-folder">
-                      <path
-                        d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
-                    </svg>
+                    </section>
 
-                    <small style="color:gray;text-align:center;" id="details-items">0 items • 0 KB</small>
+                    <footer
+                      style="margin-top:12px;border-top:1px solid rgba(0,0,0,0.04);padding-top:10px;display:flex;gap:8px;align-items:center;">
+                      <small style="color:gray;">Quick actions:</small>
+                      <button class="btn" onclick="newFileInFolder()" style="padding:6px 8px;" disabled>New
+                        File</button>
+                      <button class="btn" onclick="addTag()" style="padding:6px 8px;" disabled>Add Tag</button>
+                    </footer>
                   </div>
-                  <div class="meta" style="flex:1;">
-                    <dl
-                      style="display:grid;grid-template-columns:110px 1fr;row-gap:8px;column-gap:12px;font-size:13px;color:#111;">
-                      <dt style="color:gray;font-weight:600;">Type</dt>
-                      <dd id="details-type" style="margin:0; color:var(--color);">Folder</dd>
-                      <dt style="color:gray;font-weight:600;">Location</dt>
-                      <dd id="details-path"
-                        style="margin:0; color:var(--color);;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-                        /path/to/folder</dd>
-                      <dt style="color:gray;font-weight:600;">Items</dt>
-                      <dd id="details-count" style="margin:0; color:var(--color);">0</dd>
-                      <dt style="color:gray;font-weight:600;">Size</dt>
-                      <dd id="details-size" style="margin:0; color:var(--color);">0 KB</dd>
-                      <dt style="color:gray;font-weight:600;">Created</dt>
-                      <dd id="details-created" style="margin:0; color:var(--color);">—</dd>
-                      <dt style="color:gray;font-weight:600;">Modified</dt>
-                      <dd id="details-modified" style="margin:0; color:var(--color);">—</dd>
-                    </dl>
-                  </div>
-                </section>
 
-                <footer
-                  style="margin-top:12px;border-top:1px solid rgba(0,0,0,0.04);padding-top:10px;display:flex;gap:8px;align-items:center;">
-                  <small style="color:gray;">Quick actions:</small>
-                  <button class="btn" onclick="newFileInFolder()" style="padding:6px 8px;" disabled>New File</button>
-                  <button class="btn" onclick="addTag()" style="padding:6px 8px;" disabled>Add Tag</button>
-                </footer>
-              </div>
-
-              <%- include("partials/fab.ejs")%>
+                  <%- include("partials/fab.ejs")%>
             </main>
             <div id="context_menu" style="
                                 position: absolute;
@@ -466,6 +476,7 @@
                 selected: [...selectedCardsSet]
               })
             });
+
             if (res.ok) {
               location.reload();
             }
@@ -478,49 +489,22 @@
         }
       }
 
-      async function downloadCard() {
-        try {
-          if (selectedCardsSet.size > 1) {
-            const res = await fetch("/card/download", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                selected: [...selectedCardsSet]
-              })
-            });
-            if (res.ok) {
-              let data = await res.json();
-              const blob = new Blob([JSON.stringify({ ...data })], { type: "application/json" });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement("a");
-              a.href = url;
-              const date = new Date().toLocaleDateString();
-              const time = new Date().toLocaleTimeString();
-              a.download = `Snippets-${date}-${time}.json`;
-              a.click();
-              URL.revokeObjectURL(url);
-            } else {
-              console.error("Somthing went wrong...")
-              new Toastmaster({
-                title: "Error",
-                message: "⚠️ Something went wrong. Please try again.",
-                type: "error",
-                delay: 3000
-              }).showNotification();
-            }
-          } else {
-            new Toastmaster({
-              title: "Error",
-              message: "⚠️ Please select minimum 2 cards before downloading.",
-              type: "error",
-              delay: 3000
-            }).showNotification();
-          }
-        } catch (error) {
-          console.error(error.message);
+      function downloadCard(event) {
+        event.stopPropagation();
+
+        if (selectedCardsSet.size < 1) {
+          new Toastmaster({
+            title: "Error",
+            message: "Please select at least 1 folder",
+            type: "error",
+            delay: 3000
+          }).showNotification();
+          return;
         }
+
+        const ids = [...selectedCardsSet].join(",");
+
+        window.location.href = `/folders/download?selected=${ids}`;
       }
 
       document.querySelectorAll(".folder_icon").forEach(e => {

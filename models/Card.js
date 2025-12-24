@@ -54,6 +54,25 @@ const cardSchema = new mongoose.Schema(
         default: [],
       },
     ],
+    readmefile: {
+      title: {
+        type: String,
+        trim: true,
+      },
+      description: {
+        type: String,
+        trim: true,
+      },
+      content: {
+        type: String,
+        trim: true,
+      },
+    },
+    status: {
+      enum: ["draft", "published", "private", "archived"],
+      type: String,
+      default: "draft",
+    },
   },
   {
     timestamps: true,

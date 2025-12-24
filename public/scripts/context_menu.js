@@ -27,6 +27,8 @@ draftDB1.onsuccess = (e) => {
   };
 };
 
+// report, block,  share profile, mute
+
 const icons = {
   delete: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
   draft_Delete: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash"><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`,
@@ -36,7 +38,14 @@ const icons = {
   move: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-icon lucide-move"><path d="M12 2v20"/><path d="m15 19-3 3-3-3"/><path d="m19 9 3 3-3 3"/><path d="M2 12h20"/><path d="m5 9-3 3 3 3"/><path d="m9 5 3-3 3 3"/></svg>`,
   share: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>`,
   pin: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pin-icon lucide-pin"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>`,
+  report: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-warning-icon lucide-message-circle-warning"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>`,
+  block: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-ban-icon lucide-shield-ban"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m4.243 5.21 14.39 12.472"/></svg>`,
+  unblock: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-ban-icon lucide-shield-ban"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m4.243 5.21 14.39 12.472"/></svg>`,
+  share_profile: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2-icon lucide-share-2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>`,
+  mute: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-x-icon lucide-message-circle-x"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`,
+  open: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-open-icon lucide-package-open"><path d="M12 22v-9"/><path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z"/><path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13"/><path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z"/></svg>`,
 };
+
 const actions = {
   delete: (card) => deleteFolder(card.dataset.mtype, card.dataset.id),
   draft_Delete: (card) => draft_Delete(card.dataset.id),
@@ -47,56 +56,152 @@ const actions = {
   pin: (card) => pin(card.dataset.id, card.dataset.mtype),
   edit: (card) => editCard(card.dataset.id, card.dataset.mtype),
   draft_Edit: (card) => draft_Edit(card.dataset.id, card.dataset.url),
+  block: (card) => blockUser(card.dataset.targetid, card.dataset.currentid),
+  report: (card) => reportUser(card.dataset.targetid, card.dataset.currentid),
+  share_profile: (card) =>
+    shareProfile(card.dataset.targetid, card.dataset.currentid),
+  mute: (card) => muteUser(card.dataset.targetid, card.dataset.currentid),
+  open: (card) => openNotebook(card.dataset.id, card.dataset.mtype),
 };
 
-// Context menu DOM
+actions.unblock = actions.block;
+
+async function blockUser(targetId, currentId) {
+  const res = await fetch(`/profile/block/${currentId}/${targetId}`, {
+    method: "post",
+    credentials: "include",
+  });
+  const data = await res.json();
+  if (res.ok) {
+    if (data.message === "unblocked") {
+      new Toastmaster({
+        title: "Success",
+        message: "User Unblocked Successfully",
+        type: "success",
+        delay: 3000,
+      }).showNotification();
+    } else if (data.message === "blocked") {
+      new Toastmaster({
+        title: "Success",
+        message: "User Blocked Successfully",
+        type: "success",
+        delay: 3000,
+      }).showNotification();
+    } else {
+      new Toastmaster({
+        title: "Error",
+        message: data.message,
+        type: "error",
+        delay: 3000,
+      });
+    }
+  } else {
+    new Toastmaster({
+      title: "Error",
+      message: "Something went wrong",
+      type: "error",
+      delay: 3000,
+    }).showNotification();
+  }
+}
+async function reportUser(targetId, currentId) {
+  new Toastmaster({
+    title: "Error!",
+    message: "Feature Not Available",
+    type: "error",
+    delay: 3000,
+  }).showNotification();
+}
+async function shareProfile(targetId, currentId) {
+  new Toastmaster({
+    title: "Error!",
+    message: "Feature Not Available",
+    type: "error",
+    delay: 3000,
+  }).showNotification();
+}
+async function muteUser(targetId, currentId) {
+  new Toastmaster({
+    title: "Error!",
+    message: "Feature Not Available",
+    type: "error",
+    delay: 3000,
+  }).showNotification();
+}
+
 const contextMenu = document.getElementById("context_menu");
 const contextMenuList = document.getElementById("context_menu_list");
 
 window.addEventListener("contextmenu", (e) => e.preventDefault());
 
 window.addEventListener("click", () => {
-  contextMenu.style.display = "none";
-  document.body.classList.remove("active");
+  if (contextMenu) {
+    contextMenu.classList.remove("active");
+    document.body.classList.remove("active");
+  }
 });
 
 function openMenu(card, x, y) {
   const menus = card.dataset.menus?.split(",").map((i) => i.trim()) || [];
 
   contextMenuList.innerHTML = "";
+
   const cardAuthor = card.dataset.cardauthor;
   const userId = card.dataset.userid;
-  menus.forEach((name) => {
+  const targetId = card.dataset.targetid;
+  const isBlocked = card.dataset.isblocked === "true";
+
+  menus.forEach((menuName) => {
     if (cardAuthor !== userId) {
-      if (name === "delete" || name === "edit" || name === "move") {
+      if (
+        menuName === "delete" ||
+        menuName === "edit" ||
+        menuName === "move" ||
+        menuName === "rename"
+      ) {
         return;
       }
     }
+
+    if (menuName === "block" && targetId === userId) {
+      return;
+    }
+
+    let displayName = menuName;
+    if (menuName === "block" && isBlocked) {
+      displayName = "unblock";
+    }
+
     const li = document.createElement("li");
-    li.innerHTML = `${icons[name] || ""} ${name.replace("_", " ")}`;
+    li.dataset.action = displayName;
+    li.innerHTML = `${icons[displayName] || ""} ${displayName.replace(
+      "_",
+      " "
+    )}`;
     contextMenuList.appendChild(li);
 
-    if (actions[name]) {
-      li.addEventListener("click", (ev) => {
-        ev.stopPropagation();
-        actions[name](card);
-        contextMenu.style.display = "none";
-      });
-    }
+    li.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+
+      if (actions[displayName]) {
+        actions[displayName](card);
+      }
+
+      contextMenu.classList.add("active");
+    });
   });
 
-  contextMenu.style.visibility = "hidden";
-  contextMenu.style.display = "block";
-  let menuWidth = contextMenu.offsetWidth;
-  let menuHeight = contextMenu.offsetHeight;
+  contextMenu.classList.add("active");
 
-  if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 5;
+  const menuWidth = contextMenu.offsetWidth;
+  const menuHeight = contextMenu.offsetHeight;
+
+  if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 15;
   if (y + menuHeight > window.innerHeight)
     y = window.innerHeight - menuHeight - 5;
 
   contextMenu.style.left = `${x}px`;
   contextMenu.style.top = `${y}px`;
-  contextMenu.style.visibility = "visible";
 }
 
 document.addEventListener("contextmenu", (e) => {
@@ -165,43 +270,71 @@ async function shareFolder(id, userId) {
 
 function openContextMenu(event, clientX = null, clientY = null) {
   event.stopPropagation();
+
   const card = event.target.closest("[data-contextMenu='true']");
+  if (!card) return;
+
   const cardAuthor = card.dataset.cardauthor;
   const userId = card.dataset.userid;
-  if (!card) return;
+  const targetId = card.dataset.targetid;
+  const isBlocked = card.dataset.isblocked === "true";
+
   const menus = card.dataset.menus?.split(",").map((i) => i.trim()) || [];
   contextMenuList.innerHTML = "";
-  menus.forEach((name) => {
+
+  menus.forEach((menuName) => {
     if (cardAuthor !== userId) {
-      if (name === "delete" || name === "edit" || name === "move") {
+      if (menuName === "delete" || menuName === "edit" || menuName === "move") {
         return;
       }
     }
-    const li = document.createElement("li");
-    li.innerHTML = `${icons[name] || ""} ${name.replace("_", " ")}`;
-    contextMenuList.appendChild(li);
-    if (actions[name]) {
-      li.addEventListener("click", (ev) => {
-        ev.stopPropagation();
-        actions[name](card);
-        contextMenu.style.display = "none";
-      });
+
+    if (menuName === "block" && targetId === userId) {
+      return;
     }
+
+    let displayName = menuName;
+    if (menuName === "block" && isBlocked) {
+      displayName = "unblock";
+    }
+
+    const li = document.createElement("li");
+    li.dataset.action = displayName;
+
+    li.innerHTML = `${icons[displayName] || ""} ${displayName.replace(
+      "_",
+      " "
+    )}`;
+    contextMenuList.appendChild(li);
+
+    li.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+
+      if (actions[displayName]) {
+        actions[displayName](card);
+      }
+
+      contextMenu.classList.remove("active");
+    });
   });
-  contextMenu.style.display = "block";
+
   let x = clientX ?? event.clientX;
   let y = clientY ?? event.clientY;
-  let menuWidth = contextMenu.offsetWidth;
-  let menuHeight = contextMenu.offsetHeight;
-  if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 5;
+
+  contextMenu.classList.add("active");
+  const menuWidth = contextMenu.offsetWidth;
+  const menuHeight = contextMenu.offsetHeight;
+
+  if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth - 15;
   if (y + menuHeight > window.innerHeight)
     y = window.innerHeight - menuHeight - 5;
+
   contextMenu.style.left = `${x}px`;
   contextMenu.style.top = `${y}px`;
 }
 
 window.addEventListener("click", () => {
-  contextMenu.style.display = "none";
+  if (contextMenu) contextMenu.classList.remove("active");
 });
 
 async function favIt(ele, id) {
@@ -209,11 +342,19 @@ async function favIt(ele, id) {
     let res = await fetch(`/card/fav/${id}`, {
       method: "put",
     });
+
+    const data = await res.json();
+    console.log(data);
     if (res.ok) {
+      const likeCount = document.getElementById(`like-count-${id}`);
       let svg = ele.querySelector("svg");
       svg.classList.toggle("active");
+      if (svg.classList.contains("active")) {
+        likeCount.textContent = parseInt(likeCount.textContent) + 1;
+      } else {
+        likeCount.textContent = parseInt(likeCount.textContent) - 1;
+      }
     }
-    const data = await res.json();
     if (data.message === "favorited") {
       new Toastmaster({
         title: "Success",
@@ -290,8 +431,12 @@ async function pinIt(ele, id) {
   }
 }
 
-function editCard(id) {
-  window.location.href = `/card/${id}`;
+function editCard(id, mtype) {
+  if (mtype === "card") {
+    window.location.href = `/card/view/${id}`;
+    return;
+  }
+  window.location.href = `/${mtype}/${id}`;
 }
 
 let move_folder = document.querySelector(".move_folder");
@@ -321,7 +466,7 @@ async function moveIt() {
   const folderId = selected.value;
 
   try {
-    const res = await fetch(`moveit/${movetype}/${folderId}/${cardId}`, {
+    const res = await fetch(`/moveit/${movetype}/${folderId}/${cardId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -380,7 +525,7 @@ document.addEventListener("mouseup", () => {
 document.addEventListener("click", () => {
   document.querySelector("body").classList.remove("active");
   if (move_folder) move_folder.style.display = "none";
-  if (contextMenu) contextMenu.style.display = "none";
+  if (contextMenu) contextMenu.classList.remove("active");
   move_folder?.querySelectorAll("input").forEach((inp) => {
     if (inp.type === "radio" || inp.type === "checkbox") {
       inp.checked = false;
@@ -433,6 +578,10 @@ document.addEventListener("click", (e) => {
     });
 });
 
+function openNotebook(id, mtype) {
+  window.location.href = `/notebook/view/${id}`;
+}
+
 async function copy_cdn_link(e) {
   const id = e.target.closest(".card").dataset.id;
 
@@ -464,16 +613,6 @@ async function copy_cdn_link(e) {
   }
 }
 
-// Play sound when click on buttons, links, and inputs
-
-// const clickSound = new Audio("assets/sound/computer-mouse-click-352734.mp3");
-// clickSound.volume = 0.3;
-// clickSound.preload = "auto";
-// document.addEventListener("mousedown", (e) => {
-//   clickSound.currentTime = 0;
-//   clickSound.play();
-// });
-
 const elements = document.querySelectorAll("[tabindex='0']");
 
 elements.forEach((el) => {
@@ -492,3 +631,33 @@ document.addEventListener("mousemove", (e) => {
   cursor.style.left = `${e.clientX}px`;
   cursor.style.top = `${e.clientY}px`;
 });
+
+async function getTheme() {
+  const res = await fetch("/settings/list", {
+    method: "GET",
+    credentials: "include",
+    header: {
+      "content-Type": "application/json",
+    },
+  });
+  if (res.ok) {
+    const data = await res.json();
+    // for theme
+    const theme = data.themev2;
+    const themeInput = document.querySelector(`input[name='${theme}']`);
+    if (themeInput) themeInput.checked = true;
+    if (theme === "dark") {
+      document.body.setAttribute("data-theme", "dark");
+    } else if (theme === "light") {
+      document.body.setAttribute("data-theme", "light");
+    } else {
+      document.body.setAttribute("data-theme", "auto");
+    }
+
+    // for font-size
+    const fontsizee = data.fontSize;
+    document.body.style.fontSize = `${fontsizee}px`;
+  }
+}
+
+getTheme();

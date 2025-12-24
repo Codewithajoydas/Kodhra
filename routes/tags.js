@@ -10,20 +10,50 @@ tagsRouter.get("/", async (req, res) => {
   const userId = decode.checkUser._id;
   const image = decode.checkUser.userImage;
   const userName = decode.checkUser.userName;
-const folders = await Folder.find({ author: userId });
+  const folders = await Folder.find({ author: userId });
   try {
     const tags = await Card.aggregate([
       {
-        $match: { author: new mongoose.Types.ObjectId(userId) }, 
+        $match: {
+          author: new mongoose.Types.ObjectId(userId),
+        },
       },
-      { $unwind: "$tags" }, 
+
+      { $unwind: "$tags" },
+
       {
         $group: {
           _id: "$tags",
           count: { $sum: 1 },
+          author: { $first: "$author" },
+          createdAt: { $first: "$createdAt" },
         },
       },
-      { $sort: { count: -1 } }, 
+
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "authorInfo",
+        },
+      },
+
+      {
+        $unwind: "$authorInfo",
+      },
+
+      {
+        $project: {
+          tag: "$_id",
+          count: 1,
+          createdAt: 1,
+          authorId: "$author",
+          authorName: "$authorInfo.userName",
+        },
+      },
+
+      { $sort: { count: -1 } },
     ]);
 
     res.render("tags", { tags, image, userName, folders });

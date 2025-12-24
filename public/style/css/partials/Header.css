@@ -116,21 +116,23 @@ header nav .profile {
   padding: 10px;
 }
 header nav .profile img {
-  width: 45px;
-  height: 45px;
+  max-width: 45px;
+  min-width: 45px;
+  max-height: 45px;
+  min-height: 45px;
   border: 0.5px solid gary;
   border-radius: 50px;
   object-fit: cover;
 }
 header nav .profile .profile-bar {
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-  transition: all 0.5s ease;
+  transition: all 0.2s ease;
   position: absolute;
   width: 300px;
   height: auto;
   padding: 10px;
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.014);
+  background: var(--bg-color);
   backdrop-filter: blur(10px);
   border: 1px solid var(--accent);
   top: 115%;
@@ -166,7 +168,6 @@ header nav .profile .profile-bar .menus {
   margin-block: 10px;
 }
 header nav .profile .profile-bar .menus li a {
-  font-size: small;
   padding: 10px 10px;
   width: 100%;
   border-radius: 10px;
@@ -178,8 +179,8 @@ header nav .profile .profile-bar .menus li a {
   transition: all 0.5s ease;
 }
 header nav .profile .profile-bar .menus li a svg {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 header nav .profile .profile-bar .menus li a:hover, header nav .profile .profile-bar .menus li a:focus {
   background: var(--accent);
@@ -190,7 +191,7 @@ header nav .profile .profile-bar .theme {
   align-items: center;
   gap: 20px;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.001);
+  background: var(--accent);
   border: 1px solid var(--accent);
   border-radius: 10px;
 }
@@ -254,12 +255,13 @@ header nav .searchResult .search svg {
   height: 23px !important;
 }
 header nav .searchResult .results {
+  box-shadow: var(--box-shadow);
   position: absolute;
   top: 110%;
   left: 0;
   width: inherit;
   z-index: 100000;
-  background: rgba(0, 0, 0, 0.021);
+  background: var(--bg-color);
   backdrop-filter: blur(10px);
   padding: 10px;
   display: none;

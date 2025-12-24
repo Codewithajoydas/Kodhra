@@ -17,7 +17,7 @@ pinRouter.get("/", async (req, res) => {
       options: { limit: 10 },
     });
     const card = await findFavPinned(user.pinnedCards, userId);
-    const folders = await Folder.find({ author: userId });
+    const folders = await Folder.find({ author: userId, isDeleted: false });
 
     res.render("pinned", {
       card: card,

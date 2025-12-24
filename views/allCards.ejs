@@ -5,32 +5,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>All Snippets | Kodhra - Code Snippet Manager</title>
-  <meta name="title" content="All Snippets | Kodhra - Code Snippet Manager">
   <meta name="description"
-    content="A curated collection of community-shared code snippets across HTML, CSS, JavaScript, and more. Explore, use, like on high-quality snippets contributed by developers worldwide.">
-  <link rel="canonical" href="https://kodhra.codewithajoydas.live/card" />
-
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://kodhra.codewithajoydas.live/card">
-  <meta property="og:title" content="All Snippets | Kodhra - Code Snippet Manager">
-  <meta property="og:description"
-    content="A curated collection of community-shared code snippets across HTML, CSS, JavaScript, and more. Explore, use, like on high-quality snippets contributed by developers worldwide.">
-  <meta property="og:image" content="https://kodhra.codewithajoydas.live/icons/icon-512.png">
-
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://kodhra.codewithajoydas.live/card">
-  <meta property="twitter:title" content="All Snippets | Kodhra - Code Snippet Manager">
-  <meta property="twitter:description"
-    content="A curated collection of community-shared code snippets across HTML, CSS, JavaScript, and more. Explore, use, like on high-quality snippets contributed by developers worldwide.">
-  <meta property="twitter:image" content="https://kodhra.codewithajoydas.live/icons/icon-512.png">
-
-  <meta name="keywords"
-    content="code snippets, developer snippets, programming snippets, HTML CSS JavaScript snippets, code snippet library, snippet collection, all code snippets, reusable code snippets, frontend code snippets, backend code snippets, JavaScript code examples, CSS tricks and snippets, HTML code examples, Node.js snippets, web development snippets, coding solutions, developer tools library, coding helper snippets, UI components snippets, reusable UI code, share code snippets, community code sharing, developer social platform, snippet likes and comments, open code library, public developer snippets, collaborative coding platform, best code snippet library for developers, quick copy-paste code examples, ready-to-use JavaScript snippets, helpful HTML CSS snippets for UI, community-driven coding resources, reusable coding patterns and utilities, coding inspiration for beginners and experts">
-  <meta name="robots" content="index, follow">
-  <meta name="language" content="">
-  <meta name="revisit-after" content="3 Days days">
+    content="Access, manage, and organize all your saved code snippets in one place. Kodhra helps developers store reusable code, snippets, utilities, and logic securely with fast search and clean structure.">
+  <meta name="keywords" content="
+  code snippets manager,
+  developer code storage,
+  programming snippets,
+  javascript snippets,
+  html css snippets,
+  backend snippets,
+  full stack developer tools,
+  snippet organizer,
+  code vault,
+  developer productivity tool
+  ">
   <meta name="author" content="Ajoy Das">
-
+  <meta name="language" content="English">
+  <meta name="distribution" content="global">
+  <meta name="rating" content="general">
+  <meta name="revisit-after" content="1 day">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
+  <link rel="canonical" href="https://kodhra.codewithajoydas.live/code">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Kodhra">
+  <meta property="og:url" content="https://kodhra.codewithajoydas.live/code">
+  <meta property="og:title" content="Your Code Snippets Dashboard – Kodhra">
+  <meta property="og:description"
+    content="View and manage all your saved code snippets. Organize developer code, reuse logic, and boost productivity with Kodhra.">
+  <meta property="og:image" content="https://kodhra.codewithajoydas.live/icons/icon-512-maskable.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta property="og:image:alt" content="Kodhra Code Snippet Manager">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Your Code Snippets Dashboard – Kodhra">
+  <meta name="twitter:description"
+    content="All your developer code snippets in one place. Save, search, and reuse code faster with Kodhra.">
+  <meta name="twitter:image" content="https://kodhra.codewithajoydas.live/icons/icon-512-maskable.png">
+  <meta name="application-name" content="Kodhra">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="icon" href="https://kodhra.codewithajoydas.live/icons/icon-512-maskable.png">
+  <link rel="apple-touch-icon" href="https://kodhra.codewithajoydas.live/icons/icon-512-maskable.png">
   <link rel="stylesheet" href="/style/css/partials/Header.css">
   <link rel="stylesheet" href="/style/css/ad_search.css">
   <link rel="stylesheet" href="/style/css/Notification.css">
@@ -43,7 +58,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codewithajoydas/toastmaster@2.3.5/dist/toaster.min.css">
   <script src="/socket.io/socket.io.js"></script>
-
+  <script src="/scripts/getSettings.js"></script>
 </head>
 
 <body data-theme="light">
@@ -104,86 +119,99 @@
         <div class="container">
           <%- include("partials/sidebar", { navigation: 'card' }) %>
             <main style="height: calc(100vh - 70px);">
-              <div class="card-container" style="margin-bottom: 50px;">
-                <div class="all-cards">
-                  <div style="position: relative;">
-                    <div class="left_arrow" style="position: absolute; left: 0px; display: flex;justify-content: center;
-                  align-items: center; top: 0%; height: 100%;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-chevron-left-icon lucide-chevron-left">
-                        <path d="m15 18-6-6 6-6" />
-                      </svg>
+              <% if(card.length !==0) {%>
+                <div class="card-container" style="margin-bottom: 50px;">
+                  <div class="all-cards">
+                    <div style="position: relative;">
+                      <div class="left_arrow" style="position: absolute; left: 0px; display: flex;justify-content: center;
+                    align-items: center; top: 0%; height: 100%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-chevron-left-icon lucide-chevron-left">
+                          <path d="m15 18-6-6 6-6" />
+                        </svg>
+                      </div>
+                      <div class="chips" style="position: relative;">
+                        <div class="chip active"><span>All</span></div>
+                        <% tags.forEach((tag, i)=> { %>
+                          <div class="chip" tabindex="0"><span style="text-transform: capitalize;">
+                              <%= tag %>
+                            </span></div>
+                          <% }) %>
+                      </div>
+                      <div class="right_arrow" style="position: absolute; right: 0px; justify-content: center;
+                    align-items: center; display: flex; top: 0%;height: 100%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-chevron-right-icon lucide-chevron-right">
+                          <path d="m9 18 6-6-6-6" />
+                        </svg>
+                      </div>
                     </div>
-                    <div class="chips" style="position: relative;">
-                      <div class="chip active"><span>All</span></div>
-                      <% tags.forEach((tag, i)=> { %>
-                        <div class="chip" tabindex="0"><span style="text-transform: capitalize;">
-                            <%= tag %>
-                          </span></div>
-                        <% }) %>
-                    </div>
-                    <div class="right_arrow" style="position: absolute; right: 0px; justify-content: center;
-                  align-items: center; display: flex; top: 0%;height: 100%;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-chevron-right-icon lucide-chevron-right">
-                        <path d="m9 18 6-6-6-6" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div class="cardContainer-header" style="flex-direction: row-reverse;">
-                    <div class="card-options disabled">
-                      <div class="cardLen">125</div>
-                      <div class="selectAll" onclick="selectAllButton()"><svg xmlns="http://www.w3.org/2000/svg"
-                          width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-grid2x2-check-icon lucide-grid-2x2-check">
-                          <path
-                            d="M12 3v17a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H3" />
-                          <path d="m16 19 2 2 4-4" />
-                        </svg></div>
-                      <div class="deleteAll" onclick="deleteCards()"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-                          height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash">
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                          <path d="M3 6h18" />
-                          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                        </svg></div>
+                    <div class="cardContainer-header" style="flex-direction: row-reverse;">
+                      <div class="card-options disabled">
+                        <div class="cardLen">125</div>
+                        <div class="selectAll" onclick="selectAllButton()"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-grid2x2-check-icon lucide-grid-2x2-check">
+                            <path
+                              d="M12 3v17a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H3" />
+                            <path d="m16 19 2 2 4-4" />
+                          </svg></div>
+                        <div class="deleteAll" onclick="deleteCards()"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-trash-icon lucide-trash">
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                            <path d="M3 6h18" />
+                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                          </svg></div>
 
-                      <div class="download" onclick="downloadCard()"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-                          height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-arrow-big-down-dash-icon lucide-arrow-big-down-dash">
-                          <path
-                            d="M15 11a1 1 0 0 0 1 1h2.939a1 1 0 0 1 .75 1.811l-6.835 6.836a1.207 1.207 0 0 1-1.707 0L4.31 13.81a1 1 0 0 1 .75-1.811H8a1 1 0 0 0 1-1V9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1z" />
-                          <path d="M9 4h6" />
-                        </svg></div>
+                        <div class="download" onclick="downloadCard()"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-arrow-big-down-dash-icon lucide-arrow-big-down-dash">
+                            <path
+                              d="M15 11a1 1 0 0 0 1 1h2.939a1 1 0 0 1 .75 1.811l-6.835 6.836a1.207 1.207 0 0 1-1.707 0L4.31 13.81a1 1 0 0 1 .75-1.811H8a1 1 0 0 0 1-1V9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1z" />
+                            <path d="M9 4h6" />
+                          </svg></div>
+                      </div>
+                      <div class="page_title" data-target="#mySection"
+                        onclick="collapse(document.querySelector('.cardsasd'))">
+                        <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                            <path d="m6 9 6 6 6-6" />
+                          </svg></span>
+                        All Snippet Cards
+                      </div>
                     </div>
-                    <div class="page_title" data-target="#mySection"
-                      onclick="collapse(document.querySelector('.cardsasd'))">
-                      <span class="down"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down">
-                          <path d="m6 9 6 6 6-6" />
-                        </svg></span>
-                      All Snippet Cards
-                    </div>
+                    <section class="cardsasd">
+                      <div id="cards" style="overflow-y: scroll !important;">
+                        <%- include("partials/cards") %>
+                      </div>
+                      <div id="sentinelLoader"
+                        style=" text-align: center; width: 100%; display: flex; justify-content: center; align-items: center; padding-block: 20px;">
+                        <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif"
+                          alt="Loading..." style="width: 10%;">
+                      </div>
+                    </section>
                   </div>
-                  <section class="cardsasd">
-                    <div id="cards" style="overflow-y: scroll !important;">
-                      <%- include("partials/cards") %>
-                    </div>
-                    <div id="sentinelLoader"
-                      style=" text-align: center; width: 100%; display: flex; justify-content: center; align-items: center; padding-block: 20px;">
-                      <img src="https://cdn.pixabay.com/animation/2024/04/02/07/57/07-57-40-974_512.gif"
-                        alt="Loading..." style="width: 10%;">
-                    </div>
-                  </section>
                 </div>
-              </div>
-              <%- include("partials/fab")%>
-                <div id="context_menu" style="
+                <%}else{%>
+                  <div class="nodata"
+                    style="display: flex; justify-content: center;align-items: center; height: calc(100vh - 100px);">
+                    <%- include("partials/no-data.ejs")%>
+                  </div>
+                  <%} %>
+
+
+
+
+                    <%- include("partials/fab.ejs")%>
+                      <div id="context_menu" style="
                       position: absolute;
                       top: 0;
                       left: 0;
@@ -191,21 +219,21 @@
                       z-index: 1000000;
                       width: 200px;
                     ">
-                  <ul id="context_menu_list"></ul>
-                </div>
+                        <ul id="context_menu_list"></ul>
+                      </div>
 
 
-                <div class="networkInfo" style="display: none;">
-                  <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                      class="lucide lucide-info-icon lucide-info">
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 16v-4" />
-                      <path d="M12 8h.01" />
-                    </svg></span>
+                      <div class="networkInfo" style="display: none;">
+                        <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-info-icon lucide-info">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 16v-4" />
+                            <path d="M12 8h.01" />
+                          </svg></span>
 
-                  <span id="networkInfo"></span>
-                </div>
+                        <span id="networkInfo"></span>
+                      </div>
             </main>
         </div>
     </div>
@@ -230,7 +258,10 @@
         for (let entry of entries) {
           if (entry.isIntersecting) {
             currentPage++;
-            const res = await fetch(`/card/json?page=${currentPage}`);
+            let res;
+            res = await fetch(`/card/json?page=${currentPage}`);
+            const idOfCurrentUser = window.location.pathname.split("/")[3];
+            if (idOfCurrentUser) res = await fetch(`/card/json?page=${currentPage}&id=${idOfCurrentUser}`);
             if (res.ok) {
               const html = await res.text();
               if (html.trim()) {
@@ -492,16 +523,13 @@
         }
       }
 
-      updateArrows(); // initial
-
-      // Wheel scroll
+      updateArrows();
       slider.addEventListener("wheel", (e) => {
         e.preventDefault();
         slider.scrollLeft += e.deltaY;
         updateArrows();
       });
 
-      // Drag scroll
       let isDown = false;
       let startX;
       let scrollLeft;
@@ -524,7 +552,6 @@
         updateArrows();
       });
 
-      // Button scroll
       left_arrow.addEventListener("click", () => {
         slider.scrollTo({
           left: slider.scrollLeft - 300,

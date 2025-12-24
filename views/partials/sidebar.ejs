@@ -8,9 +8,10 @@
 </style>
 <aside>
     <ul>
-        <li>
-            <span>Main Pages</span>
-        </li>
+
+        <!-- MAIN PAGES -->
+        <li><span>Main Pages</span></li>
+
         <li>
             <a href="/" class="<%- navigation === 'home' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -25,6 +26,7 @@
             </a>
             <kbd>alt + d</kbd>
         </li>
+
         <li>
             <a href="/card" class="<%- navigation === 'card' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -39,6 +41,7 @@
             </a>
             <kbd>alt + s</kbd>
         </li>
+
         <li>
             <a href="/folder" class="<%- navigation === 'folder' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -51,59 +54,19 @@
             </a>
             <kbd>alt + f</kbd>
         </li>
+
         <li>
-            <a href="/tags" class="<%- navigation === 'tags' ? 'active' : '' %>" tabindex="0">
+            <a href="/notebook/get" class="<%- navigation === 'getnotebook' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-tags-icon lucide-tags">
+                    class="lucide lucide-book-open-icon lucide-book-open">
+                    <path d="M12 7v14" />
                     <path
-                        d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z" />
-                    <path d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193" />
-                    <circle cx="10.5" cy="6.5" r=".5" fill="currentColor" />
+                        d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
                 </svg>
-                Tags
+                Notebooks
             </a>
-            <kbd>alt + t</kbd>
-        </li>
-        <li>
-            <a href="/language" class="<%- navigation === 'lan' ? 'active' : '' %>" tabindex="0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-file-code-icon lucide-file-code">
-                    <path
-                        d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
-                    <path d="M14 2v5a1 1 0 0 0 1 1h5" />
-                    <path d="M10 12.5 8 15l2 2.5" />
-                    <path d="m14 12.5 2 2.5-2 2.5" />
-                </svg>
-                Language
-            </a>
-            <kbd>alt + l</kbd>
-        </li>
-        <li>
-            <a href="/pin" class="<%- navigation === 'pin' ? 'active' : '' %>" tabindex="0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-pin-icon lucide-pin">
-                    <path d="M12 17v5" />
-                    <path
-                        d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
-                </svg>
-                Pinned
-            </a>
-            <kbd>alt + p</kbd>
-        </li>
-        <li>
-            <a href="/fav" class="<%- navigation === 'fav' ? 'active' : '' %>" tabindex="0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-star-icon lucide-star">
-                    <path
-                        d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
-                </svg>
-                Favorites
-            </a>
-            <kbd>alt + v</kbd>
+            <kbd>alt + n</kbd>
         </li>
         <li>
             <a href="/draft" class="<%- navigation === 'draft' ? 'active' : '' %>" tabindex="0">
@@ -122,6 +85,7 @@
             </a>
             <kbd>alt + r</kbd>
         </li>
+
         <li>
             <a href="/recyclebin" class="<%- navigation === 'recyclebin' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -140,13 +104,74 @@
             <kbd>alt + b</kbd>
         </li>
 
-        <!-- Creation Shortcuts -->
         <hr>
 
-        <li>
-            <span>Creation Shortcuts</span>
+        <!-- FILTERS & VIEWS -->
+        <li><span>Filters & Views</span></li>
 
+        <li>
+            <a href="/tags" class="<%- navigation === 'tags' ? 'active' : '' %>" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-tags-icon lucide-tags">
+                    <path
+                        d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z" />
+                    <path d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193" />
+                    <circle cx="10.5" cy="6.5" r=".5" fill="currentColor" />
+                </svg>
+                Tags
+            </a>
+            <kbd>alt + t</kbd>
         </li>
+
+        <li>
+            <a href="/language" class="<%- navigation === 'lan' ? 'active' : '' %>" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-file-code-icon lucide-file-code">
+                    <path
+                        d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
+                    <path d="M14 2v5a1 1 0 0 0 1 1h5" />
+                    <path d="M10 12.5 8 15l2 2.5" />
+                    <path d="m14 12.5 2 2.5-2 2.5" />
+                </svg>
+                Language
+            </a>
+            <kbd>alt + l</kbd>
+        </li>
+
+        <li>
+            <a href="/pin" class="<%- navigation === 'pin' ? 'active' : '' %>" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-pin-icon lucide-pin">
+                    <path d="M12 17v5" />
+                    <path
+                        d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
+                </svg>
+                Pinned
+            </a>
+            <kbd>alt + p</kbd>
+        </li>
+
+        <li>
+            <a href="/fav" class="<%- navigation === 'fav' ? 'active' : '' %>" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-star-icon lucide-star">
+                    <path
+                        d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+                </svg>
+                Favorites
+            </a>
+            <kbd>alt + v</kbd>
+        </li>
+
+        <hr>
+
+        <!-- CREATION SHORTCUTS -->
+        <li><span>Creation Shortcuts</span></li>
+
         <li>
             <a href="/card/create" class="<%- navigation === 'card-create' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -162,6 +187,7 @@
             </a>
             <kbd>alt + n</kbd>
         </li>
+
         <li>
             <a href="#" class="<%- navigation === 'create-folder' ? 'active' : '' %>" tabindex="0"
                 onclick="openCreateFolderModal(event)">
@@ -178,13 +204,25 @@
             <kbd>shift + f</kbd>
         </li>
 
-        <!-- Search & Explore -->
+        <li>
+            <a href="/notebook" class="<%- navigation === 'notebook'? 'active' :'' %>" tabindex="0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-book-open-check-icon lucide-book-open-check">
+                    <path d="M12 21V7" />
+                    <path d="m16 12 2 2 4-4" />
+                    <path
+                        d="M22 6V4a1 1 0 0 0-1-1h-5a4 4 0 0 0-4 4 4 4 0 0 0-4-4H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h6a3 3 0 0 1 3 3 3 3 0 0 1 3-3h6a1 1 0 0 0 1-1v-1.3" />
+                </svg>
+                Create Notebooks
+                <kbd style="text-transform: lowercase;">alt + n</kbd>
+            </a>
+        </li>
         <hr>
 
-        <li>
-            <span>Search & Explore</span>
+        <!-- SEARCH & EXPLORE -->
+        <li><span>Search & Explore</span></li>
 
-        </li>
         <li>
             <a href="/search" class="<%- navigation === 'search' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -197,6 +235,7 @@
             </a>
             <kbd>alt + u</kbd>
         </li>
+
         <li>
             <a href="/explore" class="<%- navigation === 'explore' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -217,13 +256,11 @@
             <kbd>alt + e</kbd>
         </li>
 
-        <!-- Settings & Tools -->
         <hr>
 
-        <li>
-            <span>Settings & Tools</span>
+        <!-- SETTINGS & TOOLS -->
+        <li><span>Settings & Tools</span></li>
 
-        </li>
         <li>
             <a href="/import-export" class="<%- navigation === 'import-export' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -237,30 +274,28 @@
             </a>
             <kbd>alt + i</kbd>
         </li>
+
         <li>
             <a href="/settings" class="<%- navigation === 'settings' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-cog-icon lucide-cog">
-                    <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" />
-                    <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                    <circle cx="12" cy="12" r="8" />
+                    <circle cx="12" cy="12" r="2" />
                     <path d="M12 2v2" />
-                    <path d="M12 22v-2" />
-                    <path d="m17 20.66-1-1.73" />
-                    <path d="M11 10.27 7 3.34" />
-                    <path d="m20.66 17-1.73-1" />
-                    <path d="m3.34 7 1.73 1" />
-                    <path d="M14 12h8" />
+                    <path d="M12 20v2" />
+                    <path d="m17.66 6.34-1.41 1.41" />
+                    <path d="m6.34 17.66-1.41 1.41" />
                     <path d="M2 12h2" />
-                    <path d="m20.66 7-1.73 1" />
-                    <path d="m3.34 17 1.73-1" />
-                    <path d="m17 3.34-1 1.73" />
-                    <path d="m11 13.73-4 6.93" />
+                    <path d="M20 12h2" />
+                    <path d="m6.34 6.34 1.41 1.41" />
+                    <path d="m17.66 17.66 1.41 1.41" />
                 </svg>
                 Settings
             </a>
             <kbd>alt + g</kbd>
         </li>
+
         <li>
             <a href="/profile" class="<%- navigation === 'account' ? 'active' : '' %>" tabindex="0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -276,49 +311,8 @@
             <kbd>alt + o</kbd>
         </li>
 
-        <!-- Auth -->
-        <hr>
-        <li>
-            <span>Auth</span>
-        </li>
-        <li>
-            <a href="/login" class="<%- navigation === 'login' ? 'active' : '' %>" tabindex="0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-scan-face-icon lucide-scan-face">
-                    <path d="M3 7V5a2 2 0 0 1 2-2h2" />
-                    <path d="M17 3h2a2 2 0 0 1 2 2v2" />
-                    <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
-                    <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
-                    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                    <path d="M9 9h.01" />
-                    <path d="M15 9h.01" />
-                </svg>
-                Login
-            </a>
-        </li>
-        <li>
-            <a href="/signup" class="<%- navigation === 'signup' ? 'active' : '' %>" tabindex="0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-key-icon lucide-key">
-                    <path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4" />
-                    <path d="m21 2-9.6 9.6" />
-                    <circle cx="7.5" cy="15.5" r="5.5" />
-                </svg>
-                Sign Up
-            </a>
-        </li>
-        <li>
-            <hr>
-            <span>Payment Options</span>
-            <button class="payment_btn" class="payment-button" onclick="payNow()">
-                <img src="\assets\upload.png" alt="" width="25px" height="25px"
-                    style="padding: 0 !important; margin:0 !important;">
-                Upgrade Plan
-            </button>
-        </li>
     </ul>
+
     <div id="create-folder-modal">
 
         <label for="folderName" id="createFolder">
@@ -459,5 +453,17 @@
 
         const rzp1 = new Razorpay(options);
         rzp1.open();
+    }
+</script>
+
+
+<script>
+    const data = localStorage.getItem("settings") ? JSON.parse(localStorage.getItem("settings")) : {};
+    if (data.showSidebar === "yes") {
+        document.querySelector("aside").classList.remove("active");
+    } else if (data.showSidebar === "no") {
+        document.querySelector("aside").classList.add("active");
+    } else {
+        document.querySelector("aside").classList.remove("active");
     }
 </script>

@@ -3,7 +3,7 @@
   data-cardName="<%= e.title %>" data-mtype="card" data-cardauthor="<%= e.author._id %>"
   data-cardcontent="<%=e.title%>, <%= e.description%>, <%= e.content %>">
   <div class="header-info">
-    <input type="checkbox" class="select-card" style="display: none" id="card_<%= e._id%>" />
+    <input type="checkbox" class="select-card" hidden id="card_<%= e._id%>" />
     <label for="card_<%= e._id%>" style="display: flex; align-items: center; gap: 10px">
       <img src="<%= e.author.userImage %>" alt="" width="40" height="40" style="border-radius: 50%" class="profileImage"
         onerror="this.src='https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg'" />
@@ -29,8 +29,8 @@
             </strong></span>, <span class="lan">
             <%= e.category%>
           </span>,
-          <span class="time">
-            <%= new Date(e.metadata.createdAt).toLocaleString() %>
+          <span class="time" style="font-size: x-small; color: gray;">
+            <%= new Date(e.createdAt).toLocaleString() %>
           </span>
         </div>
       </div>
@@ -69,10 +69,10 @@
   </div>
 
   <div class="code" title="<%= e.content%>">
-    <code> <%= e.content %> </code>
+    <code style="font-size: small !important;"> <%= e.content %> </code>
   </div>
 
-  <% if(e.tags.length> 0){ %>
+  <% if( e.tags && e.tags.length> 0){ %>
     <div class="tags d-n">
       <% e.tags.forEach(tag=> { %>
         <a class="span" href="search?query=<%= tag %>">
@@ -123,13 +123,13 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          gap: 4px;
-        ">
-            <span style="font-size: small">
-              <%= e.likes.length || 0 %>
+          gap: 4px;">
+            <span style="font-size: small" class="like-count" id="like-count-<%= e._id%>">
+              <%= e.likes?.length || 0 %>
             </span>
 
-            <div class="fav" data-tooltip="Favorite" onclick="favIt(this, '<%= e._id %>')" data-id="<%= e._id%>" tabindex="0">
+            <div class="fav" data-tooltip="Favorite" onclick="favIt(this, '<%= e._id %>')" data-id="<%= e._id%>"
+              tabindex="0">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                 class="<%= e.isFavorite ? 'active' : '' %>" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star-icon lucide-star">
@@ -141,3 +141,4 @@
         </div>
       </div>
 </div>
+

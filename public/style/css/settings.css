@@ -13,14 +13,21 @@ main .setting_panal ul {
   width: 300px;
   border-right: 1px solid var(--accent);
 }
-main .setting_panal ul li a {
+main .setting_panal ul li .link {
+  margin-block: 5px;
   padding: 10px;
   margin-inline: 10px;
   list-style: none;
   padding: 10px 20px;
   cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
 }
-main .setting_panal ul li a:hover {
+main .setting_panal ul li .link svg {
+  width: 16px;
+  height: 16px;
+}
+main .setting_panal ul li .link:hover, main .setting_panal ul li .link.active {
   background: var(--accent);
   border-radius: 10px;
 }
@@ -58,8 +65,9 @@ main .setting_panal .tabs .tab label .description {
   color: #555;
 }
 main .setting_panal .tabs .tab label select,
-main .setting_panal .tabs .tab label input {
-  width: 40%;
+main .setting_panal .tabs .tab label input,
+main .setting_panal .tabs .tab label textarea {
+  width: 60%;
   min-width: 200px;
   border: 1px solid var(--accent);
   outline: none;
@@ -68,6 +76,10 @@ main .setting_panal .tabs .tab label input {
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+}
+main .setting_panal .tabs .tab label textarea {
+  padding: 3px;
+  border-radius: 5px;
 }
 main .setting_panal .tabs .tab label button {
   width: 40%;
