@@ -239,34 +239,167 @@ function pin(id, type) {
     .catch(console.error);
 }
 
-async function shareFolder(id, userId) {
+function shareOther(title, text, url) {
+  if (navigator.share) {
+    navigator.share({ title, text, url });
+  } else {
+    navigator.clipboard.writeText(url);
+    alert("Link copied. Share manually.");
+  }
+}
+
+
+const whatsappSVG = () => `
+<svg width="22" height="22" fill="white" viewBox="0 0 24 24">
+<path d="M12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0012.05 0Z"/>
+</svg>`;
+
+const facebookSVG = () => `
+<svg width="22" height="22" fill="white" viewBox="0 0 24 24">
+<path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.025 4.388 11.006 10.125 11.927v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.953.925-1.953 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.079 24 18.098 24 12.073Z"/>
+</svg>`;
+
+const xSVG = () => `
+<svg width="22" height="22" fill="white" viewBox="0 0 24 24">
+<path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993z"/>
+</svg>`;
+
+const gmailSVG = () => `
+<svg width="22" height="22" fill="white" viewBox="0 0 24 24">
+<path d="M24 5.457v13.909A1.636 1.636 0 0122.364 21h-3.819V11.73L12 16.64l-6.545-4.91V21H1.636A1.636 1.636 0 010 19.366V5.457C0 3.434 2.309 2.28 3.927 3.493L12 9.548l8.073-6.055C21.69 2.28 24 3.434 24 5.457Z"/>
+</svg>`;
+
+const shareSVG = () => `
+<svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"
+viewBox="0 0 24 24">
+<circle cx="18" cy="5" r="3"/>
+<circle cx="6" cy="12" r="3"/>
+<circle cx="18" cy="19" r="3"/>
+<line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/>
+<line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/>
+</svg>`;
+async function shareFolder(id) {
   try {
     const res = await fetch(`/generate_cdn/${id}`, {
       method: "POST",
       credentials: "include",
     });
+
     const data = await res.json();
-    if (res.ok) {
-      navigator.clipboard.writeText(
-        `${window.location.origin}/generate_cdn/${data.link._id}`
-      );
-      new Toastmaster({
-        title: "Success",
-        message: "Shared successfully",
-        type: "success",
-        delay: 5000,
-      }).showNotification();
-    }
+    if (!res.ok) throw new Error("Failed");
+
+    const shareUrl = `${window.location.origin}/generate_cdn/${data.link._id}`;
+    const shareText = `Check this shared folder:\n${shareUrl}`;
+
+    document.getElementById("share-modal")?.remove();
+
+    const modal = document.createElement("div");
+    modal.id = "share-modal";
+
+    modal.innerHTML = `
+<div style="
+  width:420px;
+  background:var(--bg-color);
+  border-radius:14px;
+  padding:20px;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  z-index:100000;
+">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <h3 style="margin:0;font-size:18px;">Share in a post</h3>
+    <span style="font-size:22px;cursor:pointer"
+      onclick="document.getElementById('share-modal').remove()">&times;</span>
+  </div>
+
+  <div style="margin-top:10px;font-weight:500;">Social Share</div>
+
+  <div style="display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;">
+
+    <!-- WhatsApp -->
+    <div style="text-align:center;cursor:pointer"
+      onclick="window.open('https://wa.me/?text=${encodeURIComponent(
+        shareText
+      )}','_blank')">
+      <div style="width:48px;height:48px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;">
+        ${whatsappSVG()}
+      </div>
+      <div style="font-size:12px;">WhatsApp</div>
+    </div>
+
+    <!-- Facebook -->
+    <div style="text-align:center;cursor:pointer"
+      onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        shareUrl
+      )}','_blank')">
+      <div style="width:48px;height:48px;border-radius:50%;background:#0866ff;display:flex;align-items:center;justify-content:center;">
+        ${facebookSVG()}
+      </div>
+      <div style="font-size:12px;">Facebook</div>
+    </div>
+
+    <!-- X -->
+    <div style="text-align:center;cursor:pointer"
+      onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(
+        shareText
+      )}','_blank')">
+      <div style="width:48px;height:48px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;">
+        ${xSVG()}
+      </div>
+      <div style="font-size:12px;">X</div>
+    </div>
+
+    <!-- Gmail -->
+    <div style="text-align:center;cursor:pointer"
+      onclick="window.open('https://mail.google.com/mail/?view=cm&fs=1&su=Shared Folder&body=${encodeURIComponent(
+        shareText
+      )}','_blank')">
+      <div style="width:48px;height:48px;border-radius:50%;background:#ea4335;display:flex;align-items:center;justify-content:center;">
+        ${gmailSVG()}
+      </div>
+      <div style="font-size:12px;">Gmail</div>
+    </div>
+
+    <!-- Share Other -->
+    <div style="text-align:center;cursor:pointer"
+      onclick="shareOther('Shared Folder','Check this shared folder','${shareUrl}')">
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;">
+        ${shareSVG()}
+      </div>
+      <div style="font-size:12px;">Share other</div>
+    </div>
+
+  </div>
+
+  <div style="display:flex;gap:10px;margin-top:16px;">
+    <input value="${shareUrl}" readonly
+      style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--accent);" />
+    <button onclick="navigator.clipboard.writeText('${shareUrl}')"
+      style="padding:10px 16px;border:none;border-radius:8px;background:var(--accent2);color:white;">
+      Copy
+    </button>
+  </div>
+
+</div>
+`;
+
+    document.body.appendChild(modal);
   } catch (err) {
-    new Toastmaster({
-      title: "Error",
-      message: "Failed to share",
-      type: "error",
-      delay: 5000,
-    });
     console.error(err);
+    alert("Failed to share");
   }
 }
+
+
+window.addEventListener("click", (e) => {
+  const share_modal = document.getElementById("share-modal");
+  if(e.target.closest("#share-modal")) return;
+  if(share_modal) share_modal.remove();
+})
 
 function openContextMenu(event, clientX = null, clientY = null) {
   event.stopPropagation();

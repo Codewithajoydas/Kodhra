@@ -67,7 +67,9 @@ const { BSON } = require("bson");
 const accesskeyRouter = require("./routes/generate_access_key");
 const notebookRouter = require("./routes/notebook");
 const downloadRouter = require("./routes/download");
-const followuser = require("./routes/getuserstofollow")
+const followuser = require("./routes/getuserstofollow");
+const folder = require("./models/folder");
+const Notebook = require("./models/Notebook");
 const io = socket.init(server);
 io.on("connection", (socket) => {
   socket.on("register", (userId) => {
@@ -122,6 +124,11 @@ app.use("/token", authMiddleware, accesskeyRouter);
 app.use("/notebook", authMiddleware, notebookRouter);
 app.use("/folders", authMiddleware, downloadRouter);
 app.use("/f", authMiddleware, followuser);
+
+app.get("/landing", (req, res) => {
+  res.render("landingPage");
+});
+
 // HOME ROUTER
 app.get("/", authMiddleware, async (req, res, next) => {
   try {
@@ -164,7 +171,7 @@ app.post("/card", async (req, res) => {
     category,
     folderName,
     visibility,
-    readmefile
+    readmefile,
   } = req.body;
   try {
     const token = req.cookies.token;
@@ -226,6 +233,97 @@ app.get("/draft", authMiddleware, async (req, res) => {
   });
 });
 
+app.get("/sitemap.xml", async (req, res) => {
+  try {
+    res.header("Content-Type", "application/xml");
+
+    const baseUrl = "https://kodhra.codewithajoydas.live";
+
+    const staticUrls = [
+      "/",
+      "/landing/features",
+      "/landing/workflow",
+      "/explore",
+      "/profile",
+      "/card",
+      "/search",
+      "/folder",
+      "/notbook/get",
+    ];
+
+    const snippets = await Card.find({
+      isDeleted: false,
+    }).select("_id");
+    const folders = await folder
+      .find({
+        isDeleted: false,
+      })
+      .select("_id");
+    const notebooks = await Notebook.find({
+      isDeleted: false,
+    }).select("_id");
+    const users = await User.find({ visibility: "public" }).select("userName");
+
+    let urls = [];
+
+    staticUrls.forEach((path) => {
+      urls.push(`
+        <url>
+          <loc>${baseUrl}${path}</loc>
+          <priority>0.8</priority>
+        </url>
+      `);
+    });
+
+    snippets.forEach((s) => {
+      urls.push(`
+        <url>
+          <loc>${baseUrl}/card/view/${s._id}</loc>
+          <priority>0.7</priority>
+        </url>
+      `);
+    });
+
+    folders.forEach((f) => {
+      urls.push(`
+        <url>
+          <loc>${baseUrl}/folder/${f._id}</loc>
+          <priority>0.6</priority>
+        </url>
+      `);
+    });
+
+    notebooks.forEach((n) => {
+      urls.push(`
+        <url>
+          <loc>${baseUrl}/notebook/view/${n._id}</loc>
+          <priority>0.6</priority>
+        </url>
+      `);
+    });
+
+    users.forEach((u) => {
+      urls.push(`
+        <url>
+          <loc>${baseUrl}/profile/${u.userName}</loc>
+          <priority>0.5</priority>
+        </url>
+      `);
+    });
+
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+      <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        ${urls.join("")}
+      </urlset>
+    `;
+
+    res.send(sitemap);
+  } catch (err) {
+    console.error("Sitemap error:", err);
+    res.status(500).end();
+  }
+});
+
 /*
 Demo routes remove it before deployment
 */
@@ -249,6 +347,7 @@ app.get("/democards", async (req, res) => {
     folders,
   });
 });
+
 app.get("/logout", (req, res) => {
   res.clearCookie("token");
   res.redirect("/");
@@ -514,9 +613,6 @@ server.listen(3000, () => {
   console.log("Server started on port 3000");
 });
 
-
-
-
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
   process.exit(1);
@@ -525,4 +621,3 @@ let rs = JSON.parse(
   fs.readFileSync(path.join(__dirname, "package.json"), "utf-8")
 );
 global.appVersion = rs.version;
-

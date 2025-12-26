@@ -402,7 +402,7 @@ cardRouter.get("/view/:id", async (req, res) => {
   const card = await cardSchema
     .findOne({ _id: id, isDeleted: false })
     .populate("author", "userName userImage");
-  console.log(card)
+  console.log(card);
   res.render("editCard", { id, card, image: userImage, userName, userId: _id });
 });
 
@@ -461,7 +461,7 @@ cardRouter.post("/:id", async (req, res) => {
         await findFolder.save();
       }
     } catch (error) {
-    return  res.json({ error });
+      return res.json({ error });
     }
     res.json({ createCard });
   } catch (err) {
@@ -471,19 +471,37 @@ cardRouter.post("/:id", async (req, res) => {
 });
 
 cardRouter.get("/:id", async (req, res) => {
-  const token = req.cookies.token;
-  const decode = jwt.verify(token, process.env.SECRET);
-  const { _id, userImage, userName } = decode.checkUser;
   const { id } = req.params;
+
+  const token = req.cookies.token;
+  if (!token) {
+    return res.redirect(`/public/${id}`);
+  }
+
+  let decode;
+  try {
+    decode = jwt.verify(token, process.env.SECRET);
+  } catch (err) {
+    return res.redirect(`/public/${id}`);
+  }
+
+  const { _id, userImage, userName } = decode.checkUser;
+
   const cards = await cardSchema
-    .find({ _id: new mongoose.Types.ObjectId(id), isDeleted: false })
+    .find({ _id: id, isDeleted: false })
     .populate("author", "userName userImage");
+
+  if (!cards.length) {
+    return res.status(404).send("Card not found");
+  }
+
   const cardss = await findFavPinned(cards, _id);
-  console.log(cardss);
+
   const folders = await Folder.find({
-    author: decode.checkUser._id,
+    author: _id,
     isDeleted: false,
   });
+
   res.render("viewcard", {
     card: cardss[0],
     image: userImage,
@@ -492,5 +510,7 @@ cardRouter.get("/:id", async (req, res) => {
     folders,
   });
 });
+
+
 
 module.exports = cardRouter;

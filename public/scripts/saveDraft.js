@@ -136,7 +136,10 @@ draftDB.onsuccess = (e) => {
   <p style="font-size: 1.5em; font-weight: bold;">No Data Found</p>
   <p>Create a snippet to get started</p>
 </div>`;
+        return;
       }
+
+      cards.innerHTML = "";
       cardss.forEach((card) => {
         const cardHTML = `
    <div class="card"
@@ -260,7 +263,7 @@ draftDB.onsuccess = (e) => {
     </div>
 </div>`;
         if (cards) {
-          cards.innerHTML = cardHTML;
+          cards.innerHTML += cardHTML;
         }
       });
     };

@@ -81,8 +81,12 @@
         document.querySelector(".acctions").classList.remove("active")
     })
 
-    function getAccent() {
-        const settings = JSON.parse(localStorage.getItem("settings"));
+    async function getAccent() {
+        const data = await fetch("/settings/list", {
+            method: "GET",
+            credentials: "include"
+        })
+        const settings = await data.json();
         if (settings.accentColorv2 === "default") {
             document.documentElement.style.setProperty("--accent2", "rgba(44, 44, 228, 0.788)");
             return;

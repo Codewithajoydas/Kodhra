@@ -241,7 +241,8 @@
                                                 </svg>
                                                 Folder
                                             </span>
-                                            <input type="text" id="folderName1" placeholder="Optional" value="<%= card.folderName%>"/>
+                                            <input type="text" id="folderName1" placeholder="Optional"
+                                                value="<%= card.folderName%>" />
                                         </label>
                                     </div>
 
@@ -259,7 +260,8 @@
                                                 </svg>
                                                 Tags
                                             </span>
-                                            <input type="text" id="tags" placeholder="comma,separated,tags" value="<%= card.tags%>"/>
+                                            <input type="text" id="tags" placeholder="comma,separated,tags"
+                                                value="<%= card.tags%>" />
                                         </label>
                                     </div>
                                     <div class="meta-field">
@@ -277,8 +279,10 @@
                                                 Visibility
                                             </span>
                                             <select id="visibility">
-                                                <option value="true" <%= card.visibility === "true" ? "selected" : "" %>>Public</option>
-                                                <option value="false" <%= card.visibility === "false" ? "selected" : "" %>>Private</option>
+                                                <option value="true" <%=card.visibility==="true" ? "selected" : "" %>
+                                                    >Public</option>
+                                                <option value="false" <%=card.visibility==="false" ? "selected" : "" %>
+                                                    >Private</option>
                                             </select>
                                         </label>
                                     </div>
@@ -297,7 +301,8 @@
                                                 <rect width="16" height="20" x="4" y="2" rx="2" />
                                                 <path d="M16 2v20" />
                                             </svg> Description</span>
-                                        <textarea id="des" placeholder="Optional notes…" rows="5"><%= card.description%></textarea>
+                                        <textarea id="des" placeholder="Optional notes…"
+                                            rows="5"><%= card.description%></textarea>
                                     </label>
 
 
@@ -359,7 +364,8 @@
                                                                 d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
                                                         </svg>Enter a description</span>
                                                     <textarea type="text" name="readme_desciption"
-                                                        id="readme_desciption1" placeholder="Description"><%= card.readmefile.description%></textarea>
+                                                        id="readme_desciption1"
+                                                        placeholder="Description"><%= card.readmefile.description%></textarea>
                                                 </label>
                                             </div>
                                             <textarea id="asd"><%= card.readmefile.content%></textarea>
@@ -414,191 +420,202 @@
                 </div>
         </div>
 
- <script>
-  
-    let editor;
-    let easyMDE;
+        <script>
 
- 
-    document.addEventListener("DOMContentLoaded", async () => {
-        easyMDE = new EasyMDE({
-            element: document.getElementById("asd"),
-            toolbar: [
-                "bold", "italic", "heading", "|",
-                "quote", "unordered-list", "ordered-list", "|",
-                "link", "image", "table", "|",
-                "preview",
-            ]
-        });
+            let editor;
+            let easyMDE;
 
-        initCodeMirror();
-        await getEditorSettings();
-    });
 
-    /* ─────────────────────────────
-       CODEMIRROR INIT
-    ───────────────────────────── */
-    function initCodeMirror() {
-        const modeMap = {
-            JavaScript: "javascript",
-            C: "text/x-csrc",
-            "C++": "text/x-c++src",
-            "C#": "text/x-csharp",
-            Java: "text/x-java",
-            TypeScript: "text/typescript",
-            Python: "python",
-            Ruby: "ruby",
-            PHP: "php",
-            Go: "go",
-            Rust: "rust",
-            Swift: "swift",
-            Kotlin: "text/x-kotlin",
-            "Objective-C": "text/x-objectivec",
-            Scala: "text/x-scala",
-            Perl: "perl",
-            R: "r",
-            Dart: "dart",
-            Haskell: "haskell",
-            Lua: "lua",
-            Elixir: "elixir",
-            Clojure: "clojure",
-            Shell: "shell",
-            PowerShell: "powershell",
-            SQL: "sql",
-            GraphQL: "graphql",
-            MATLAB: "octave",
-            Assembly: "gas",
-            Fortran: "fortran",
-            COBOL: "cobol",
-            Erlang: "erlang",
-            "VB.NET": "vb",
-            HTML: "htmlmixed",
-            CSS: "css",
-        };
+            document.addEventListener("DOMContentLoaded", async () => {
+                easyMDE = new EasyMDE({
+                    element: document.getElementById("asd"),
+                    toolbar: [
+                        "bold", "italic", "heading", "|",
+                        "quote", "unordered-list", "ordered-list", "|",
+                        "link", "image", "table", "|",
+                        "preview",
+                    ]
+                });
 
-        const languageSelect = document.getElementById("category");
+                initCodeMirror();
+                await getEditorSettings();
+            });
 
-        editor = CodeMirror.fromTextArea(
-            document.getElementById("code"),
-            {
-                lineNumbers: true,
-                lineWrapping: true,
-                mode: modeMap[languageSelect?.value] || "javascript",
-                theme: "eclipse",
-                extraKeys: {
-                    "Ctrl-Space": "autocomplete",
-                    "Ctrl-/": "toggleComment",
-                    "Tab": cm => cm.replaceSelection("  "),
+            /* ─────────────────────────────
+               CODEMIRROR INIT
+            ───────────────────────────── */
+            function initCodeMirror() {
+                const modeMap = {
+                    JavaScript: "javascript",
+                    C: "text/x-csrc",
+                    "C++": "text/x-c++src",
+                    "C#": "text/x-csharp",
+                    Java: "text/x-java",
+                    TypeScript: "text/typescript",
+                    Python: "python",
+                    Ruby: "ruby",
+                    PHP: "php",
+                    Go: "go",
+                    Rust: "rust",
+                    Swift: "swift",
+                    Kotlin: "text/x-kotlin",
+                    "Objective-C": "text/x-objectivec",
+                    Scala: "text/x-scala",
+                    Perl: "perl",
+                    R: "r",
+                    Dart: "dart",
+                    Haskell: "haskell",
+                    Lua: "lua",
+                    Elixir: "elixir",
+                    Clojure: "clojure",
+                    Shell: "shell",
+                    PowerShell: "powershell",
+                    SQL: "sql",
+                    GraphQL: "graphql",
+                    MATLAB: "octave",
+                    Assembly: "gas",
+                    Fortran: "fortran",
+                    COBOL: "cobol",
+                    Erlang: "erlang",
+                    "VB.NET": "vb",
+                    HTML: "htmlmixed",
+                    CSS: "css",
+                };
+
+                const languageSelect = document.getElementById("category");
+
+                editor = CodeMirror.fromTextArea(
+                    document.getElementById("code"),
+                    {
+                        lineNumbers: true,
+                        lineWrapping: true,
+                        mode: modeMap[languageSelect?.value] || "javascript",
+                        theme: "eclipse",
+                        extraKeys: {
+                            "Ctrl-Space": "autocomplete",
+                            "Ctrl-/": "toggleComment",
+                            "Tab": cm => cm.replaceSelection("  "),
+                        }
+                    }
+                );
+
+                /* Proper height */
+                editor.setSize("100%", "500px");
+
+                /* Language change */
+                languageSelect?.addEventListener("change", function () {
+                    editor.setOption("mode", modeMap[this.value] || "javascript");
+                });
+            }
+
+            /* ─────────────────────────────
+               SUBMIT DATA (GLOBAL)
+            ───────────────────────────── */
+            async function submitData() {
+                try {
+                    const payload = {
+                        title: document.getElementById("title1")?.value || "",
+                        description: document.getElementById("des")?.value || "",
+                        category: document.getElementById("category")?.value || "",
+                        content: editor.getValue() || "",
+                        folderName: document.getElementById("folderName1")?.value || "",
+                        visibility: document.getElementById("visibility")?.value || "",
+                        tags: (document.getElementById("tags")?.value || "")
+                            .split(",")
+                            .map(t => t.trim())
+                            .filter(Boolean),
+                        readmefile: {
+                            title: document.getElementById("readme_title1")?.value || "",
+                            description: document.getElementById("readme_desciption1")?.value || "",
+                            content: easyMDE.value() || ""
+                        }
+                    };
+
+                    const res = await fetch("/card/<%= id %>", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify(payload),
+                    });
+
+                    const data = await res.json();
+
+                    if (!res.ok) throw new Error("Save failed");
+
+                    new Toastmaster({
+                        title: "Success",
+                        message: "Snippet saved successfully",
+                        delay: 3000,
+                        type: "success"
+                    }).showNotification();
+                    document.getElementById("title1").value = "";
+                    document.getElementById("des").value = "";
+                    document.getElementById("category").value = "";
+                    editor.value = "";
+                    document.getElementById("folderName1").value = "";
+                    document.getElementById("visibility").value = "";
+                    document.getElementById("tags").value = "";
+                    document.getElementById("readme_title1").value = "";
+                    document.getElementById("readme_desciption1").value = "";
+                    easyMDE.value("");
+
+                    window.location.href = `/card`
+                } catch (err) {
+                    console.error(err);
+                    new Toastmaster({
+                        title: "Error",
+                        message: "Snippet not saved",
+                        delay: 3000,
+                        type: "error"
+                    }).showNotification();
                 }
             }
-        );
 
-        /* Proper height */
-        editor.setSize("100%", "500px");
+            /* ─────────────────────────────
+               SETTINGS LOAD
+            ───────────────────────────── */
+            async function getEditorSettings() {
+                try {
+                    const res = await fetch("/settings/list", {
+                        method: "GET",
+                        credentials: "include",
+                        headers: { "Content-Type": "application/json" }
+                    });
 
-        /* Language change */
-        languageSelect?.addEventListener("change", function () {
-            editor.setOption("mode", modeMap[this.value] || "javascript");
-        });
-    }
+                    if (!res.ok) return;
 
-    /* ─────────────────────────────
-       SUBMIT DATA (GLOBAL)
-    ───────────────────────────── */
-    async function submitData() {
-        try {
-            const payload = {
-                title: document.getElementById("title1")?.value || "",
-                description: document.getElementById("des")?.value || "",
-                category: document.getElementById("category")?.value || "",
-                content: editor.getValue() || "",
-                folderName: document.getElementById("folderName1")?.value || "",
-                visibility: document.getElementById("visibility")?.value || "",
-                tags: (document.getElementById("tags")?.value || "")
-                    .split(",")
-                    .map(t => t.trim())
-                    .filter(Boolean),
-                readmefile: {
-                    title: document.getElementById("readme_title1")?.value || "",
-                    description: document.getElementById("readme_desciption1")?.value || "",
-                    content: easyMDE.value() || ""
+                    const data = await res.json();
+
+                    editor.setOption("tabSize", data.tabSize || 2);
+                    editor.setOption("lineWrapping", data.wordWrap !== "off");
+                    editor.setOption("lineNumbers", data.lineNumbers === "on");
+                    editor.setOption("theme", data.syntaxStyle || "eclipse");
+
+                } catch (err) {
+                    console.error("Editor settings failed:", err);
                 }
-            };
+            }
 
-            const res = await fetch("/card/<%= id %>", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify(payload),
+            /* ─────────────────────────────
+               FULLSCREEN HANDLING
+            ───────────────────────────── */
+            function requestFull() {
+                const wrapper = document.querySelector(".snippet-editor");
+                if (!wrapper) return;
+
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                } else {
+                    wrapper.requestFullscreen();
+                }
+            }
+
+            window.addEventListener("fullscreenchange", () => {
+                const cm = document.querySelector(".CodeMirror");
+                if (!cm) return;
+                cm.classList.toggle("active", !!document.fullscreenElement);
             });
-
-            const data = await res.json();
-
-            if (!res.ok) throw new Error("Save failed");
-
-            new Toastmaster({
-                title: "Success",
-                message: "Snippet saved successfully",
-                delay: 3000,
-                type: "success"
-            }).showNotification();
-
-        } catch (err) {
-            console.error(err);
-            new Toastmaster({
-                title: "Error",
-                message: "Snippet not saved",
-                delay: 3000,
-                type: "error"
-            }).showNotification();
-        }
-    }
-
-    /* ─────────────────────────────
-       SETTINGS LOAD
-    ───────────────────────────── */
-    async function getEditorSettings() {
-        try {
-            const res = await fetch("/settings/list", {
-                method: "GET",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" }
-            });
-
-            if (!res.ok) return;
-
-            const data = await res.json();
-
-            editor.setOption("tabSize", data.tabSize || 2);
-            editor.setOption("lineWrapping", data.wordWrap !== "off");
-            editor.setOption("lineNumbers", data.lineNumbers === "on");
-            editor.setOption("theme", data.syntaxStyle || "eclipse");
-
-        } catch (err) {
-            console.error("Editor settings failed:", err);
-        }
-    }
-
-    /* ─────────────────────────────
-       FULLSCREEN HANDLING
-    ───────────────────────────── */
-    function requestFull() {
-        const wrapper = document.querySelector(".snippet-editor");
-        if (!wrapper) return;
-
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-        } else {
-            wrapper.requestFullscreen();
-        }
-    }
-
-    window.addEventListener("fullscreenchange", () => {
-        const cm = document.querySelector(".CodeMirror");
-        if (!cm) return;
-        cm.classList.toggle("active", !!document.fullscreenElement);
-    });
-</script>
+        </script>
 
         <script src="\scripts\shortcut.js"></script>
         <script src="/scripts/home.js"></script>

@@ -1,8 +1,28 @@
 User-agent: *
 Allow: /
 
+# Block private/auth pages
+Disallow: /login
+Disallow: /signup
+Disallow: /settings
 
+# Block create/edit flows
+Disallow: /card/create
+Disallow: /notebook
 
-<svg width="200" height="201" viewBox="0 0 200 201" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0 18.0227C0 8.08156 8.06893 0.0227606 18.0101 0.0219564C60.5808 0.0185129 94.4264 0.00397876 131 1.08491e-07C140.941 -0.00108134 148.838 8.08297 149.168 18.0186C149.977 42.3918 154.676 46.2666 181.972 46.8826C191.911 47.1068 200 55.0579 200 64.999V182.023C200 191.964 191.941 200.023 182 200.023H18C8.05887 200.023 0 191.964 0 182.023V18.0227Z" fill="#D9D9D9"/>
-</svg>
+# Block search & filtered URLs
+Disallow: /search?
+Disallow: /*?q=
+Disallow: /*&q=
+Disallow: /*?filter=
+Disallow: /*?sort=
+Disallow: /*?page=
+
+# Allow important public sections
+Allow: /explore
+Allow: /folder
+Allow: /notebook/get
+Allow: /profile
+
+# Sitemap
+Sitemap: https://kodhra.codewithajoydas.live/sitemap.xml
