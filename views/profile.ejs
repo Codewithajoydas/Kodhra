@@ -192,7 +192,7 @@
                   <div class="followers" style="cursor: pointer;"
                     onclick="window.location.href = '/followers/<%= user._id%>'">
                     <span>Followers</span>
-                    <span>
+                    <span class="follwercount">
                       <%= user.followers.length ?? 0%>
                     </span>
                   </div>
@@ -587,10 +587,10 @@
             element.disabled = false;
             if (element.innerText === "Follow") {
               element.innerText = "Unfollow";
-              document.querySelector(".followingcount").innerText = parseInt(document.querySelector(".followingcount").innerText) + 1
+              document.querySelector(".follwercount").innerText = parseInt(document.querySelector(".follwercount").innerText) + 1
             } else {
               element.innerText = "Follow";
-              document.querySelector(".followingcount").innerText = parseInt(document.querySelector(".followingcount").innerText) - 1
+              document.querySelector(".follwercount").innerText = parseInt(document.querySelector(".follwercount").innerText) - 1
             }
             const data = await res.json();
             new Toastmaster({

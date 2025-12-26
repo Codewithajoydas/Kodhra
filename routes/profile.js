@@ -17,7 +17,7 @@ profileRouter.get("/:user", async (req, res) => {
     const { _id, userName, email, userImage } = decode.checkUser;
     const user = await User.findOne({ userName: USER_NAME });
     const cardlen = await Card.find({ author: user._id }).countDocuments();
-    const cards = await Card.find({ author: user._id, isdeleted: false })
+    const cards = await Card.find({ author: user._id, isDeleted: false })
       .populate("author")
       .sort({ likes: -1 })
       .limit(10);
