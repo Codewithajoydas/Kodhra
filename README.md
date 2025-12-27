@@ -1,253 +1,86 @@
-# Kodhra - Code Snippet Manager
+# Kodhra – Code Snippet Manager
 
-Kodhra is a powerful and elegant **Code Snippet Manager** built for developers who value speed, structure, and simplicity. It allows you to organize, store, and retrieve code snippets from multiple languages in one unified place. Whether you are a front-end developer, backend engineer, or full-stack creator, Kodhra helps you maintain your code library in an efficient and visually organized way.
+Kodhra is a privately developed **Code Snippet Management platform** created to support structured, long-term code reuse for professional development workflows.
 
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [API Endpoints](#api-endpoints)
-- [Authentication](#authentication)
-- [Environment Variables](#environment-variables)
-- [Screenshots](#screenshots)
-- [Future Plans](#future-plans)
-- [Contributing](#contributing)
-- [License](#license)
+This repository is **informational** in nature and documents the technologies and architecture used to build the system.
+It is **not intended as a starter template or cloneable project**.
 
 ---
 
-## Overview
+## Purpose
 
-Kodhra provides a modern interface and backend to manage your personal or team-based code snippets. Developers can create, tag, search, and categorize snippets across multiple programming languages. It reduces repetitive coding, improves workflow, and serves as a long-term knowledge repository.
+Kodhra was built to solve a personal and professional problem:
 
-### Key Goals
+* Code logic scattered across projects
+* Difficulty reusing verified snippets
+* Lack of structure in long-term code storage
 
-- Simplify the process of storing and retrieving reusable code.
-- Encourage structured snippet organization.
-- Provide a clean, fast, and minimal UI for focused coding.
-- Support authentication and multi-device access.
-
----
-
-## Features
-
-- **Snippet Creation:** Add, edit, and delete code snippets easily.
-- **Categorization:** Organize snippets by tags, categories, and languages.
-- **Search and Filter:** Quickly find snippets using powerful search filters.
-- **Syntax Highlighting:** Code syntax is rendered cleanly.
-- **Authentication:** Secure user login and registration system using JWT.
-- **Cloud Storage:** Snippets are stored persistently in MongoDB.
-- **Responsive Design:** Works seamlessly on desktop, tablet, and mobile.
-- **Draft Support:** Save snippets temporarily before publishing.
-- **Profile System:** Manage your personal coding library and metadata.
-- **Dark/Light Mode:** Switch between visual themes for comfort.
-- **Clipboard Support:** Copy snippets instantly with one click.
+The application focuses on **clarity, structure, and reliability**, following traditional web development principles.
 
 ---
 
-## Tech Stack
+## Technologies Used
 
-**Frontend:**
+### Frontend
 
-- HTML, CSS, JavaScript (Vanilla)
-- CodeMirror / Monaco Editor (for syntax highlighting)
-- Tailwind CSS or SCSS for styling
-- Fetch API / Axios for client-server communication
+* **HTML5**
+* **EJS (Server-Side Rendering)**
+* **SCSS (compiled using `sass`)**
+* **Vanilla JavaScript**
+* **CodeMirror** (syntax highlighting)
 
-**Backend:**
-
-- Node.js
-- Express.js
-- MongoDB with Mongoose
-- JWT for authentication
-- bcrypt for password hashing
-
-**Other Tools:**
-
-- dotenv for environment configuration
-- nodemon for local development
-- cookie-parser for token management
+> No frontend frameworks or CSS utility libraries are used.
 
 ---
 
-## Installation
+### Backend
 
-### Prerequisites
-
-Ensure you have the following installed:
-
-- Node.js (v18 or later)
-- MongoDB (local or Atlas)
-- Git
-
-### Steps
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/codewithajoydas/kodhra.git
-
-   ```
-
-2. Navigate to the project directory:
-
-   ```bash
-   cd kodhra
-   ```
-
-3. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-4. Create a `.env` file in the root directory and configure the required variables (see below).
-
-5. Start the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-6. Visit the application in your browser:
-
-   ```
-   http://localhost:3000
-   ```
+* **Node.js**
+* **Express.js**
+* **MongoDB** with **Mongoose**
+* **JWT Authentication**
+* **Session & Cookie Management**
+* **Redis** (session storage & caching)
+* **Socket.IO** (real-time features)
 
 ---
 
-## Usage
+### Infrastructure & Services
 
-- Register or login to your account.
-- Create new code snippets with title, description, tags, and code content.
-- Categorize snippets using custom tags or predefined categories.
-- Search snippets by keyword, language, or date created.
-- Copy snippets directly to your clipboard for reuse in projects.
-
----
-
-## Project Structure
-
-```
-kodhra/
-│   ├── models/
-│   ├── routes/
-│   ├── controllers/
-│   ├── middlewares/
-│   ├── utils/
-│   ├── app.js
-│   └── server.js
-|   ├──public/
-│     ├── assets/
-│     ├── css/
-│     ├── js/
-│     ├── components/
-│     └── index.html
-|  ├── views/*/
-├── .env
-├── package.json
-└── README.md
-```
+* **Cloudinary** – media storage
+* **Nodemailer** – email services
+* **Razorpay** – payment integration
+* **Archiver** – data export
+* **Electron** – desktop packaging
+* **esbuild** – bundling & optimization
+* **Jest + Supertest** – testing
 
 ---
 
-## API Endpoints
+## Development Approach
 
-| Method | Endpoint       | Description                 |
-| ------ | -------------- | --------------------------- |
-| POST   | `/auth/signup` | Register a new user         |
-| POST   | `/auth/login`  | Login user and return token |
-| GET    | `/card`        | Get all snippets            |
-| POST   | `/card       ` | Create a new snippet        |
-| PUT    | `/card/:id`    | Update existing snippet     |
-| DELETE | `/card/:id`    | Delete a snippet            |
-| GET    | `/card/:id`    | Get a specific snippet      |
+* Traditional MVC-style backend architecture
+* Server-rendered views for SEO and stability
+* Minimal client-side abstraction
+* Custom SCSS instead of UI frameworks
+* Explicit control over data flow and rendering
+* Focus on maintainability over trends
 
 ---
 
-## Authentication
+## Usage Notice
 
-Kodhra uses **JWT (JSON Web Token)** for secure authentication. Tokens are stored in HTTP-only cookies to prevent client-side tampering.
+This project is **not provided as an open-source boilerplate**.
 
----
-
-## Environment Variables
-
-Create a `.env` file in the project root with the following variables:
-
-```
-PORT=3000
-MONGO_URI=your_mongodb_connection_string
-SECRET=your_jwt_secret_key
-```
-
-Optional:
-
-```
-NODE_ENV=development
-```
+* Cloning, redistributing, or using this project as a base template is **not intended**
+* Code is shared **for reference and documentation purposes only**
+* Business logic, structure, and implementation are proprietary
 
 ---
 
-## Screenshots
+## Ownership
 
-- Dashboard View
-  <img width="1365" height="633" alt="image" src="https://github.com/user-attachments/assets/0bc37a10-b0de-48d0-bf75-ca421b7f50db" />
-- Snippet Editor
-- <img width="1365" height="635" alt="image" src="https://github.com/user-attachments/assets/6f6ed48b-3731-4d49-9f6c-a46db5cd5bee" />
+All design decisions, architecture, and implementation are original and part of an ongoing private product.
 
-- Snippets Results
-- <img width="1365" height="636" alt="image" src="https://github.com/user-attachments/assets/36b7e9a2-46e2-434f-88c1-3b12f073b4d3" />
-
----
-
-## Future Plans
-
-- Add AI-powered snippet suggestions.
-- Implement syntax-based search.
-- Introduce user collaboration and sharing features.
-- Support for multiple code editors (VSCode-like experience).
-- Offline support with IndexedDB or LocalForage.
-
----
-
-## Contributing
-
-Contributions are always welcome.
-To contribute:
-
-1. Fork the repository.
-2. Create a feature branch.
-3. Commit your changes.
-4. Push to your fork and open a Pull Request.
-
-Follow standard commit message formats and coding conventions.
-
----
-
-## License
-
-This project is licensed under the **MIT License**.
-See the [LICENSE](./LICENSE) file for details.
-
----
-
-## Author
-
-**Developed by Codewithajoydas**
-Passionate about clean, structured, and purposeful code.
-
-```
-
-
-
-
-
- 
+**Kodhra** is actively developed and maintained by
+**Codewithajoydas**
